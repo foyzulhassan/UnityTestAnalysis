@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/animal-sniffer-annotations-1.17.jar"/>
+	<classpathentry kind="lib" path="libs/antlr-3.5.2.jar"/>
+	<classpathentry kind="lib" path="libs/antlr-runtime-3.5.2.jar"/>
+	<classpathentry kind="lib" path="libs/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="libs/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="libs/cglib-2.2.1-v20090111.jar"/>
+	<classpathentry kind="lib" path="libs/checker-qual-2.5.2.jar"/>
+	<classpathentry kind="lib" path="libs/classindex-3.8.jar"/>
+	<classpathentry kind="lib" path="libs/client-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/client.diff-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="libs/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="libs/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="libs/core-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/error_prone_annotations-2.2.0.jar"/>
+	<classpathentry kind="lib" path="libs/failureaccess-1.0.jar"/>
+	<classpathentry kind="lib" path="libs/gen.antlr3-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.antlr3-antlr-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.antlr3-json-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.antlr3-php-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.antlr3-r-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.antlr3-xml-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.c-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.css-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.javaparser-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.jdt-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.js-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.python-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.ruby-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gen.srcml-3.0.0-beta1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/guava-27.0-jre.jar"/>
+	<classpathentry kind="lib" path="libs/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="libs/j2objc-annotations-1.1.jar"/>
+	<classpathentry kind="lib" path="libs/javaparser-core-3.13.6.jar"/>
+	<classpathentry kind="lib" path="libs/javaparser-symbol-solver-core-3.13.6.jar"/>
+	<classpathentry kind="lib" path="libs/javaparser-symbol-solver-logic-3.13.6.jar"/>
+	<classpathentry kind="lib" path="libs/javaparser-symbol-solver-model-3.13.6.jar"/>
+	<classpathentry kind="lib" path="libs/javassist-3.24.0-GA.jar"/>
+	<classpathentry kind="lib" path="libs/javax.inject-1.jar"/>
+	<classpathentry kind="lib" path="libs/javax.servlet-api-3.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-client-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-http-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-io-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-security-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-server-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-servlet-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-util-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-webapp-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-xml-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/jgrapht-core-1.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/jrubyparser-0.5.3.jar"/>
+	<classpathentry kind="lib" path="libs/jsr305-3.0.2.jar"/>
+	<classpathentry kind="lib" path="libs/jtidy-r938.jar"/>
+	<classpathentry kind="lib" path="libs/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.core.commands-3.9.700.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.core.contenttype-3.7.600.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.core.expressions-3.6.700.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.core.filesystem-1.7.700.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.core.jobs-3.10.700.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.core.resources-3.13.700.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.core.runtime-3.17.100.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.equinox.app-1.4.400.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.equinox.common-3.11.0.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.equinox.preferences-3.7.700.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.equinox.registry-3.8.700.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.jdt.core-3.16.0.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.osgi-3.15.200.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.text-3.10.100.jar"/>
+	<classpathentry kind="lib" path="libs/ph-commons-9.4.0.jar"/>
+	<classpathentry kind="lib" path="libs/ph-css-6.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/rendersnake-1.9.0.jar"/>
+	<classpathentry kind="lib" path="libs/rhino-1.7.12.jar"/>
+	<classpathentry kind="lib" path="libs/simmetrics-core-3.2.3.jar"/>
+	<classpathentry kind="lib" path="libs/slf4j-api-1.7.30.jar"/>
+	<classpathentry kind="lib" path="libs/slf4j-simple-1.7.21.jar"/>
+	<classpathentry kind="lib" path="libs/spark-core-2.9.1.jar"/>
+	<classpathentry kind="lib" path="libs/spring-aop-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/spring-beans-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/spring-context-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/spring-core-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/spring-expression-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/spring-web-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/spring-webmvc-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/ST4-4.0.8.jar"/>
+	<classpathentry kind="lib" path="libs/trove4j-3.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/websocket-api-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/websocket-client-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/websocket-common-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/websocket-server-9.4.18.v20190429.jar"/>
+	<classpathentry kind="lib" path="libs/websocket-servlet-9.4.18.v20190429.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
