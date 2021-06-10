@@ -23,6 +23,7 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.unity.entity.PerfFixData;
+import com.unity.entity.TestData;
 
 public class CSVReaderWriter {
 
@@ -159,6 +160,52 @@ public class CSVReaderWriter {
 		}
 
 		return data;
+	}
+	
+	public void writeListBeanToFile(List<TestData> fixdata, String csvfilepath)
+			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+
+		try {
+
+			// Creating writer class to generate
+			// csv file
+			FileWriter writer = new FileWriter(csvfilepath);
+
+			// // Create Mapping Strategy to arrange the
+			// // column name in order
+			// ColumnPositionMappingStrategy mappingStrategy=
+			// new ColumnPositionMappingStrategy();
+			// mappingStrategy.setType(PerfFixData.class);
+			//
+			// // Arrange column name as provided in below array.
+			// String[] columns = new String[]
+			// { "projName","projGitUrl","fixCommitID", "fixCommitMsg",
+			// "patchPath","srcFileChangeCount","assetChangeCount" };
+			// mappingStrategy.setColumnMapping(columns);
+			//
+			//
+			// // Createing StatefulBeanToCsv object
+			// StatefulBeanToCsvBuilder<PerfFixData> builder=
+			// new StatefulBeanToCsvBuilder(writer);
+			// StatefulBeanToCsv beanWriter =
+			// builder.withMappingStrategy(mappingStrategy).build();
+			//
+			// // Write list to StatefulBeanToCsv object
+			// beanWriter.write(fixdata);
+
+			// // closing the writer object
+			// writer.close();
+
+			StatefulBeanToCsvBuilder<TestData> builder = new StatefulBeanToCsvBuilder<TestData>(writer);
+			StatefulBeanToCsv<TestData> beanWriter = builder.build();
+
+			beanWriter.write(fixdata);
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

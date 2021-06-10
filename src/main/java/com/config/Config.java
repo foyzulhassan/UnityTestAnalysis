@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Config {
 	// public static String rootDir="/media/AutoBuilder/UnityPerformance/";
 	 public static String
-	 rootDir="/home/foyzulhassan/Research/Tammi/UnityPerformance/";
+	 rootDir="D:\\Code\\VR_AR_Testing\\unityperfanalyzer\\repo\\project_repo\\";
 	 //
 	 //text file that contains list of projects to analyze
 	 public static String gitProjList=rootDir+"Project_Source.txt";
@@ -19,6 +19,8 @@ public class Config {
 
 	public static String[] perfCommitToken = { "performance", "speed up", "accelerate", "fast", "slow", "latenc",
 			"contention", "optimiz", "efficient" };
+	
+	public static String csvFileTestStat=rootDir+"test_stat.csv";
 
 	// text file that contains list of projects to analyze
 //	public static String rootDir = "F:\\Tammi_Thesis\\Repo\\";

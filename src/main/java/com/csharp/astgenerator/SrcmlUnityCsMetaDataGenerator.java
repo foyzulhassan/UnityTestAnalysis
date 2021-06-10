@@ -147,8 +147,22 @@ public class SrcmlUnityCsMetaDataGenerator {
 			// encountered it before
 
 			if (currentFirst.getType().toString().contains(type)) {
+				currentFirst.setMetadata("JUNIT", false);
+				List<ITree> attributes=breadthFirstSearchForNodeList1(currentFirst,"attribute","an1");
+				
+				if(attributes!=null && attributes.size()>0)
+				{
+					List<ITree> anotations=breadthFirstSearchForLabel(attributes.get(0),"Test","an2");
+					System.out.println("test");
+					
+					if(anotations!=null && anotations.size()>0)
+					{
+						currentFirst.setMetadata("JUNIT", true);
+					}
+				}
+				
 				nodelist.add(currentFirst);
-				//classnode = currentFirst;
+
 			}
 
 			if (currentFirst.getMetadata(nodevisitedmeta) != null)
@@ -192,5 +206,131 @@ public class SrcmlUnityCsMetaDataGenerator {
 		}
 		return classnamenode;		
 	}
+	
+	public static ITree getTestAnotation(ITree classnode)
+	{
+		ITree classnamenode=null;
+		
+		for(ITree node: classnode.getChildren())
+		{
+			if(node.getLabel().equals("Test"))
+			{
+				classnamenode=node;
+				break;
+			}
+			
+		}
+		return classnamenode;		
+	}
+	
+	
+	public static List<ITree> breadthFirstSearchForNodeList1(ITree node,String type,String nodevisitedmeta) {
+
+		// Just so we handle receiving an uninitialized Node, otherwise an
+		// exception will be thrown when we try to add it to queue
+		//ITree classnode = null;
+		List<ITree> nodelist=new ArrayList<>();
+		if (node == null)
+			return null;
+
+		// Creating the queue, and adding the first node (step 1)
+		LinkedList<ITree> queue = new LinkedList<>();
+		queue.add(node);
+
+		while (!queue.isEmpty()) {
+			ITree currentFirst = queue.removeFirst();
+
+			// In some cases we might have added a particular node more than once before
+			// actually visiting that node, so we make sure to check and skip that node if
+			// we have
+			// encountered it before
+
+			if (currentFirst.getType().toString().contains(type)) {
+				nodelist.add(currentFirst);
+				
+				
+				
+				
+				
+				//classnode = currentFirst;
+			}
+
+			if (currentFirst.getMetadata(nodevisitedmeta) != null)
+				continue;
+
+			// Mark the node as visited
+			currentFirst.setMetadata(nodevisitedmeta, 1);
+			// System.out.print(currentFirst.name + " ");
+
+			List<ITree> allNeighbors = currentFirst.getChildren();
+
+			// We have to check whether the list of neighbors is null before proceeding,
+			// otherwise
+			// the for-each loop will throw an exception
+			if (allNeighbors == null)
+				continue;
+
+			for (ITree neighbor : allNeighbors) {
+				// We only add unvisited neighbors
+				if (neighbor.getMetadata(nodevisitedmeta) == null) {
+					queue.add(neighbor);
+				}
+			}
+		}
+		return nodelist;
+	}
+	
+	public static List<ITree> breadthFirstSearchForLabel(ITree node,String label,String nodevisitedmeta) {
+
+		// Just so we handle receiving an uninitialized Node, otherwise an
+		// exception will be thrown when we try to add it to queue
+		//ITree classnode = null;
+		List<ITree> nodelist=new ArrayList<>();
+		if (node == null)
+			return null;
+
+		// Creating the queue, and adding the first node (step 1)
+		LinkedList<ITree> queue = new LinkedList<>();
+		queue.add(node);
+
+		while (!queue.isEmpty()) {
+			ITree currentFirst = queue.removeFirst();
+
+			// In some cases we might have added a particular node more than once before
+			// actually visiting that node, so we make sure to check and skip that node if
+			// we have
+			// encountered it before
+
+			if (currentFirst.getLabel().equals(label)) {
+				nodelist.add(currentFirst);
+				
+				//classnode = currentFirst;
+			}
+
+			if (currentFirst.getMetadata(nodevisitedmeta) != null)
+				continue;
+
+			// Mark the node as visited
+			currentFirst.setMetadata(nodevisitedmeta, 1);
+			// System.out.print(currentFirst.name + " ");
+
+			List<ITree> allNeighbors = currentFirst.getChildren();
+
+			// We have to check whether the list of neighbors is null before proceeding,
+			// otherwise
+			// the for-each loop will throw an exception
+			if (allNeighbors == null)
+				continue;
+
+			for (ITree neighbor : allNeighbors) {
+				// We only add unvisited neighbors
+				if (neighbor.getMetadata(nodevisitedmeta) == null) {
+					queue.add(neighbor);
+				}
+			}
+		}
+		return nodelist;
+	}
+	
 
 }

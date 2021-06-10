@@ -15,13 +15,18 @@ import com.config.Config;
 import com.csharp.changesize.ChangeSizeAnalyzer;
 import com.csharp.diff.CSharpDiffGenMngr;
 import com.github.gumtreediff.actions.EditScript;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.unity.callgraph.CallGraphBasedDistinctFuncAnalyzer;
 import com.unity.callgraph.CallGraphBasedFuncAnalyzer;
 import com.unity.callgraph.CallGraphBasedFuncFixCommit;
 import com.unity.callgraph.UserDefinedCallAnalysis;
 import com.unity.commitanalyzer.CommitAnalysisMngr;
 import com.unity.entity.PerfFixData;
+import com.unity.entity.TestData;
 import com.unity.repodownloader.ProjectLoader;
+import com.unity.testanalysis.ProjectTestAnalyzer;
+import com.unity.testanalysis.ProjectTestData;
 
 import edu.util.fileprocess.CSVReaderWriter;
 
@@ -36,7 +41,8 @@ public class MainClass {
 				+ "\n5->Generate Statement Change Statistics" + "\n6->Change Size Calculation"
 				+ "\n7->Change File Calculation" + "\n8->Callback based Function Analysis"
 				+ "\n9->User Defined Statistics Generation" + "\n10-> Calcuate Fix with Distinct Method Change"
-				+"\n11->Generate Function Change Statistics with Callback Analysis");
+				+"\n11->Generate Function Change Statistics with Callback Analysis"
+				+ "\n12->Generate Test Statistics");
 
 		Scanner cin = new Scanner(System.in);
 
@@ -127,6 +133,42 @@ public class MainClass {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+			}
+		
+		 else if (inputid == 12) {
+			 
+			 ProjectTestAnalyzer analyzer=new ProjectTestAnalyzer();
+			 ProjectTestData projdata=analyzer.PerformClassFunctionType();
+			 List<TestData> testdatalist=analyzer.convertToTestData(projdata);
+			 
+			 if(testdatalist.size()>0)
+				{
+					CSVReaderWriter writer=new CSVReaderWriter();
+					try {
+						writer.writeListBeanToFile(testdatalist, Config.csvFileTestStat);
+					} catch (CsvDataTypeMismatchException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (CsvRequiredFieldEmptyException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}	
+
+//			  CallGraphBasedDistinctFuncAnalyzer callgraphcommit = new CallGraphBasedDistinctFuncAnalyzer();
+//
+//				CSVReaderWriter csvrw = new CSVReaderWriter();
+//				try {
+//					List<PerfFixData> cmtlist = csvrw.getListBeanFromCSV(Config.csvFile);
+//					callgraphcommit.generateFuncChageData(cmtlist);
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 
 			}
 

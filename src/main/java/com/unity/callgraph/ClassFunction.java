@@ -5,10 +5,13 @@ import java.util.List;
 
 public class ClassFunction {
 	private String classname;
+	private boolean isTestClass;	
+
 	private List<FunctionCall> funcNameList;
 
 	public ClassFunction() {
 		funcNameList = new ArrayList<FunctionCall>();
+		isTestClass=false;
 	}
 
 	public String getClassname() {
@@ -25,6 +28,14 @@ public class ClassFunction {
 
 	public void addItemToFuncList(FunctionCall func) {
 		funcNameList.add(func);
+	}
+	
+	public boolean isTestClass() {
+		return isTestClass;
+	}
+
+	public void setTestClass(boolean isTestClass) {
+		this.isTestClass = isTestClass;
 	}
 
 }

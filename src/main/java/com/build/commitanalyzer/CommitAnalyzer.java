@@ -68,6 +68,7 @@ import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.unity.callgraph.ClassFunction;
 import com.unity.entity.PerfFixData;
+import com.unity.testanalysis.ClassFunctionTypeAnalyzer;
 
 import org.apache.commons.io.IOUtils;
 
@@ -450,6 +451,80 @@ public class CommitAnalyzer {
 					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
 					CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
 					ClassFunction clsfunc=diffgen.getClassFunction(f1);
+					classfunclist.add(clsfunc);
+					
+					f1.delete();
+
+
+				}
+
+			}
+			treeWalk.reset();
+
+		} catch (Exception ex) {
+			System.out.print(ex.getMessage());
+		}
+		
+		return classfunclist;
+	}
+	
+	public String getHeadCommitID()
+	{
+		Ref head = repository.getAllRefs().get("HEAD");
+		
+		return head.getObjectId().getName();
+	}
+	
+	
+	public List<ClassFunction> getClassFunctionTypeList(String commitid) {
+
+		List<ClassFunction> classfunclist=new ArrayList<>();
+		
+		try {
+			ObjectId objectid = repository.resolve(commitid);
+			RevCommit commit = rw.parseCommit(objectid);
+
+			RevTree tree = commit.getTree();
+
+			// TreeWalk treeWalk = new TreeWalk(repository);
+			// treeWalk.addTree(tree);
+			// treeWalk.setRecursive(false);
+			// treeWalk.setPostOrderTraversal(false);
+
+			TreeWalk treeWalk = new TreeWalk(repository);
+			treeWalk.addTree(commit.getTree());
+			treeWalk.setRecursive(false);
+
+			// treeWalk.setRecursive(true);
+
+			while (treeWalk.next()) {
+				// System.out.println("found:" + treeWalk.getPathString());
+
+				if (treeWalk.isSubtree()) {
+					// System.out.println("dir: " + treeWalk.getPathString());
+					treeWalk.enterSubtree();
+				}
+				
+
+
+				else if (treeWalk.getPathString().endsWith(".cs")) {
+					if(treeWalk.getPathString().contains("WalkingTests.cs"))
+						System.out.println("Debug");
+					
+					ObjectId objectId = treeWalk.getObjectId(0);
+					ObjectLoader loader = repository.open(objectId);
+
+					// and then one can the loader to read the file
+					// loader.copyTo(System.out);
+
+					byte[] butestr = loader.getBytes();
+					String str = new String(butestr);
+					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+					
+					
+					//CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
+					ClassFunctionTypeAnalyzer typeanalyzer=new ClassFunctionTypeAnalyzer();
+					ClassFunction clsfunc=typeanalyzer.getClassFunctionType(f1);
 					classfunclist.add(clsfunc);
 					
 					f1.delete();
