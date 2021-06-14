@@ -31,8 +31,8 @@ public class ClassFunctionTypeAnalyzer {
 					
 					classname = SrcmlUnityCsMetaDataGenerator.getClassName(classnode);
 					
-					if(classname.getLabel().equals("WalkingTests"))
-						System.out.println("sdafadf");
+//					if(classname.getLabel().equals("WalkingTests"))
+//						System.out.println("sdafadf");
 					
 					String lowerclassname=classname.getLabel();
 					

@@ -153,7 +153,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 				if(attributes!=null && attributes.size()>0)
 				{
 					List<ITree> anotations=breadthFirstSearchForLabel(attributes.get(0),"Test","an2");
-					System.out.println("test");
+					//System.out.println("test");
 					
 					if(anotations!=null && anotations.size()>0)
 					{

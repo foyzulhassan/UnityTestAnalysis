@@ -24,6 +24,7 @@ import com.unity.callgraph.UserDefinedCallAnalysis;
 import com.unity.commitanalyzer.CommitAnalysisMngr;
 import com.unity.entity.PerfFixData;
 import com.unity.entity.TestData;
+import com.unity.entity.TestMethodData;
 import com.unity.repodownloader.ProjectLoader;
 import com.unity.testanalysis.ProjectTestAnalyzer;
 import com.unity.testanalysis.ProjectTestData;
@@ -141,12 +142,13 @@ public class MainClass {
 			 ProjectTestAnalyzer analyzer=new ProjectTestAnalyzer();
 			 ProjectTestData projdata=analyzer.PerformClassFunctionType();
 			 List<TestData> testdatalist=analyzer.convertToTestData(projdata);
-			 
+			 List<TestMethodData> testmethoddatalist=analyzer.convertToTestMethodData(projdata);
 			 if(testdatalist.size()>0)
 				{
 					CSVReaderWriter writer=new CSVReaderWriter();
 					try {
-						writer.writeListBeanToFile(testdatalist, Config.csvFileTestStat);
+						writer.newwriteListBeanToFile(testdatalist, Config.csvFileTestStat);
+						writer.writeBeanToFile(testmethoddatalist, Config.csvFileTestStatDetails);
 					} catch (CsvDataTypeMismatchException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -157,7 +159,9 @@ public class MainClass {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}	
+				}
+			 
+			 System.out.print("*********Done************");
 
 //			  CallGraphBasedDistinctFuncAnalyzer callgraphcommit = new CallGraphBasedDistinctFuncAnalyzer();
 //

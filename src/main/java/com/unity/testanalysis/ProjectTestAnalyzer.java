@@ -13,6 +13,7 @@ import com.unity.callgraph.ClassFunction;
 import com.unity.callgraph.FunctionCall;
 import com.unity.entity.PerfFixData;
 import com.unity.entity.TestData;
+import com.unity.entity.TestMethodData;
 import com.utility.ProjectPropertyAnalyzer;
 
 import edu.util.fileprocess.CSVReaderWriter;
@@ -31,11 +32,15 @@ public class ProjectTestAnalyzer {
 		//List<PerfFixData> fixdata = new ArrayList<>();
 		ProjectTestData projtestdata=new ProjectTestData();
 
+		int counter=0;
 		for (String proj : projlist) {
 			String projname = ProjectPropertyAnalyzer.getProjName(proj);
 			TestAnalysisData analysisdata = new TestAnalysisData(projname);
 
 			CommitAnalyzer cmtanalyzer = null;
+			System.out.println(counter+"-->"+projname);;
+			counter++;
+			
 
 			try {
 				cmtanalyzer = new CommitAnalyzer("test", projname, proj);
@@ -64,7 +69,7 @@ public class ProjectTestAnalyzer {
 
 				// Should work here to analyze the data
 				
-				System.out.print("test");
+				//System.out.print("test");
 				projtestdata.addProjectData(projname, analysisdata);
 
 			} catch (Exception e) {
@@ -112,6 +117,35 @@ public class ProjectTestAnalyzer {
 			 testdata.setTestFunctionCount(projectTestData.get(proj).getTestMethodListSize());
 			 
 			 testdatalist.add(testdata);
+		 }	
+		
+		
+		return testdatalist;
+	}
+	
+	public List<TestMethodData> convertToTestMethodData(ProjectTestData data)
+	{
+		List<TestMethodData> testdatalist=new ArrayList<TestMethodData>();
+		
+		Map<String,TestAnalysisData> projectTestData=data.getProjectTestData();
+		
+		int id=0;
+		 for (String proj : projectTestData.keySet())
+		 {			 
+			 List<String> methodlist=projectTestData.get(proj).getTestMethodList();
+			 
+			 if(methodlist!=null && methodlist.size()>0)
+			 {
+				 for(String method:methodlist)
+				 {
+					 TestMethodData testmethoddata=new TestMethodData(proj,id);
+					 testmethoddata.setTestMethodName(method);
+					 testdatalist.add(testmethoddata);
+				 }
+			 }
+			 
+			 id++;
+			
 		 }	
 		
 		

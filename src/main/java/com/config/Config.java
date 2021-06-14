@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Config {
 	// public static String rootDir="/media/AutoBuilder/UnityPerformance/";
 	 public static String
-	 rootDir="D:\\Code\\VR_AR_Testing\\unityperfanalyzer\\repo\\project_repo\\";
+	 rootDir="G:\\Research\\VR_AR_Testing\\project_repo\\";
 	 //
 	 //text file that contains list of projects to analyze
 	 public static String gitProjList=rootDir+"Project_Source.txt";
@@ -21,6 +21,7 @@ public class Config {
 			"contention", "optimiz", "efficient" };
 	
 	public static String csvFileTestStat=rootDir+"test_stat.csv";
+	public static String csvFileTestStatDetails=rootDir+"test_stat_details.csv";
 
 	// text file that contains list of projects to analyze
 //	public static String rootDir = "F:\\Tammi_Thesis\\Repo\\";
