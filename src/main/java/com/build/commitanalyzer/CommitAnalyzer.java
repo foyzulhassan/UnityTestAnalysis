@@ -69,6 +69,9 @@ import com.github.gumtreediff.tree.ITree;
 import com.unity.callgraph.ClassFunction;
 import com.unity.entity.PerfFixData;
 import com.unity.testanalysis.ClassFunctionTypeAnalyzer;
+import com.unity.testanalyzer.LineCountAssertCount;
+import com.unity.testsmell.AssertCall;
+import com.unity.testsmell.AssertionRoulette;
 
 import org.apache.commons.io.IOUtils;
 
@@ -540,6 +543,168 @@ public class CommitAnalyzer {
 		}
 		
 		return classfunclist;
+	}
+	
+	public LineCountAssertCount getTestLocAndAssertCount(String commitid) {
+
+		List<ClassFunction> classfunclist=new ArrayList<>();
+		LineCountAssertCount projtestloclinecount=new LineCountAssertCount();
+		try {
+			ObjectId objectid = repository.resolve(commitid);
+			RevCommit commit = rw.parseCommit(objectid);
+
+			RevTree tree = commit.getTree();
+
+			// TreeWalk treeWalk = new TreeWalk(repository);
+			// treeWalk.addTree(tree);
+			// treeWalk.setRecursive(false);
+			// treeWalk.setPostOrderTraversal(false);
+
+			TreeWalk treeWalk = new TreeWalk(repository);
+			treeWalk.addTree(commit.getTree());
+			treeWalk.setRecursive(false);
+
+			// treeWalk.setRecursive(true);
+
+			while (treeWalk.next()) {
+				// System.out.println("found:" + treeWalk.getPathString());
+
+				if (treeWalk.isSubtree()) {
+					// System.out.println("dir: " + treeWalk.getPathString());
+					treeWalk.enterSubtree();
+				}
+				
+
+
+				else if (treeWalk.getPathString().endsWith(".cs")) {
+					if(treeWalk.getPathString().contains("WalkingTests.cs"))
+						System.out.println("Debug");
+					
+					ObjectId objectId = treeWalk.getObjectId(0);
+					ObjectLoader loader = repository.open(objectId);
+
+					// and then one can the loader to read the file
+					// loader.copyTo(System.out);
+
+					byte[] butestr = loader.getBytes();
+					String str = new String(butestr);
+					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+					
+					
+					//CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
+					ClassFunctionTypeAnalyzer typeanalyzer=new ClassFunctionTypeAnalyzer();
+					LineCountAssertCount testclasslocassert=typeanalyzer.getClassTestLocAssert(f1);
+					projtestloclinecount.addAssertCount(testclasslocassert.getAssertCount());
+					projtestloclinecount.addLineCount(testclasslocassert.getLineCount());
+					
+					f1.delete();
+
+
+				}
+
+			}
+			treeWalk.reset();
+
+		} catch (Exception ex) {
+			System.out.print(ex.getMessage());
+		}
+		
+		return projtestloclinecount;
+	}
+	
+	
+	public Map<String,List<AssertCall>> getAssertRoulette(String commitid) {
+
+		//List<ClassFunction> classfunclist=new ArrayList<>();
+		Map<String,List<AssertCall>> projtestfuncassertmap=new HashMap<>();
+		
+		try {
+			ObjectId objectid = repository.resolve(commitid);
+			RevCommit commit = rw.parseCommit(objectid);
+
+			RevTree tree = commit.getTree();
+
+			// TreeWalk treeWalk = new TreeWalk(repository);
+			// treeWalk.addTree(tree);
+			// treeWalk.setRecursive(false);
+			// treeWalk.setPostOrderTraversal(false);
+
+			TreeWalk treeWalk = new TreeWalk(repository);
+			treeWalk.addTree(commit.getTree());
+			treeWalk.setRecursive(false);
+
+			// treeWalk.setRecursive(true);
+
+			while (treeWalk.next()) {
+				// System.out.println("found:" + treeWalk.getPathString());
+//				System.out.println(treeWalk.getPathString()+"*****");
+				if (treeWalk.isSubtree()) {
+					// System.out.println("dir: " + treeWalk.getPathString());
+					treeWalk.enterSubtree();
+				}
+				
+
+
+				else if (treeWalk.getPathString().endsWith(".cs")) {					
+					
+					ObjectId objectId = treeWalk.getObjectId(0);
+					ObjectLoader loader = repository.open(objectId);
+
+					// and then one can the loader to read the file
+					// loader.copyTo(System.out);
+
+					byte[] butestr = loader.getBytes();
+					String str = new String(butestr);
+					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+					
+					
+					
+					Reader reader;
+					try {
+//						System.out.println(treeWalk.getPathString());
+						
+//						if(treeWalk.getPathString().contains("Resources.Designer.cs"))
+//						{
+//							System.out.print("debug");
+//						}
+						reader = new FileReader(f1.toString());
+						ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+						
+						//TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
+						//analyzer.getTestFunctionList(curtree);
+						AssertionRoulette ar=new AssertionRoulette();
+						Map<String,List<AssertCall>> testfuncassertmap=ar.searchForAssertionRoulette(curtree);
+						
+						//Copy to project map
+						for(String key:testfuncassertmap.keySet())
+						{
+							if(!projtestfuncassertmap.containsKey(key))
+							{
+								projtestfuncassertmap.put(key, testfuncassertmap.get(key));
+							}
+							
+							
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+
+					
+					f1.delete();
+
+
+				}
+
+			}
+			treeWalk.reset();
+
+		} catch (Exception ex) {
+			System.out.print(ex.getMessage());
+		}
+		
+		return projtestfuncassertmap;
 	}
 
 }

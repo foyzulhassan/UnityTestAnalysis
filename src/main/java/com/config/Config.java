@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Config {
 	// public static String rootDir="/media/AutoBuilder/UnityPerformance/";
 	 public static String
-	 rootDir="G:\\Research\\VR_AR_Testing\\project_repo\\";
+	 rootDir="H:\\Research\\VR_AR_Testing\\project_repo\\";
 	 //
 	 //text file that contains list of projects to analyze
 	 public static String gitProjList=rootDir+"Project_Source.txt";
@@ -20,8 +20,11 @@ public class Config {
 	public static String[] perfCommitToken = { "performance", "speed up", "accelerate", "fast", "slow", "latenc",
 			"contention", "optimiz", "efficient" };
 	
-	public static String csvFileTestStat=rootDir+"test_stat.csv";
-	public static String csvFileTestStatDetails=rootDir+"test_stat_details.csv";
+	public static String csvFileTestStat=rootDir+"unity_test_stat.csv";
+	public static String csvFileTestStatDetails=rootDir+"unity_test_stat_details.csv";
+	public static String csvFileAssertDensityStat=rootDir+"unity_assert_density_stat.csv";
+	private static String csvFileSmellStat=rootDir+"unity_Smell_";
+
 
 	// text file that contains list of projects to analyze
 //	public static String rootDir = "F:\\Tammi_Thesis\\Repo\\";
@@ -33,5 +36,11 @@ public class Config {
 
 	public static int commitid = 1;
 	public static int stmtUniqueId = 1;
+	public static String separatorStr="<>";
+	
+	public static String getSmellStatFile(String smellname)
+	{
+		return csvFileSmellStat+smellname+".csv";
+	}
 
 }

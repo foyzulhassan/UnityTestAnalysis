@@ -47,6 +47,7 @@ public class SrcmlUnityCsTreeGenerator extends AbstractSrcmlTreeGenerator {
     }
 
     public TreeContext getTreeContext(String xml) {
+    	//System.out.println(xml);
         XMLInputFactory fact = XMLInputFactory.newInstance();
         context = new TreeContext();
         currentLabel = new StringBuilder();
@@ -70,6 +71,7 @@ public class SrcmlUnityCsTreeGenerator extends AbstractSrcmlTreeGenerator {
                         if (trees.isEmpty()) {
                             context.setRoot(t);
                             t.setPos(0);
+                            t.setMetadata("lineno", 0);
                         } else {
                             t.setParentAndUpdateChildren(trees.peekFirst());
                             setPos(t, s);

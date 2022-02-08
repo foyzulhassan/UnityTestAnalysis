@@ -24,6 +24,7 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.unity.entity.PerfFixData;
+import com.unity.entity.ProjAssertDensity;
 import com.unity.entity.TestData;
 import com.unity.entity.TestMethodData;
 
@@ -74,8 +75,8 @@ public class CSVReaderWriter {
 		}
 
 	}
-	
-	public <T> void writeListBean(List<T> fixdata, String csvfilepath,Class neededClass)
+
+	public <T> void writeListBean(List<T> fixdata, String csvfilepath, Class neededClass)
 			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 
 		try {
@@ -121,7 +122,6 @@ public class CSVReaderWriter {
 
 	}
 
-
 	public List<PerfFixData> getListBeanFromCSV(String strpath) throws Exception {
 
 		List<PerfFixData> data = null;
@@ -142,8 +142,8 @@ public class CSVReaderWriter {
 
 		return data;
 	}
-	
-	public <T> List<T> getListBeanFromCSV(String strpath,Class neededClass) throws Exception {
+
+	public <T> List<T> getListBeanFromCSV(String strpath, Class neededClass) throws Exception {
 
 		List<T> data = null;
 
@@ -163,7 +163,7 @@ public class CSVReaderWriter {
 
 		return data;
 	}
-	
+
 	public void writeListBeanToFile(List<TestData> fixdata, String csvfilepath)
 			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 
@@ -209,8 +209,7 @@ public class CSVReaderWriter {
 		}
 
 	}
-	
-	
+
 	public void newwriteListBeanToFile(List<TestData> fixdata, String csvfilepath)
 			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 
@@ -218,46 +217,15 @@ public class CSVReaderWriter {
 
 			// Creating writer class to generate
 			// csv file
-			//FileWriter writer = new FileWriter(csvfilepath);
+			// FileWriter writer = new FileWriter(csvfilepath);
 			CustomMappingStrategy<TestData> mappingStrategy = new CustomMappingStrategy<>();
-	        mappingStrategy.setType(TestData.class);
-			
-			 Writer writer = new FileWriter(csvfilepath);
-		        StatefulBeanToCsv<TestData> beanToCsv = new StatefulBeanToCsvBuilder<TestData>(writer)
-		                .withMappingStrategy(mappingStrategy).withSeparator(',').build();
-		        beanToCsv.write(fixdata);
-		        writer.close();
+			mappingStrategy.setType(TestData.class);
 
-			// // Create Mapping Strategy to arrange the
-			// // column name in order
-			// ColumnPositionMappingStrategy mappingStrategy=
-			// new ColumnPositionMappingStrategy();
-			// mappingStrategy.setType(PerfFixData.class);
-			//
-			// // Arrange column name as provided in below array.
-			// String[] columns = new String[]
-			// { "projName","projGitUrl","fixCommitID", "fixCommitMsg",
-			// "patchPath","srcFileChangeCount","assetChangeCount" };
-			// mappingStrategy.setColumnMapping(columns);
-			//
-			//
-			// // Createing StatefulBeanToCsv object
-			// StatefulBeanToCsvBuilder<PerfFixData> builder=
-			// new StatefulBeanToCsvBuilder(writer);
-			// StatefulBeanToCsv beanWriter =
-			// builder.withMappingStrategy(mappingStrategy).build();
-			//
-			// // Write list to StatefulBeanToCsv object
-			// beanWriter.write(fixdata);
-
-			// // closing the writer object
-			// writer.close();
-
-//			StatefulBeanToCsvBuilder<TestData> builder = new StatefulBeanToCsvBuilder<TestData>(writer);
-//			StatefulBeanToCsv<TestData> beanWriter = builder.build();
-//
-//			beanWriter.write(fixdata);
-//			writer.close();
+			Writer writer = new FileWriter(csvfilepath);
+			StatefulBeanToCsv<TestData> beanToCsv = new StatefulBeanToCsvBuilder<TestData>(writer)
+					.withMappingStrategy(mappingStrategy).withSeparator(',').build();
+			beanToCsv.write(fixdata);
+			writer.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -265,7 +233,29 @@ public class CSVReaderWriter {
 
 	}
 	
-	
+	public void writeAssertDensityListBeanToFile(List<ProjAssertDensity> fixdata, String csvfilepath)
+			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+
+		try {
+
+			// Creating writer class to generate
+			// csv file
+			// FileWriter writer = new FileWriter(csvfilepath);
+			CustomMappingStrategy<ProjAssertDensity> mappingStrategy = new CustomMappingStrategy<>();
+			mappingStrategy.setType(ProjAssertDensity.class);
+
+			Writer writer = new FileWriter(csvfilepath);
+			StatefulBeanToCsv<ProjAssertDensity> beanToCsv = new StatefulBeanToCsvBuilder<ProjAssertDensity>(writer)
+					.withMappingStrategy(mappingStrategy).withSeparator(',').build();
+			beanToCsv.write(fixdata);
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	public void newwriteTestMethodListBeanToFile(List<TestMethodData> fixdata, String csvfilepath)
 			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 
@@ -273,15 +263,15 @@ public class CSVReaderWriter {
 
 			// Creating writer class to generate
 			// csv file
-			//FileWriter writer = new FileWriter(csvfilepath);
+			// FileWriter writer = new FileWriter(csvfilepath);
 			CustomMappingStrategy<TestMethodData> mappingStrategy = new CustomMappingStrategy<>();
-	        mappingStrategy.setType(TestMethodData.class);
-			
-			 Writer writer = new FileWriter(csvfilepath);
-		        StatefulBeanToCsv<TestMethodData> beanToCsv = new StatefulBeanToCsvBuilder<TestMethodData>(writer)
-		                .withMappingStrategy(mappingStrategy).withSeparator(',').build();
-		        beanToCsv.write(fixdata);
-		        writer.close();
+			mappingStrategy.setType(TestMethodData.class);
+
+			Writer writer = new FileWriter(csvfilepath);
+			StatefulBeanToCsv<TestMethodData> beanToCsv = new StatefulBeanToCsvBuilder<TestMethodData>(writer)
+					.withMappingStrategy(mappingStrategy).withSeparator(',').build();
+			beanToCsv.write(fixdata);
+			writer.close();
 
 			// // Create Mapping Strategy to arrange the
 			// // column name in order
@@ -319,7 +309,7 @@ public class CSVReaderWriter {
 		}
 
 	}
-	
+
 	public <T> void writeBeanToFile(List<T> fixdata, String csvfilepath)
 			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 

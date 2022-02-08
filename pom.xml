@@ -193,6 +193,11 @@
 			<artifactId>org.eclipse.jdt.core</artifactId>
 			<version>3.12.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.5</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>

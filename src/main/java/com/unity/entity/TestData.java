@@ -4,30 +4,24 @@ import com.config.Config;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 
-//@CsvBindByPosition(position = 2)
+
 public class TestData {
 	@CsvBindByName(column = "id", required = true)
-	@CsvBindByPosition(position = 0)
 	public int id;
 
 	@CsvBindByName(column = "projName", required = true)
-	 @CsvBindByPosition(position = 1)
 	public String projName;
 
 	@CsvBindByName(column = "classCount", required = true)
-	@CsvBindByPosition(position = 2)
 	public int classCount;
 
 	@CsvBindByName(column = "testClassCount", required = true)
-	@CsvBindByPosition(position = 3)
 	public int testClassCount;
 
 	@CsvBindByName(column = "functionCount", required = true)
-	@CsvBindByPosition(position = 4)
 	public int functionCount;
 
 	@CsvBindByName(column = "testFunctionCount", required = true)
-	@CsvBindByPosition(position = 5)
 	public int testFunctionCount;
 
 	public TestData(String projname) {
