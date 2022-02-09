@@ -52,7 +52,6 @@ public class ApacheCSVReaderWriter {
 		String[] HEADERS = { "project", "smellname", "percentage" };
 
 		try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(HEADERS))) {
-
 			for (ProjectSmellEntity item : smellstat) {
 				printer.printRecord(item.getProjName(), item.getSmellName(), item.getSmellPercentage());
 			}

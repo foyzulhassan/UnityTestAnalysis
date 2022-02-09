@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Config {
 	// public static String rootDir="/media/AutoBuilder/UnityPerformance/";
 	 public static String
-	 rootDir="H:\\Research\\VR_AR_Testing\\project_repo\\";
+	 rootDir="/home/umd-002677/VR_AR_Testing/project_repos/";
 	 //
 	 //text file that contains list of projects to analyze
 	 public static String gitProjList=rootDir+"Project_Source.txt";

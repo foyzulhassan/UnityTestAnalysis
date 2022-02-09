@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/reference_project/TestSmellDetector-2.1/TestSmellDetector.iml" filepath="$PROJECT_DIR$/reference_project/TestSmellDetector-2.1/TestSmellDetector.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unitytestAnalyzer.iml" filepath="$PROJECT_DIR$/unitytestAnalyzer.iml" />
+    </modules>
+  </component>
+</project>
