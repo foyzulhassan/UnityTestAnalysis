@@ -27,16 +27,12 @@ public class AssertionRoulette {
 		List<ITree> testfunclist=TreeNodeAnalyzer.getTestFunctionList(root);
 		Map<String,List<AssertCall>> testfuncassertmap=new HashMap<>();
 		ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
-		
 		if(classnode==null)
 			return testfuncassertmap;
 		                  
 		ITree classname = SrcmlUnityCsMetaDataGenerator.getClassName(classnode);		
 		
 		String lowerclassname = classname.getLabel();
-		
-		
-		
 		for(ITree testfunc:testfunclist)
 		{
 			List<ITree> assertlist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "assert");

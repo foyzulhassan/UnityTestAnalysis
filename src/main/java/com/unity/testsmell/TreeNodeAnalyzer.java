@@ -119,7 +119,8 @@ public class TreeNodeAnalyzer {
 			// actually visiting that node, so we make sure to check and skip that node if
 			// we have
 			// encountered it before
-
+//            System.out.println(currentFirst.getType().toString());
+//            System.out.println(currentFirst.getLabel());
 			if (currentFirst.getType().toString().contains(nodetype)) {
 
 				nodelist.add(currentFirst);
@@ -223,7 +224,12 @@ public class TreeNodeAnalyzer {
 			// actually visiting that node, so we make sure to check and skip that node if
 			// we have
 			// encountered it before
-			
+
+            if(currentFirst.getType().toString().toLowerCase().equals("switch"))
+            {
+                System.out.println(currentFirst.getLabel().toLowerCase());
+            }
+
 			if (currentFirst.getLabel().toLowerCase().equals(label) && currentFirst.getType().toString().toLowerCase().equals(type)) {
 				nodelist.add(currentFirst);
 				
@@ -254,5 +260,6 @@ public class TreeNodeAnalyzer {
 		}
 		return nodelist;
 	}
+
 
 }

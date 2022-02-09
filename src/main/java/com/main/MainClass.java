@@ -173,6 +173,20 @@ public class MainClass {
 			}
 			
 		}
+        else if (inputid == 99) {
+            System.out.println("Conditional Test Analysis(RQ3-a)");
+
+            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeConditionalTest();
+            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ConditionalTestLogic"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
 		
 		
 		else if (inputid == 24) {

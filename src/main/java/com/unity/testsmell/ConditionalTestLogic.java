@@ -16,262 +16,178 @@ import com.unity.testanalyzer.LineCountAssertCount;
 import java.util.*;
 
 public class ConditionalTestLogic {
-// TODO: #DHIA Continue working on class visitor pattern for ConditionalTestLogic
 
+private int conditionCount, ifCount, switchCount, forCount, foreachCount, whileCount,doCount = 0;
 
-//    private class ClassVisitor  {
-//        public void visit(MethodDeclaration n, Void arg) {
-//            if (Util.isValidTestMethod(n)) {
-//                currentMethod = n;
-//                testMethod = new TestMethod(n.getNameAsString());
-//                testMethod.setHasSmell(false); //default value is false (i.e. no smell)
-//
-//                testMethod.setHasSmell(conditionCount > 0 | ifCount > 0 | switchCount > 0 | foreachCount > 0 | forCount > 0 | whileCount > 0);
-//                testMethod.addDataItem("ConditionCount", String.valueOf(conditionCount));
-//                testMethod.addDataItem("IfCount", String.valueOf(ifCount));
-//                testMethod.addDataItem("SwitchCount", String.valueOf(switchCount));
-//                testMethod.addDataItem("ForeachCount", String.valueOf(foreachCount));
-//                testMethod.addDataItem("ForCount", String.valueOf(forCount));
-//                testMethod.addDataItem("WhileCount", String.valueOf(whileCount));
-//                smellyElementList.add(testMethod);
-//
-//                //reset values for next method
-//                currentMethod = null;
-//                conditionCount = 0;
-//                ifCount = 0;
-//                switchCount = 0;
-//                forCount = 0;
-//                foreachCount = 0;
-//                whileCount = 0;
-//            }
-//        }
-//
-//        public void visit(IfStmt n, Void arg) {
-//
-//            if (currentMethod != null) {
-//                ifCount++;
-//            }
-//        }
-//        public void visit(SwitchStmt n, Void arg) {
-//
-//            if (currentMethod != null) {
-//                switchCount++;
-//            }
-//        }
-//
-//        public void visit(ConditionalExpr n, Void arg) {
-//
-//
-//            if (currentMethod != null) {
-//                conditionCount++;
-//            }
-//        }
-//        public void visit(ForStmt n, Void arg) {
-//
-//
-//            if (currentMethod != null) {
-//                forCount++;
-//            }
-//        }
-//        public void visit(ForeachStmt n, Void arg) {
-//
-//            if (currentMethod != null) {
-//                foreachCount++;
-//            }
-//        }
-//
-//        public void visit(WhileStmt n, Void arg) {
-//
-//            if (currentMethod != null) {
-//                whileCount++;
-//            }
-//        }
-//    }
-//
-	
 	public void getSmell(ITree root)
 	{
-		
+
 	}
 
-	public Map<String,List<AssertCall>> searchForConditionalTestLogic(ITree root)
+	public Map<String,Map<String,Integer>> searchForConditionalTestLogic(ITree root)
 	{
-				
+
 		List<ITree> testfunclist=TreeNodeAnalyzer.getTestFunctionList(root);
-		Map<String,List<AssertCall>> testfuncassertmap=new HashMap<>();
+		Map<String,Map<String,Integer>> testfuncconditionalTestmap=new HashMap<>();
+
 		ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
-		
+
 		if(classnode==null)
-			return testfuncassertmap;
-		                  
-		ITree classname = SrcmlUnityCsMetaDataGenerator.getClassName(classnode);		
-		
+			return testfuncconditionalTestmap;
+
+		ITree classname = SrcmlUnityCsMetaDataGenerator.getClassName(classnode);
+
 		String lowerclassname = classname.getLabel();
-		
-		
-		
+
+
 		for(ITree testfunc:testfunclist)
 		{
-
-
-			List<ITree> assertlist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "assert");
+			List<ITree> if_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "if_stmt", "");
 			ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
-			List<AssertCall> assercalllist=new ArrayList<>();
+//			List<AssertCall> assercalllist=new ArrayList<>();
 			String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
-			if(assertlist!=null && assertlist.size()>0)
+
+			if(if_stmt_list!=null && if_stmt_list.size()>0)
 			{
-				for(ITree assertitem:assertlist)
-				{					
-					AssertCall assertcall=TreeNodeAnalyzer.getAssertCall(assertitem);
-					boolean ismsged=IsMsgedAssert(assertcall);
-					if(ismsged)
-					{
-						assertcall.setHasMsg(true);
-					}
-					assercalllist.add(assertcall);
-					//System.out.println("test");
-				}
-			}		
-			testfuncassertmap.put(classtestfunc, assercalllist);
-		}
-		
-		return testfuncassertmap;
-	}
-	
-	private boolean IsMsgedAssert(AssertCall assertcall)
-	{
-		
-		boolean ismsged=false;
-		
-		if(IsNUnitSingleParamAssert(assertcall.getAssertName()))
-		{
-			if(assertcall.getParamList().size()>1)
-			{
-				ismsged=true;
+				ifCount++;
 			}
+
+            List<ITree> switch_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc,"switch", "");
+//            System.out.println(switch_stmt_list);
+            funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+//			List<AssertCall> assercalllist=new ArrayList<>();
+             classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+
+            if(switch_stmt_list!=null && switch_stmt_list.size()>0)
+            {
+                switchCount++;
+            }
+            //TODO
+            //condition ternary
+            List<ITree> ternary_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc,"ternary","");
+//            System.out.println(switch_stmt_list);
+            funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+//			List<AssertCall> assercalllist=new ArrayList<>();
+            classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+
+            if(ternary_stmt_list!=null && ternary_stmt_list.size()>0)
+            {
+                conditionCount++;
+            }
+
+
+            //dowhile
+            List<ITree> do_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc,"do", "");
+//            System.out.println(switch_stmt_list);
+            funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+//			List<AssertCall> assercalllist=new ArrayList<>();
+            classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+
+            if(do_stmt_list!=null && do_stmt_list.size()>0)
+            {
+                doCount++;
+            }
+            //for
+            List<ITree> for_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc,"for", "");
+//            System.out.println(switch_stmt_list);
+            funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+//			List<AssertCall> assercalllist=new ArrayList<>();
+            classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+
+            if(for_stmt_list!=null && for_stmt_list.size()>0)
+            {
+                forCount++;
+            }
+            //foreach
+            List<ITree> for_each_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc,"foreach", "");
+//            System.out.println(switch_stmt_list);
+            funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+//			List<AssertCall> assercalllist=new ArrayList<>();
+            classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+
+            if(for_each_stmt_list!=null && for_each_stmt_list.size()>0)
+            {
+                foreachCount++;
+            }
+            //while
+            List<ITree> while_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc,"while", "");
+//            System.out.println(switch_stmt_list);
+            funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+//			List<AssertCall> assercalllist=new ArrayList<>();
+            classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+
+            if(while_stmt_list!=null && while_stmt_list.size()>0)
+            {
+                whileCount++;
+            }
+//            if (ifCount+switchCount+doCount+conditionCount+forCount+foreachCount+whileCount >0 )
+//                System.out.println(classtestfunc);
+//            if(ifCount > 0) {
+//                System.out.println("ifCount");
+//                System.out.println(ifCount);
+//            }
+//            if(switchCount>0){
+//                System.out.println("switchCount");
+//                System.out.println(switchCount);}
+//
+//            if(doCount>0){
+//                System.out.println("doCount");
+//                System.out.println(doCount);}
+//
+//            if(conditionCount>0){
+//                System.out.println("conditionCount");
+//                System.out.println(conditionCount);}
+//            if(forCount>0){
+//                System.out.println("forCount");
+//                System.out.println(forCount);}
+//            if(foreachCount>0){
+//                System.out.println("foreachCount");
+//                System.out.println(foreachCount);}
+//            if(whileCount>0){
+//                System.out.println("whileCount");
+//                System.out.println(whileCount);}
+
+////        System.exit(0);
+            Map<String,Integer> mapTemp = new HashMap<>();
+            if(doCount>0)
+                mapTemp.put("doCount",doCount);
+            if(conditionCount>0)
+            mapTemp.put("conditionCount",conditionCount);
+            if(ifCount>0)
+            mapTemp.put("ifCount",ifCount);
+            if(switchCount>0)
+            mapTemp.put("switchCount",switchCount);
+            if(forCount>0)
+            mapTemp.put("forCount",forCount);
+            if(foreachCount>0)
+            mapTemp.put("foreachCount",foreachCount);
+            if(whileCount>0)
+            mapTemp.put("whileCount",whileCount);
+            testfuncconditionalTestmap.put(classtestfunc,mapTemp);
+            doCount=0;
+            conditionCount = 0;
+            ifCount = 0;
+            switchCount = 0;
+            forCount = 0;
+            foreachCount = 0;
+            whileCount = 0;
+
 		}
-		else if(IsNUnitDoubleParamAssert(assertcall.getAssertName()))
-		{
-			if(assertcall.getParamList().size()>2)
-			{
-				ismsged=true;
-			}
-		}
-		else if(IsNUnitNoParamAssert(assertcall.getAssertName()))
-		{
-			if(assertcall.getParamList().size()>0)
-			{
-				ismsged=true;
-			}
-		}
-		
-		return ismsged;
-	}
-	
-	private boolean IsNUnitSingleParamAssert(String assertname)
-	{
-		List<String> assertlist=new ArrayList<>();
-		
-		assertlist.add("Assert.True");
-		assertlist.add("Assert.False");
-		assertlist.add("Assert.Null");
-		assertlist.add("Assert.NotNull");
-		assertlist.add("Assert.Zero");
-		assertlist.add("Assert.NotZero");
-		assertlist.add("Assert.IsNaN");
-		assertlist.add("Assert.IsEmpty");
-		assertlist.add("Assert.IsNotEmpty");
-		assertlist.add("Assert.NotNull");
-		assertlist.add("Assert.Positive");
-		assertlist.add("Assert.Negative");		
-		assertlist.add("Assert.IsInstanceOf");
-		assertlist.add("Assert.IsNotInstanceOf");
-		assertlist.add("Assert.IsAssignableFrom");
-		assertlist.add("Assert.IsNotAssignableFrom");		
-		assertlist.add("Assert.DoesNotThrow");
-		assertlist.add("Assert.DoesNotThrowAsync");
-		assertlist.add("Assert.Catch");
-		assertlist.add("Assert.CatchAsync");		
-		assertlist.add("Assert.DoesNotThrow");
-		assertlist.add("Assert.DoesNotThrowAsync");
-		assertlist.add("Assert.Catch");
-		assertlist.add("Assert.CatchAsync");
-		
-		assertlist.add("CollectionAssert.AllItemsAreInstancesOfType");
-		assertlist.add("CollectionAssert.AllItemsAreNotNull");
-		assertlist.add("CollectionAssert.AllItemsAreUnique");
-		assertlist.add("CollectionAssert.IsEmpty");
-		assertlist.add("CollectionAssert.IsNotEmpty");
-		assertlist.add("CollectionAssert.IsOrdered");
 
-		if(assertlist.contains(assertname))
-			return true;
-		else
-			return false;
-		
-	}
-	
-	private boolean IsNUnitDoubleParamAssert(String assertname)
-	{
-		List<String> assertlist=new ArrayList<>();
-		
-		assertlist.add("Assert.AreEqual");
-		assertlist.add("Assert.AreNotEqual");
-		assertlist.add("Assert.AreSame");
-		assertlist.add("Assert.AreNotSame");
-		assertlist.add("Assert.Contains");
-		assertlist.add("Assert.Greater");
-		assertlist.add("Assert.GreaterOrEqual");
-		assertlist.add("Assert.Less");
-		assertlist.add("Assert.LessOrEqual");
-		assertlist.add("Assert.NotNull");
-		assertlist.add("Assert.Zero");
-		assertlist.add("Assert.NotZero");		
-		assertlist.add("Assert.Throws");		
-		assertlist.add("StringAssert");		
 
-		assertlist.add("DirectoryAssert");
-		
-		assertlist.add("CollectionAssert.AreEqual");
-		assertlist.add("CollectionAssert.AreEquivalent");
-		assertlist.add("CollectionAssert.AreNotEqual");
-		
-		assertlist.add("CollectionAssert.AreNotEquivalent");
-		assertlist.add("CollectionAssert.Contains");
-		assertlist.add("CollectionAssert.DoesNotContain");
-		
-		assertlist.add("CollectionAssert.IsSubsetOf");
-		assertlist.add("CollectionAssert.IsNotSubsetOf");
-		assertlist.add("CollectionAssert.AreNotEqual");
+        return testfuncconditionalTestmap;
 
-		if(assertlist.contains(assertname))
-			return true;
-		else
-			return false;
-		
-	}
-	
-	private boolean IsNUnitNoParamAssert(String assertname)
-	{
-		List<String> assertlist=new ArrayList<>();
-		
-		assertlist.add("Assert.Pass");
-		assertlist.add("Assert.Fail");
-		assertlist.add("Assert.Ignore");
-		assertlist.add("Assert.Inconclusive");
-		
-		if(assertlist.contains(assertname))
-			return true;
-		else
-			return false;
-		
-	}
-	
-	
-	
 
-	
-	
+	}
+
+
+
+
+
+
+
+
+
 //	public static ITree getBlock(ITree currentnode) {
 //		ITree block = null;
 //
@@ -389,11 +305,11 @@ public class ConditionalTestLogic {
 //		}
 //		return classnode;
 //	}
-//	
+//
 	public static LineCountAssertCount getLineCount(ITree node,String nodevisitedmeta) {
 
 		// Just so we handle receiving an uninitialized Node, otherwise an
-		// exception will be thrown when we try to add it to queue	
+		// exception will be thrown when we try to add it to queue
 		Map<Integer,Integer> mapping=new HashMap<>();
 		int assertcount=0;
 		LineCountAssertCount lineassert=new LineCountAssertCount();
@@ -414,13 +330,13 @@ public class ConditionalTestLogic {
 
 			if (!currentFirst.getType().toString().equals("comment")) {
 				int linepos=(int) currentFirst.getMetadata("lineno");
-				
+
 				if(!mapping.containsKey(linepos))
 				{
 					mapping.put(linepos, linepos);
 				}
 			}
-			
+
 			if(currentFirst.getType().toString().equals("call"))
 			{
 				if(currentFirst.getChildren().size()>0)
@@ -432,20 +348,20 @@ public class ConditionalTestLogic {
 						assertcount++;
 					}
 				}
-				
+
 			}
 			else if(currentFirst.getType().toString().equals("name"))
 			{
-				
+
 					String methodname=currentFirst.getLabel();
 					//ITree parent=currentFirst.getParent();
-					
+
 					if(methodname.toLowerCase().contains("assert"))
 					{
 						assertcount++;
 					}
-				
-				
+
+
 			}
 
 			if (currentFirst.getMetadata(nodevisitedmeta) != null)
@@ -474,7 +390,7 @@ public class ConditionalTestLogic {
 		lineassert.setAssertCount(assertcount);
 		return lineassert;
 	}
-//	
+//
 //	public static List<ITree> breadthFirstSearchForNodeList(ITree node,String type,String nodevisitedmeta) {
 //
 //		// Just so we handle receiving an uninitialized Node, otherwise an
@@ -499,18 +415,18 @@ public class ConditionalTestLogic {
 //			if (currentFirst.getType().toString().contains(type)) {
 //				currentFirst.setMetadata("JUNIT", false);
 //				List<ITree> attributes=breadthFirstSearchForNodeList1(currentFirst,"attribute","an1");
-//				
+//
 //				if(attributes!=null && attributes.size()>0)
 //				{
 //					List<ITree> anotations=breadthFirstSearchForLabel(attributes.get(0),"Test","an2");
 //					//System.out.println("test");
-//					
+//
 //					if(anotations!=null && anotations.size()>0)
 //					{
 //						currentFirst.setMetadata("JUNIT", true);
 //					}
 //				}
-//				
+//
 //				nodelist.add(currentFirst);
 //
 //			}
@@ -539,7 +455,7 @@ public class ConditionalTestLogic {
 //		}
 //		return nodelist;
 //	}
-//	
+//
 //	public static List<ITree> breadthFirstSearchForNodeListUnityTest(ITree node,String type,String nodevisitedmeta) {
 //
 //		// Just so we handle receiving an uninitialized Node, otherwise an
@@ -564,18 +480,18 @@ public class ConditionalTestLogic {
 //			if (currentFirst.getType().toString().contains(type)) {
 //				currentFirst.setMetadata("UNITYTEST", false);
 //				List<ITree> attributes=breadthFirstSearchForNodeList1(currentFirst,"attribute","an1");
-//				
+//
 //				if(attributes!=null && attributes.size()>0)
 //				{
 //					List<ITree> anotations=breadthFirstSearchForLabel(attributes.get(0),"UnityTest","an3");
 //					//System.out.println("test");
-//					
+//
 //					if(anotations!=null && anotations.size()>0)
 //					{
 //						currentFirst.setMetadata("UNITYTEST", true);
 //					}
 //				}
-//				
+//
 //				nodelist.add(currentFirst);
 //
 //			}
@@ -604,12 +520,12 @@ public class ConditionalTestLogic {
 //		}
 //		return nodelist;
 //	}
-//	
-//	
+//
+//
 //	public static ITree getClassName(ITree classnode)
 //	{
 //		ITree classnamenode=null;
-//		
+//
 //		for(ITree node: classnode.getChildren())
 //		{
 //			if(node.getType().toString().contains("name"))
@@ -617,15 +533,15 @@ public class ConditionalTestLogic {
 //				classnamenode=node;
 //				break;
 //			}
-//			
+//
 //		}
-//		return classnamenode;		
+//		return classnamenode;
 //	}
-//	
+//
 //	public static ITree getTestAnotation(ITree classnode)
 //	{
 //		ITree classnamenode=null;
-//		
+//
 //		for(ITree node: classnode.getChildren())
 //		{
 //			if(node.getLabel().equals("Test"))
@@ -633,12 +549,12 @@ public class ConditionalTestLogic {
 //				classnamenode=node;
 //				break;
 //			}
-//			
+//
 //		}
-//		return classnamenode;		
+//		return classnamenode;
 //	}
-//	
-//	
+//
+//
 //	public static List<ITree> breadthFirstSearchForNodeList1(ITree node,String type,String nodevisitedmeta) {
 //
 //		// Just so we handle receiving an uninitialized Node, otherwise an
@@ -662,11 +578,11 @@ public class ConditionalTestLogic {
 //
 //			if (currentFirst.getType().toString().contains(type)) {
 //				nodelist.add(currentFirst);
-//				
-//				
-//				
-//				
-//				
+//
+//
+//
+//
+//
 //				//classnode = currentFirst;
 //			}
 //
@@ -694,7 +610,7 @@ public class ConditionalTestLogic {
 //		}
 //		return nodelist;
 //	}
-//	
+//
 //	public static List<ITree> breadthFirstSearchForLabel(ITree node,String label,String nodevisitedmeta) {
 //
 //		// Just so we handle receiving an uninitialized Node, otherwise an
@@ -718,7 +634,7 @@ public class ConditionalTestLogic {
 //
 //			if (currentFirst.getLabel().equals(label)) {
 //				nodelist.add(currentFirst);
-//				
+//
 //				//classnode = currentFirst;
 //			}
 //
@@ -746,45 +662,45 @@ public class ConditionalTestLogic {
 //		}
 //		return nodelist;
 //	}
-	
-	public double getAssertRoulteStats(Map<String,List<AssertCall>> testfuncassertmap)
+
+	public Map<String,Double> getConditionalTestLogicStats(Map<String,Map<String,Integer>> testfuncconditionalTestmap)
 	{
-		double percentage=0.0;
-		int total=0;
-		int roulecount=0;
-		
-		for(String key:testfuncassertmap.keySet())
+
+        Map<String,Double> results=new HashMap<>();
+//		double percentage=0.0;
+//		 total=0;
+//		int roulecount=0;
+        Map<String,Integer> totals=new HashMap<>();
+		for(String key:testfuncconditionalTestmap.keySet())
 		{
-			List<AssertCall> assertcall=testfuncassertmap.get(key);
-			
-			if(assertcall!=null && assertcall.size()>1)
-			{
-				int index=1;
-				
-				while(index<assertcall.size())
-				{
-					if(assertcall.get(index).isHasMsg()==false)
-					{
-						roulecount++;
-						break;
-					}
-					index++;
-				}
-				
-			}
+            Map<String,Integer> condmap=testfuncconditionalTestmap.get(key);
+            condmap.forEach(
+                    (key1,value1) -> {
+                        if (totals.containsKey(key1))
+                        totals.replace(key1,totals.get(key1)+1) ;
+                        else{
+                            totals.put(key1,1) ;
+                        }
+                    }
+            );
+
+
 		}
-		
-		total=testfuncassertmap.keySet().size();
-		
+//        System.out.println("totals");
+//        System.out.println(totals);
+
+        final int total=testfuncconditionalTestmap.keySet().size();
+
 		if(total<=0)
 		{
-			return -0.001;
+			return results;
 		}
 		else
 		{
-			percentage= (((double)roulecount/(double)total)*100.00);
+            totals.forEach(
+                    (key2,value2) -> results.put(key2,((double) value2 / (double) total) * 100.00)) ;
 		}
-		
-		return percentage;
-	}	
+
+		return results;
+	}
 }
