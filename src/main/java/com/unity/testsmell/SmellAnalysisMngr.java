@@ -75,8 +75,8 @@ public class SmellAnalysisMngr {
             System.out.println(counter + "-->" + projname);
 
             counter++;
-            if (counter > 5)
-                return smellpercentage;
+//            if (counter > 5)
+//                return smellpercentage;
 
             try {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);

@@ -27,21 +27,21 @@ public class TestSmellDetector {
 
     private void initializeSmells(){
         testSmells = new ArrayList<>();
-        testSmells.add(new AssertionRoulette());
+        testSmells.add(new AssertionRoulette()); // done
         testSmells.add(new ConditionalTestLogic());
         testSmells.add(new ConstructorInitialization());
         testSmells.add(new DefaultTest());
         testSmells.add(new EmptyTest());
         testSmells.add(new ExceptionCatchingThrowing());
-        testSmells.add(new GeneralFixture());
-        testSmells.add(new MysteryGuest());
+        testSmells.add(new GeneralFixture()); // do this
+        testSmells.add(new MysteryGuest()); // do this
         testSmells.add(new PrintStatement());
         testSmells.add(new RedundantAssertion());
-        testSmells.add(new SensitiveEquality());
+        testSmells.add(new SensitiveEquality()); // do this
         testSmells.add(new VerboseTest());
         testSmells.add(new SleepyTest());
-        testSmells.add(new EagerTest());
-        testSmells.add(new LazyTest());
+        testSmells.add(new EagerTest()); // do this
+        testSmells.add(new LazyTest()); // do this
         testSmells.add(new DuplicateAssert());
         testSmells.add(new UnknownTest());
         testSmells.add(new IgnoredTest());
