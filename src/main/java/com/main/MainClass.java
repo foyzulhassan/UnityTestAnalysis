@@ -170,9 +170,27 @@ public class MainClass {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
-		}
+            }
+
+        }
+        // TODO General Fixture
+
+        else if (inputid == 98) {
+            System.out.println("General Fixture Analysis(RQ3-a)");
+
+            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
+//            List<ProjectSmellEntity> projsemlllist=
+                    smellmgr.analyzeGeneralFixture();
+//            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+//            try {
+//                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ConditionalTestLogic"));
+//            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+
+        }
+
         else if (inputid == 99) {
             System.out.println("Conditional Test Analysis(RQ3-a)");
 
