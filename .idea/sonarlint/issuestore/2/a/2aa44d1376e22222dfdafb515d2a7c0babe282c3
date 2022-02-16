@@ -1,0 +1,63 @@
+
+3
+java:S2386"Make this member "protected".(•¿½À
+P
+java:S1118":Add a private constructor to hide the implicit public one.(Óùÿ¿
+V	java:S125"<This block of commented-out lines of code should be removed.(œ”Šşûÿÿÿÿ
+Q	java:S125"<This block of commented-out lines of code should be removed.(Ÿæ ì
+I
+java:S1128"3Remove this unused import 'java.io.BufferedReader'.(€é²Å
+J
+java:S1128"/Remove this unused import 'java.io.FileReader'.(Â¡¢äşÿÿÿÿ
+K
+java:S1128"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ
+n
+java:S1104
+"SMake rootDir a static final constant or non-public and provide accessors if needed.(ç§œÚùÿÿÿÿ
+m
+java:S1104"WMake gitProjList a static final constant or non-public and provide accessors if needed.(Í½ìÊ
+i
+java:S1104"SMake repoDir a static final constant or non-public and provide accessors if needed.(¿°Ü´
+h
+java:S1104"SMake csvFile a static final constant or non-public and provide accessors if needed.(²¯õ
+j
+java:S1104"TMake patchDir a static final constant or non-public and provide accessors if needed.(‡¬ÛÀ
+q
+java:S1104"[Make perfCommitToken a static final constant or non-public and provide accessors if needed.(•¿½À
+q
+java:S1104"[Make csvFileTestStat a static final constant or non-public and provide accessors if needed.(æ‹Šº
+}
+java:S1104"bMake csvFileTestStatDetails a static final constant or non-public and provide accessors if needed.(‹å½ûÿÿÿÿ
+z
+java:S1104"dMake csvFileAssertDensityStat a static final constant or non-public and provide accessors if needed.(¦òÚñ
+j
+java:S1104%"TMake commitid a static final constant or non-public and provide accessors if needed.(ÜŒìƒ
+n
+java:S1104&"XMake stmtUniqueId a static final constant or non-public and provide accessors if needed.(ıŒãû
+s
+java:S1104'"XMake separatorStr a static final constant or non-public and provide accessors if needed.(ÛíÃÕøÿÿÿÿ
+H
+java:S1444
+"-Make this "public static rootDir" field final(ç§œÚùÿÿÿÿ
+G
+java:S1444"1Make this "public static gitProjList" field final(Í½ìÊ
+C
+java:S1444"-Make this "public static repoDir" field final(¿°Ü´
+B
+java:S1444"-Make this "public static csvFile" field final(²¯õ
+D
+java:S1444".Make this "public static patchDir" field final(‡¬ÛÀ
+K
+java:S1444"5Make this "public static perfCommitToken" field final(•¿½À
+K
+java:S1444"5Make this "public static csvFileTestStat" field final(æ‹Šº
+W
+java:S1444"<Make this "public static csvFileTestStatDetails" field final(‹å½ûÿÿÿÿ
+T
+java:S1444">Make this "public static csvFileAssertDensityStat" field final(¦òÚñ
+D
+java:S1444%".Make this "public static commitid" field final(ÜŒìƒ
+H
+java:S1444&"2Make this "public static stmtUniqueId" field final(ıŒãû
+M
+java:S1444'"2Make this "public static separatorStr" field final(ÛíÃÕøÿÿÿÿ

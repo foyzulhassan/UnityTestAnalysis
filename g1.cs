@@ -1,43 +1,78 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.﻿
-
-using Microsoft.MixedReality.Toolkit.Teleport;
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Microsoft.MixedReality.Toolkit.Editor
+namespace UnityTest
 {
-    [MixedRealityServiceInspector(typeof(IMixedRealityTeleportSystem))]
-    public class TeleportSystemInspector : BaseMixedRealityServiceInspector
+    [Serializable]
+    internal class DropDownControl<T>
     {
-        private static readonly Color enabledColor = GUI.backgroundColor;
-        private static readonly Color disabledColor = Color.Lerp(enabledColor, Color.clear, 0.5f);
+        private readonly GUILayoutOption[] m_ButtonLayoutOptions = { GUILayout.ExpandWidth(true) };
+        public Func<T, string> convertForButtonLabel = s => s.ToString();
+        public Func<T, string> convertForGUIContent = s => s.ToString();
+        public Func<T[], bool> ignoreConvertForGUIContent = t => t.Length <= 40;
+        public Action<T> printContextMenu = null;
+        public string tooltip = "";
 
-        public override void DrawInspectorGUI(object target)
+        private object m_SelectedValue;
+
+
+        public void Draw(T selected, T[] options, Action<T> onValueSelected)
         {
-            IMixedRealityTeleportSystem teleport = (IMixedRealityTeleportSystem)target;
+            Draw(null,
+                 selected,
+                 options,
+                 onValueSelected);
+        }
 
-            EditorGUILayout.LabelField("Event Listeners", EditorStyles.boldLabel);
+        public void Draw(string label, T selected, T[] options, Action<T> onValueSelected)
+        {
+            Draw(label, selected, () => options, onValueSelected);
+        }
 
-            if (!Application.isPlaying)
-            {
-                EditorGUILayout.HelpBox("Event listeners will be populated once you enter play mode.", MessageType.Info);
-                return;
-            }
+        public void Draw(string label, T selected, Func<T[]> loadOptions, Action<T> onValueSelected)
+        {
+            if (!string.IsNullOrEmpty(label))
+                EditorGUILayout.BeginHorizontal();
+            var guiContent = new GUIContent(label);
+            var labelSize = EditorStyles.label.CalcSize(guiContent);
 
-            if (teleport.EventListeners.Count == 0)
+            if (!string.IsNullOrEmpty(label))
+                GUILayout.Label(label, EditorStyles.label, GUILayout.Width(labelSize.x));
+
+            if (GUILayout.Button(new GUIContent(convertForButtonLabel(selected), tooltip),
+                                 EditorStyles.popup, m_ButtonLayoutOptions))
             {
-                EditorGUILayout.LabelField("(None found)", EditorStyles.miniLabel);
-            }
-            else
-            {
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                foreach (GameObject listener in teleport.EventListeners)
+                if (Event.current.button == 0)
                 {
-                    EditorGUILayout.ObjectField(listener.name, listener, typeof(GameObject), true);
+                    PrintMenu(loadOptions());
                 }
-                EditorGUILayout.EndVertical();
+                else if (printContextMenu != null && Event.current.button == 1)
+                    printContextMenu(selected);
             }
+
+            if (m_SelectedValue != null)
+            {
+                onValueSelected((T)m_SelectedValue);
+                m_SelectedValue = null;
+            }
+            if (!string.IsNullOrEmpty(label))
+                EditorGUILayout.EndHorizontal();
+        }
+
+        public void PrintMenu(T[] options)
+        {
+            var menu = new GenericMenu();
+            foreach (var s in options)
+            {
+                var localS = s;
+                menu.AddItem(new GUIContent((ignoreConvertForGUIContent(options) ? localS.ToString() : convertForGUIContent(localS))),
+                             false,
+                             () => { m_SelectedValue = localS; }
+                             );
+            }
+            menu.ShowAsContext();
         }
     }
 }

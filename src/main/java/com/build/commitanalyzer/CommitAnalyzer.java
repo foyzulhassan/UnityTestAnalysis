@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Queue;
 
 //import org.apache.commons.compress.utils.IOUtils;
+import com.github.gumtreediff.tree.TreeContext;
 import com.unity.testsmell.ConditionalTestLogic;
 import com.unity.testsmell.GeneralFixture;
 import org.apache.commons.io.FileUtils;
@@ -766,7 +767,9 @@ public class CommitAnalyzer {
 //						}
                         reader = new FileReader(f1.toString());
                         ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
-
+//                        TreeContext tx = new SrcmlUnityCsTreeGenerator().generate(reader);
+//                        System.out.println(tx.toString());
+//                        System.exit(0);
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
                         GeneralFixture gf=new GeneralFixture();
@@ -865,6 +868,7 @@ public class CommitAnalyzer {
 //						}
 						reader = new FileReader(f1.toString());
 						ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+
 						
 						//TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
 						//analyzer.getTestFunctionList(curtree);

@@ -1,0 +1,240 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Ş¨ì¿ıÿÿÿÿ
+V	java:S125;"<This block of commented-out lines of code should be removed.(èç¢ûÿÿÿÿ
+Y
+java:S1854¡"=Remove this useless assignment to local variable "debugging".(®ßõÏşÿÿÿÿ
+N
+java:S1854 "7Remove this useless assignment to local variable "act".(‚ÌÍ©
+W
+java:S1854Ÿ"@Remove this useless assignment to local variable "totalactions".(‰üº¢
+H
+java:S1481Ÿ"1Remove this unused "totalactions" local variable.(‰üº¢
+?
+java:S1481 "(Remove this unused "act" local variable.(‚ÌÍ©
+J
+java:S1481¡".Remove this unused "debugging" local variable.(®ßõÏşÿÿÿÿ
+=
+java:S1481¢"&Remove this unused "r" local variable.(ğÃÿ
+W	java:S125£"<This block of commented-out lines of code should be removed.(Áñ˜Îùÿÿÿÿ
+W	java:S125­"<This block of commented-out lines of code should be removed.(èºë®ûÿÿÿÿ
+T	java:S106¿"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ
+¡
+java:S1130Å"‰Remove the declaration of thrown exception 'org.eclipse.jgit.errors.MissingObjectException' which is a subclass of 'java.io.IOException'.(ÌÎ…
+§
+java:S1130Å"Remove the declaration of thrown exception 'org.eclipse.jgit.errors.IncorrectObjectTypeException' which is a subclass of 'java.io.IOException'.(ÌÎ…
+W	java:S125Ğ"<This block of commented-out lines of code should be removed.(·‚‡±ÿÿÿÿÿ
+A
+java:S1481Ñ"*Remove this unused "count" local variable.(æÕ¿¼
+O	java:S106Ó"9Replace this use of System.out or System.err by a logger.(í¦›¯
+_
+java:S5361×"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ÖÉŒ
+_
+java:S5361Ø"HReplace this call to "replaceAll()" by a call to the "replace()" method.(íÃ£¶
+W	java:S125å"<This block of commented-out lines of code should be removed.(İì¡¶ûÿÿÿÿ
+W	java:S125ÿ"<This block of commented-out lines of code should be removed.(Áñ˜Îùÿÿÿÿ
+B
+java:S1168†"+Return an empty collection instead of null.(¥¹ï
+W	java:S125Š"<This block of commented-out lines of code should be removed.(Ìœ ÿÿÿÿÿ
+V	java:S899£";Do something with the "boolean" value returned by "delete".(¹Î“üÿÿÿÿ
+j
+java:S4042£"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(¹Î“üÿÿÿÿ
+Q	java:S899¤";Do something with the "boolean" value returned by "delete".(şó«è
+e
+java:S4042¤"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(şó«è
+R	java:S125ª"<This block of commented-out lines of code should be removed.(ƒåŞ
+T	java:S106­"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ
+[
+java:S1854µ"?Remove this useless assignment to local variable "actionslist".(éùùÿÿÿÿ
+W	java:S125´"<This block of commented-out lines of code should be removed.(Áñ˜Îùÿÿÿÿ
+L
+java:S1481µ"0Remove this unused "actionslist" local variable.(éùùÿÿÿÿ
+W	java:S125Á"<This block of commented-out lines of code should be removed.(Ìœ ÿÿÿÿÿ
+T	java:S106Ö"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ
+V
+java:S1854ç":Remove this useless assignment to local variable "parent".(™õ„»ıÿÿÿÿ
+G
+java:S1481ç"+Remove this unused "parent" local variable.(™õ„»ıÿÿÿÿ
+T	java:S106î"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ
+W	java:S125ü"<This block of commented-out lines of code should be removed.(Š²êÿÿÿÿÿ
+R	java:S125€"<This block of commented-out lines of code should be removed.(³ŒÚÒ
+I
+java:S1481”"-Remove this unused "fileMode" local variable.(Ê¯Ö¡øÿÿÿÿ
+W	java:S125—"<This block of commented-out lines of code should be removed.(…İíÿÿÿÿÿ
+O
+java:S1854©"8Remove this useless assignment to local variable "tree".(¡êå§
+@
+java:S1481©")Remove this unused "tree" local variable.(¡êå§
+R	java:S125«"<This block of commented-out lines of code should be removed.(óüŸù
+R	java:S125´"<This block of commented-out lines of code should be removed.(À±¹
+W	java:S125·"<This block of commented-out lines of code should be removed.(ŠİÜ½ÿÿÿÿÿ
+R	java:S125º"<This block of commented-out lines of code should be removed.(€°·å
+W	java:S125Ã"<This block of commented-out lines of code should be removed.(…İíÿÿÿÿÿ
+V	java:S899Ì";Do something with the "boolean" value returned by "delete".(¹Î“üÿÿÿÿ
+j
+java:S4042Ì"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(¹Î“üÿÿÿÿ
+T	java:S106Õ"9Replace this use of System.out or System.err by a logger.(˜¢•˜ûÿÿÿÿ
+O
+java:S1854ë"8Remove this useless assignment to local variable "tree".(¡êå§
+@
+java:S1481ë")Remove this unused "tree" local variable.(¡êå§
+R	java:S125í"<This block of commented-out lines of code should be removed.(óüŸù
+R	java:S125ö"<This block of commented-out lines of code should be removed.(À±¹
+W	java:S125ù"<This block of commented-out lines of code should be removed.(ŠİÜ½ÿÿÿÿÿ
+R	java:S125ü"<This block of commented-out lines of code should be removed.(€°·å
+O	java:S106„"9Replace this use of System.out or System.err by a logger.(ÅßÒ«
+W	java:S125Š"<This block of commented-out lines of code should be removed.(…İíÿÿÿÿÿ
+W	java:S125‘"<This block of commented-out lines of code should be removed.(Àæ¸›ûÿÿÿÿ
+V	java:S899–";Do something with the "boolean" value returned by "delete".(¹Î“üÿÿÿÿ
+j
+java:S4042–"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(¹Î“üÿÿÿÿ
+T	java:S106Ÿ"9Replace this use of System.out or System.err by a logger.(˜¢•˜ûÿÿÿÿ
+]
+java:S1854§"ARemove this useless assignment to local variable "classfunclist".(·¢Éóÿÿÿÿÿ
+O
+java:S1854­"8Remove this useless assignment to local variable "tree".(¡êå§
+N
+java:S1481§"2Remove this unused "classfunclist" local variable.(·¢Éóÿÿÿÿÿ
+@
+java:S1481­")Remove this unused "tree" local variable.(¡êå§
+R	java:S125¯"<This block of commented-out lines of code should be removed.(óüŸù
+R	java:S125¸"<This block of commented-out lines of code should be removed.(À±¹
+W	java:S125»"<This block of commented-out lines of code should be removed.(ŠİÜ½ÿÿÿÿÿ
+R	java:S125¾"<This block of commented-out lines of code should be removed.(€°·å
+O	java:S106Æ"9Replace this use of System.out or System.err by a logger.(ÅßÒ«
+W	java:S125Ì"<This block of commented-out lines of code should be removed.(…İíÿÿÿÿÿ
+W	java:S125Ó"<This block of commented-out lines of code should be removed.(Àæ¸›ûÿÿÿÿ
+V	java:S899Ù";Do something with the "boolean" value returned by "delete".(¹Î“üÿÿÿÿ
+j
+java:S4042Ù"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(¹Î“üÿÿÿÿ
+T	java:S106â"9Replace this use of System.out or System.err by a logger.(˜¢•˜ûÿÿÿÿ
+O
+java:S1854ñ"8Remove this useless assignment to local variable "tree".(¡êå§
+9
+java:S3626Ã"Remove this redundant jump.(ûÁİ…8üêéûí/
+R	java:S125ê"<This block of commented-out lines of code should be removed.(òôŠÁ
+@
+java:S1481ñ")Remove this unused "tree" local variable.(¡êå§
+R	java:S125ó"<This block of commented-out lines of code should be removed.(óüŸù
+R	java:S125ü"<This block of commented-out lines of code should be removed.(À±¹
+W	java:S125ÿ"<This block of commented-out lines of code should be removed.(ŠİÜ½ÿÿÿÿÿ
+R	java:S125‚"<This block of commented-out lines of code should be removed.(€°·å
+W	java:S125"<This block of commented-out lines of code should be removed.(…İíÿÿÿÿÿ
+W	java:S125˜"<This block of commented-out lines of code should be removed.(€“¾”ùÿÿÿÿ
+R	java:S125š"<This block of commented-out lines of code should be removed.(ß¸’ö
+W	java:S125¡"<This block of commented-out lines of code should be removed.(‘ÎõŸûÿÿÿÿ
+Y	java:S125§"<This block of commented-out lines of code should be removed.(¾†Ûë8Ôëûí/
+N
+java:S1135±"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+V	java:S899·";Do something with the "boolean" value returned by "delete".(¹Î“üÿÿÿÿ
+j
+java:S4042·"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(¹Î“üÿÿÿÿ
+T	java:S106À"9Replace this use of System.out or System.err by a logger.(˜¢•˜ûÿÿÿÿ
+V
+java:S1854Ğ"8Remove this useless assignment to local variable "tree".(¡êå§8”Ûèûí/
+Y	java:S125É"<This block of commented-out lines of code should be removed.(òôŠÁ8–Ûèûí/
+G
+java:S1481Ğ")Remove this unused "tree" local variable.(¡êå§8—•éûí/
+Y	java:S125Ò"<This block of commented-out lines of code should be removed.(óüŸù8–Ûèûí/
+Y	java:S125Û"<This block of commented-out lines of code should be removed.(À±¹8—Ûèûí/
+^	java:S125Ş"<This block of commented-out lines of code should be removed.(ŠİÜ½ÿÿÿÿÿ8—Ûèûí/
+Y	java:S125á"<This block of commented-out lines of code should be removed.(€°·å8˜Ûèûí/
+^	java:S125í"<This block of commented-out lines of code should be removed.(…İíÿÿÿÿÿ8˜Ûèûí/
+^	java:S125÷"<This block of commented-out lines of code should be removed.(€“¾”ùÿÿÿÿ8™Ûèûí/
+Y	java:S125ù"<This block of commented-out lines of code should be removed.(ß¸’ö8™Ûèûí/
+^	java:S125€"<This block of commented-out lines of code should be removed.(‘ÎõŸûÿÿÿÿ8šÛèûí/
+R
+java:S2864†"4Iterate over the "entrySet" instead of the "keySet".(£Ì™³8šÛèûí/
+U
+java:S1135"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ8›Ûèûí/
+]	java:S899–";Do something with the "boolean" value returned by "delete".(¹Î“üÿÿÿÿ8›Ûèûí/
+q
+java:S4042–"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(¹Î“üÿÿÿÿ8›Ûèûí/
+[	java:S106Ÿ"9Replace this use of System.out or System.err by a logger.(˜¢•˜ûÿÿÿÿ8›Ûèûí/
+P
+java:S1128"3Remove this unused import 'java.io.BufferedReader'.(€é²Å8ûûìûí/
+M
+java:S1128"0Remove this unused import 'java.io.InputStream'.(¹»º8ûûìûí/
+S
+java:S1128"6Remove this unused import 'java.io.InputStreamReader'.(ãˆÎÉ8ûûìûí/
+S
+java:S1128
+"1Remove this unused import 'java.io.StringWriter'.(ô“Õıùÿÿÿÿ8üûìûí/
+[
+java:S1128">Remove this unused import 'java.nio.charset.StandardCharsets'.(ï˜ŞÛ8üûìûí/
+M
+java:S1128"0Remove this unused import 'java.nio.file.Files'.(‚ƒü8üûìûí/
+M
+java:S1128"0Remove this unused import 'java.nio.file.Paths'.(áè°¯8üûìûí/
+O
+java:S1128"-Remove this unused import 'java.util.Arrays'.(î–˜Éüÿÿÿÿ8üûìûí/
+T
+java:S1128"2Remove this unused import 'java.util.Collections'.(¢³ïÓşÿÿÿÿ8üûìûí/
+H
+java:S1128"+Remove this unused import 'java.util.Date'.(¸…¼ü8üûìûí/
+J
+java:S1128".Remove this unused import 'java.util.HashSet'.(Ê‚êX8üûìûí/
+M
+java:S1128"1Remove this unused import 'java.util.LinkedList'.(»Äğ18üûìûí/
+I
+java:S1128",Remove this unused import 'java.util.Queue'.(Äá™ô8üûìûí/
+Y
+java:S1128"<Remove this unused import 'org.apache.commons.io.FileUtils'.(À¿Ù´8üûìûí/
+f
+java:S1128 "DRemove this unused import 'org.eclipse.jgit.diff.RawTextComparator'.(–›Ö¢ùÿÿÿÿ8ıûìûí/
+W
+java:S1128#";Remove this unused import 'org.eclipse.jgit.lib.Constants'.(ÔùÃm8ıûìûí/
+[
+java:S1128'">Remove this unused import 'org.eclipse.jgit.lib.ObjectReader'.(ÉºË’8ıûìûí/
+l
+java:S1128-"JRemove this unused import 'org.eclipse.jgit.treewalk.CanonicalTreeParser'.(¦“×µÿÿÿÿÿ8ıûìûí/
+g
+java:S11280"JRemove this unused import 'org.eclipse.jgit.util.io.DisabledOutputStream'.(åÓ®ê8ıûìûí/
+t
+java:S11284"RRemove this unused import 'com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator'.(º½¹Îùÿÿÿÿ8ıûìûí/
+l
+java:S11288"ORemove this unused import 'com.github.gumtreediff.actions.EditScriptGenerator'.(™˜¯º8ıûìûí/
+y
+java:S11289"]Remove this unused import 'com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator'.(¡™¨Q8ıûìûí/
+o
+java:S1128@"RRemove this unused import 'com.github.gumtreediff.gen.srcml.SrcmlCsTreeGenerator'.(üù®8ıûìûí/
+f
+java:S1128A"IRemove this unused import 'com.github.gumtreediff.matchers.MappingStore'.(ãßÏ€8ıûìûí/
+a
+java:S1128B"DRemove this unused import 'com.github.gumtreediff.matchers.Matcher'.(§‘µÕ8şûìûí/
+b
+java:S1128C"ERemove this unused import 'com.github.gumtreediff.matchers.Matchers'.(±À‚Š8şûìûí/
+~
+java:S1128D"aRemove this unused import 'com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher'.(ôÔ®ƒ8şûìûí/
+W
+java:S1128M":Remove this unused import 'org.apache.commons.io.IOUtils'.(Ì–’8şûìûí/
+D
+java:S1068\"/Remove this unused "statsHolder" private field.(ÜÅÖN
+L
+java:S1068_"1Remove this unused "resultsHolder" private field.(Ìè¹Ìúÿÿÿÿ
+K
+java:S1068e"0Remove this unused "projectOwner" private field.(ï¼ğ”ùÿÿÿÿ
+=
+java:S1068n"'Remove this unused "git" private field.(æÊ÷´
+L
+java:S1068u"1Remove this unused "gradleChanges" private field.(µˆø¨ûÿÿÿÿ
+p
+java:S2293Ÿ"YReplace the type specification in this constructor call with the diamond operator ("<>").(‰üº¢
+p
+java:S2293 "YReplace the type specification in this constructor call with the diamond operator ("<>").(‚ÌÍ©
+u
+java:S2293¡"YReplace the type specification in this constructor call with the diamond operator ("<>").(®ßõÏşÿÿÿÿ
+]
+java:S1192™"FDefine a constant instead of duplicating this literal "g1.cs" 6 times.(ã‹˜Å
+Q
+java:S1141—"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ
+X
+java:S1141ö"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8ŸÛèûí/
+g	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôˆ¨à
+l	java:S117ş"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ªƒÕáøÿÿÿÿ
+g	java:S117³"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ı³ÅŸ
+s
+java:S1488ÿ"\Immediately return this expression instead of assigning it to the temporary variable "tree".(¡êå§
+w
+java:S1488š"[Immediately return this expression instead of assigning it to the temporary variable "str".(çñŒâúÿÿÿÿ
+a
+java:S2259ß"JA "NullPointerException" could be thrown; "getObjectId()" can return null.(ÌœÖê

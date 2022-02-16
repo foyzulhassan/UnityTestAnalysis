@@ -129,8 +129,8 @@ public class SmellAnalysisMngr {
 
             counter++;
 // TODO change counter
-            if (counter > 20)
-                return ;
+//            if (counter > 20)
+//                return ;
 
             try {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);

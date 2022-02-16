@@ -1,0 +1,40 @@
+
+U
+java:S1118	":Add a private constructor to hide the implicit public one.(Ø•àûÿÿÿÿ
+g
+java:S1871)"LThis branch's code block is the same as the block for the branch on line 37.(ÒÌâ–øÿÿÿÿ
+Q	java:S125""<This block of commented-out lines of code should be removed.(Œ¥¦ß
+C
+java:S1481="-Remove this unused "callnode" local variable.(æí“Œ
+~
+java:S1157B"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(ÓãŞåşÿÿÿÿ
+Q	java:S125j"<This block of commented-out lines of code should be removed.(óòé‹
+A
+java:S1168m"+Return an empty collection instead of null.(¥¹ï
+]	java:S125z"<This block of commented-out lines of code should be removed.(ççÕŒıÿÿÿÿ8ÆŞûí/
+R	java:S125‡"<This block of commented-out lines of code should be removed.(“™´£
+R	java:S125Ÿ"<This block of commented-out lines of code should be removed.(óòé‹
+B
+java:S1168¢"+Return an empty collection instead of null.(¥¹ï
+W	java:S125³"<This block of commented-out lines of code should be removed.(¿ªÈüÿÿÿÿ
+R	java:S125»"<This block of commented-out lines of code should be removed.(“™´£
+R	java:S125Ó"<This block of commented-out lines of code should be removed.(óòé‹
+B
+java:S1168Ö"+Return an empty collection instead of null.(¥¹ï
+W	java:S125ç"<This block of commented-out lines of code should be removed.(¿ªÈüÿÿÿÿ
+R	java:S125ï"<This block of commented-out lines of code should be removed.(“™´£
+n	java:S135s"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+o	java:S135¨"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+o	java:S135Ü"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+T
+java:S1155">Use isEmpty() to check whether the collection is empty or not.(œ™ß¥
+Y
+java:S1155$">Use isEmpty() to check whether the collection is empty or not.(ŒÛı¿ùÿÿÿÿ
+T
+java:S1155(">Use isEmpty() to check whether the collection is empty or not.(—Œº—
+7
+java:S1643T"Use a StringBuilder instead.(ñÍŸğûÿÿÿÿ
+{
+java:S1488"`Immediately return this expression instead of assigning it to the temporary variable "funclist".(”Êçùÿÿÿÿ
+{
+java:S14884"`Immediately return this expression instead of assigning it to the temporary variable "nodelist".(šĞ¯¬üÿÿÿÿ

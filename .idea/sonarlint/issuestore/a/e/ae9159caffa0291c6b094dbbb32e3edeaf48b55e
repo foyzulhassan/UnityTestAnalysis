@@ -1,0 +1,39 @@
+
+œ
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÇĞöşÿÿÿÿ
+X	java:S1255"<This block of commented-out lines of code should be removed.(Œ¥¦ß8Ó™‰ûí/
+j	java:S100>"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†×É®8Ô™‰ûí/
+o	java:S100\"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œõ´Ìøÿÿÿÿ8Õ™‰ûí/
+d
+java:S1126€"AReplace this if-then-else statement by a single return statement.(†ÏöÊùÿÿÿÿ8Ø™‰ûí/
+p	java:S100‡"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‚³ÓÄüÿÿÿÿ8Ø™‰ûí/
+d
+java:S1126¨"AReplace this if-then-else statement by a single return statement.(†ÏöÊùÿÿÿÿ8Ú™‰ûí/
+k	java:S100¯"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×ÍÔ©8Û™‰ûí/
+d
+java:S1126¸"AReplace this if-then-else statement by a single return statement.(†ÏöÊùÿÿÿÿ8Û™‰ûí/
+p
+java:S3776º"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(ŠàÎ¯8Ü™‰ûí/
+^	java:S125Ä"<This block of commented-out lines of code should be removed.(ÆïÁ¡ùÿÿÿÿ8Ş™‰ûí/
+^	java:S125ê"<This block of commented-out lines of code should be removed.(Õ˜Õ³ÿÿÿÿÿ8á™‰ûí/
+Y	java:S125ù"<This block of commented-out lines of code should be removed.(“™´£8á™‰ûí/
+a
+java:S1854¡">Remove this useless assignment to local variable "percentage".(­‘­Çüÿÿÿÿ8ã™‰ûí/
+^	java:S125"<This block of commented-out lines of code should be removed.(Å—Çºùÿÿÿÿ8å™‰ûí/
+R
+java:S2864¥"4Iterate over the "entrySet" instead of the "keySet".(£Ì™³8å™‰ûí/
+J
+java:S1125¯"'Remove the unnecessary boolean literal.(›¥½ßşÿÿÿÿ8æ™‰ûí/
+l
+java:S1192c"ODefine a constant instead of duplicating this literal "Assert.NotNull" 3 times.(ş÷ğÖ8ç™‰ûí/
+d
+java:S1192&"GDefine a constant instead of duplicating this literal "assert" 3 times.(†ûÚ‰8ç™‰ûí/
+v	java:S135È"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦8è™‰ûí/
+Q
+java:S1066S"/Merge this if statement with the enclosing one.(ÂÉ¡Ïúÿÿÿÿ8è™‰ûí/
+[
+java:S1155*">Use isEmpty() to check whether the collection is empty or not.(İ¯”õ8é™‰ûí/
+`
+java:S1155S">Use isEmpty() to check whether the collection is empty or not.(ÂÉ¡Ïúÿÿÿÿ8é™‰ûí/
+\
+java:S1155Û">Use isEmpty() to check whether the collection is empty or not.(Íã¹ê8é™‰ûí/

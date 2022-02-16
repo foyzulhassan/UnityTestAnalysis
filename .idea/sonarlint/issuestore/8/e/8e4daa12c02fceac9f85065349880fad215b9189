@@ -1,0 +1,58 @@
+
+U
+java:S1118":Add a private constructor to hide the implicit public one.(Øë¶¹úÿÿÿÿ
+Q	java:S125o"<This block of commented-out lines of code should be removed.(“™´£
+i
+java:S3776ƒ"RRefactor this method to reduce its Cognitive Complexity from 34 to the 15 allowed.(ŠàÎ¯
+Q	java:S125š"<This block of commented-out lines of code should be removed.(ûÛ­-
+W	java:S125¶"<This block of commented-out lines of code should be removed.(Õ˜Õ³ÿÿÿÿÿ
+R	java:S125Ã"<This block of commented-out lines of code should be removed.(“™´£
+T	java:S106×"9Replace this use of System.out or System.err by a logger.(©þêÜúÿÿÿÿ
+i
+java:S3776Ü"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(…œ®È
+R	java:S125à"<This block of commented-out lines of code should be removed.(óòé‹
+B
+java:S1168ã"+Return an empty collection instead of null.(¥¹ï
+R	java:S125÷"<This block of commented-out lines of code should be removed.(Œ¥¦ß
+R	java:S125‡"<This block of commented-out lines of code should be removed.(“™´£
+i
+java:S3776›"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ŽÓ×û
+R	java:S125Ÿ"<This block of commented-out lines of code should be removed.(óòé‹
+B
+java:S1168¢"+Return an empty collection instead of null.(¥¹ï
+R	java:S125¸"<This block of commented-out lines of code should be removed.(Œ¥¦ß
+R	java:S125È"<This block of commented-out lines of code should be removed.(“™´£
+R	java:S125‡"<This block of commented-out lines of code should be removed.(óòé‹
+B
+java:S1168Š"+Return an empty collection instead of null.(¥¹ï
+W	java:S125›"<This block of commented-out lines of code should be removed.(¿ªÈüÿÿÿÿ
+R	java:S125£"<This block of commented-out lines of code should be removed.(“™´£
+R	java:S125»"<This block of commented-out lines of code should be removed.(óòé‹
+B
+java:S1168¾"+Return an empty collection instead of null.(¥¹ï
+W	java:S125Ï"<This block of commented-out lines of code should be removed.(¿ªÈüÿÿÿÿ
+R	java:S125×"<This block of commented-out lines of code should be removed.(“™´£
+n	java:S135^"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+o	java:S135“"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+o	java:S135é"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+o	java:S135¨"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+o	java:S135"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+o	java:S135Ä"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+K
+java:S1066 "/Merge this if statement with the enclosing one.(úò„Ãüÿÿÿÿ
+U
+java:S1155«">Use isEmpty() to check whether the collection is empty or not.(ì÷ºŸ
+Z
+java:S1155õ">Use isEmpty() to check whether the collection is empty or not.(ë ±Ëüÿÿÿÿ
+Z
+java:S1155ù">Use isEmpty() to check whether the collection is empty or not.(é˜Ò ýÿÿÿÿ
+Z
+java:S1155´">Use isEmpty() to check whether the collection is empty or not.(ë ±Ëüÿÿÿÿ
+Z
+java:S1155º">Use isEmpty() to check whether the collection is empty or not.(é˜Ò ýÿÿÿÿ
+W
+java:S4973"<Strings and Boxed types should be compared using "equals()".(å­ Õûÿÿÿÿ
+W
+java:S4973""<Strings and Boxed types should be compared using "equals()".(ÛúÑ›üÿÿÿÿ
+W
+java:S49733"<Strings and Boxed types should be compared using "equals()".(„ƒ©øÿÿÿÿ

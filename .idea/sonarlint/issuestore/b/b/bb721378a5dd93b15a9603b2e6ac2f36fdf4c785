@@ -1,0 +1,51 @@
+
+h
+java:S37761"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(‡²…Õ
+R
+java:S1854="7Remove this useless assignment to local variable "abc".(Âçşúÿÿÿÿ
+P
+java:S11611":Add the "@Override" annotation above this method signature(‡²…Õ
+V	java:S1252"<This block of commented-out lines of code should be removed.(Ñü­Ÿûÿÿÿÿ
+C
+java:S1481="(Remove this unused "abc" local variable.(Âçşúÿÿÿÿ
+L
+java:S2696F"6Make the enclosing method "static" or remove this set.(ê‚áË
+m
+java:S2177g"WRename this method; there is a "private" method in the parent class with the same name.(¤ùîı
+m
+java:S2177k"WRename this method; there is a "private" method in the parent class with the same name.(µ“œ“
+n
+java:S2177Œ"WRename this method; there is a "private" method in the parent class with the same name.(€…¡ó
+N
+java:S1854£"7Remove this useless assignment to local variable "end".(ÿÔ·Æ
+V	java:S125|"<This block of commented-out lines of code should be removed.(¬†©‹üÿÿÿÿ
+W	java:S125"<This block of commented-out lines of code should be removed.(­İï×ùÿÿÿÿ
+R	java:S125›"<This block of commented-out lines of code should be removed.(Ó¢Î
+?
+java:S1481£"(Remove this unused "end" local variable.(ÿÔ·Æ
+R	java:S125¦"<This block of commented-out lines of code should be removed.(‘¿Øâ
+n
+java:S2177«"WRename this method; there is a "private" method in the parent class with the same name.(Çàñ
+N
+java:S1854¸"7Remove this useless assignment to local variable "end".(ÿÔ·Æ
+W	java:S125®"<This block of commented-out lines of code should be removed.(Î¿‹‘ùÿÿÿÿ
+?
+java:S1481¸"(Remove this unused "end" local variable.(ÿÔ·Æ
+V
+java:S1161¾":Add the "@Override" annotation above this method signature(•÷ìûüÿÿÿÿ
+F
+java:S1197È"*Move the array designators [] to the type.(¾Ûéğûÿÿÿÿ
+F
+java:S1197Ö"*Move the array designators [] to the type.(¾Ûéğûÿÿÿÿ
+n
+java:S1128"XRemove this unused import 'com.github.gumtreediff.gen.antlr3.r.RParser.sequence_return'.(»¡…Ñ
+4
+java:S1128"Remove this duplicated import.(¯Ö¬“
+9
+java:S1128"$Remove this unused import 'java.io'.(¬›ãD
+9
+java:S1128"Remove this duplicated import.(ş£öôÿÿÿÿÿ
+E
+java:S1066n"/Merge this if statement with the enclosing one.(¦±Ó
+N
+java:S27553"3Disable access to external entities in XML parsing.(¨Ì¬ıÿÿÿÿ

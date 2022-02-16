@@ -1,0 +1,56 @@
+
+h
+java:S37766"RRefactor this method to reduce its Cognitive Complexity from 38 to the 15 allowed.(Çµí‘
+]
+java:S1854´"ARemove this useless assignment to local variable "projsemlllist".(®Û³„ùÿÿÿÿ
+W
+java:S1854Â"@Remove this useless assignment to local variable "typeanalyzer".(×»”ğ
+a
+java:S1854Ì"ERemove this useless assignment to local variable "testfuncassertmap".(îÿ×Ÿıÿÿÿÿ
+S	java:S1068"9Replace this use of System.out or System.err by a logger.(âÈªÜúÿÿÿÿ
+S	java:S106:"9Replace this use of System.out or System.err by a logger.(ãğ•úÿÿÿÿ
+S	java:S106B"9Replace this use of System.out or System.err by a logger.(¸±Èûÿÿÿÿ
+N	java:S106H"9Replace this use of System.out or System.err by a logger.(ãœ
+M
+java:S1135T"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+N	java:S106Z"9Replace this use of System.out or System.err by a logger.(‚ØÃÁ
+[
+java:S2147i"ECombine this catch with the one at line 102, which has the same body.(ç¼¸õ
+[
+java:S2147l"ECombine this catch with the one at line 102, which has the same body.(ï­£Ä
+M
+java:S1135g"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+M
+java:S1135j"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+M
+java:S1135m"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+S	java:S106r"9Replace this use of System.out or System.err by a logger.(ñÈˆÿÿÿÿÿ
+S	java:S106w"9Replace this use of System.out or System.err by a logger.(ÿàÊûÿÿÿÿ
+P
+java:S2864€"4Iterate over the "entrySet" instead of the "keySet".(À”±êÿÿÿÿÿ
+T	java:S106‹"9Replace this use of System.out or System.err by a logger.(öòÛıÿÿÿÿ
+D
+java:S1905"(Remove this unnecessary cast to "float".(ˆÔšŸùÿÿÿÿ
+N	java:S106’"9Replace this use of System.out or System.err by a logger.(ÅÑ½
+N
+java:S1135œ"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+O	java:S106£"9Replace this use of System.out or System.err by a logger.(§¯ñÉ
+N
+java:S1135«"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+T	java:S106±"9Replace this use of System.out or System.err by a logger.(¯ê¤ºùÿÿÿÿ
+N
+java:S1481´"2Remove this unused "projsemlllist" local variable.(®Û³„ùÿÿÿÿ
+R	java:S125µ"<This block of commented-out lines of code should be removed.(á‘°ä
+N
+java:S1135¹"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+H
+java:S1481Â"1Remove this unused "typeanalyzer" local variable.(×»”ğ
+X
+java:S1075Ã"ARefactor your code to get this URI from a customizable parameter.(£×Û‹
+W	java:S125É"<This block of commented-out lines of code should be removed.(‘ÎõŸûÿÿÿÿ
+R
+java:S1481Ì"6Remove this unused "testfuncassertmap" local variable.(îÿ×Ÿıÿÿÿÿ
+N
+java:S1135Î"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+Y
+java:S1155`">Use isEmpty() to check whether the collection is empty or not.(Äâ¸Çÿÿÿÿÿ

@@ -1,0 +1,29 @@
+
+V
+java:S1854"@Remove this useless assignment to local variable "analysisdata".(“¸ÌÌ
+Q	java:S125"<This block of commented-out lines of code should be removed.(ìíÙ
+G
+java:S1481"1Remove this unused "analysisdata" local variable.(“¸ÌÌ
+N	java:S106 "9Replace this use of System.out or System.err by a logger.(¥ÿãÁ
+7
+java:S1116!"Remove this empty statement.(Åñ­õþÿÿÿÿ
+M
+java:S11355"2Complete the task associated to this TODO comment.(ÕÌ®þÿÿÿÿ
+V
+java:S1854I"@Remove this useless assignment to local variable "analysisdata".(“¸ÌÌ
+Q	java:S125C"<This block of commented-out lines of code should be removed.(ìíÙ
+G
+java:S1481I"1Remove this unused "analysisdata" local variable.(“¸ÌÌ
+N	java:S106L"9Replace this use of System.out or System.err by a logger.(¥ÿãÁ
+Q	java:S125W"<This block of commented-out lines of code should be removed.(å©‹Ò
+Q	java:S125Z"<This block of commented-out lines of code should be removed.(‘Ö„å
+P	java:S125^"<This block of commented-out lines of code should be removed.(ØÏØ
+M
+java:S1135a"2Complete the task associated to this TODO comment.(ÕÌ®þÿÿÿÿ
+`
+java:S1128	">Remove this unused import 'com.unity.callgraph.ClassFunction'.(ÐÀÕ•ÿÿÿÿÿ8ì¿’üí/
+Z
+java:S1128
+"=Remove this unused import 'com.unity.callgraph.FunctionCall'.(ã¾‰«8ì¿’üí/
+`
+java:S1128"CRemove this unused import 'com.unity.testanalysis.ProjectTestData'.(§Ç¹Ñ8ì¿’üí/

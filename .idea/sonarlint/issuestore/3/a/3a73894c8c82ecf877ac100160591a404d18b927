@@ -1,0 +1,95 @@
+
+œ
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÇĞöşÿÿÿÿ
+Z
+java:S1659"DDeclare "ifCount" and all following declarations on a separate line.(ë°ÿ
+s
+java:S1450"]Remove the "conditionCount" field and declare it as a local variable in the relevant methods.(ë°ÿ
+m
+java:S1450"WRemove the "forCount" field and declare it as a local variable in the relevant methods.(ë°ÿ
+q
+java:S1450"[Remove the "foreachCount" field and declare it as a local variable in the relevant methods.(ë°ÿ
+o
+java:S1450"YRemove the "whileCount" field and declare it as a local variable in the relevant methods.(ë°ÿ
+H
+java:S1135"2Complete the task associated to this TODO comment.(¸Ö–Ñ
+H
+java:S1135"2Complete the task associated to this TODO comment.(¸Ö–Ñ
+H
+java:S1135"2Complete the task associated to this TODO comment.(¸Ö–Ñ
+H
+java:S1135"2Complete the task associated to this TODO comment.(¸Ö–Ñ
+H
+java:S1135"2Complete the task associated to this TODO comment.(¸Ö–Ñ
+H
+java:S1135"2Complete the task associated to this TODO comment.(¸Ö–Ñ
+Q	java:S1252"<This block of commented-out lines of code should be removed.(‘²Å
+N	java:S1064"9Replace this use of System.out or System.err by a logger.(‹àê¹
+S	java:S1065"9Replace this use of System.out or System.err by a logger.(¦¹¶Íÿÿÿÿÿ
+Q	java:S125="<This block of commented-out lines of code should be removed.(‘²Å
+N	java:S106?"9Replace this use of System.out or System.err by a logger.(‹àê¹
+U	java:S106E"9Replace this use of System.out or System.err by a logger.(ÅÚ¾ı8Í‰¢üí/
+U	java:S106G"9Replace this use of System.out or System.err by a logger.(¹šÌÌ8Í‰¢üí/
+]	java:S125H"<This block of commented-out lines of code should be removed.(´£ç‚øÿÿÿÿ8Í‰¢üí/
+c	java:S100X"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†×É®
+h	java:S100v"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œõ´Ìøÿÿÿÿ
+]
+java:S1126š"AReplace this if-then-else statement by a single return statement.(†ÏöÊùÿÿÿÿ
+i	java:S100¡"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‚³ÓÄüÿÿÿÿ
+]
+java:S1126Â"AReplace this if-then-else statement by a single return statement.(†ÏöÊùÿÿÿÿ
+d	java:S100É"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×ÍÔ©
+]
+java:S1126Ò"AReplace this if-then-else statement by a single return statement.(†ÏöÊùÿÿÿÿ
+i
+java:S3776Ô"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(ŠàÎ¯
+W	java:S125Ş"<This block of commented-out lines of code should be removed.(ÆïÁ¡ùÿÿÿÿ
+W	java:S125„"<This block of commented-out lines of code should be removed.(Õ˜Õ³ÿÿÿÿÿ
+R	java:S125“"<This block of commented-out lines of code should be removed.(“™´£
+Z
+java:S1854»">Remove this useless assignment to local variable "percentage".(­‘­Çüÿÿÿÿ
+W	java:S125©"<This block of commented-out lines of code should be removed.(Å—Çºùÿÿÿÿ
+K
+java:S2864¿"4Iterate over the "entrySet" instead of the "keySet".(£Ì™³
+C
+java:S1125É"'Remove the unnecessary boolean literal.(›¥½ßşÿÿÿÿ
+j
+java:S1128"MRemove this unused import 'com.github.javaparser.ast.body.MethodDeclaration'.(İÁà„8ŒŸİûí/
+m
+java:S1128"KRemove this unused import 'com.github.javaparser.ast.expr.ConditionalExpr'.(¡Õ¼İøÿÿÿÿ8Ÿİûí/
+`
+java:S1128	"CRemove this unused import 'com.github.javaparser.ast.stmt.ForStmt'.( Ü‰ú8Ÿİûí/
+d
+java:S1128
+"BRemove this unused import 'com.github.javaparser.ast.stmt.IfStmt'.(ğáœ¡ûÿÿÿÿ8Ÿİûí/
+h
+java:S1128"FRemove this unused import 'com.github.javaparser.ast.stmt.SwitchStmt'.(ÏØòÜúÿÿÿÿ8Ÿİûí/
+b
+java:S1128"ERemove this unused import 'com.github.javaparser.ast.stmt.WhileStmt'.(¾é Û8Ÿİûí/
+s
+java:S1128"QRemove this unused import 'com.github.javaparser.ast.visitor.VoidVisitorAdapter'.(é”¨Êúÿÿÿÿ8Ÿİûí/
+H
+java:S1068"2Remove this unused "conditionCount" private field.(ë°ÿ
+B
+java:S1068",Remove this unused "forCount" private field.(ë°ÿ
+F
+java:S1068"0Remove this unused "foreachCount" private field.(ë°ÿ
+D
+java:S1068".Remove this unused "whileCount" private field.(ë°ÿ
+H
+java:S1144X"2Remove this unused private "IsMsgedAssert" method.(†×É®
+e
+java:S1192}"ODefine a constant instead of duplicating this literal "Assert.NotNull" 3 times.(ş÷ğÖ
+o	java:S135â"YReduce the total number of break and continue statements in this loop to use at most one.(ãéº¦
+J
+java:S1066m"/Merge this if statement with the enclosing one.(ÂÉ¡Ïúÿÿÿÿ
+f	java:S1170"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(——ç½
+k	java:S117;"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(•ºšÿÿÿÿÿ
+T
+java:S11556">Use isEmpty() to check whether the collection is empty or not.(©Á Î
+S
+java:S1155@">Use isEmpty() to check whether the collection is empty or not.(®•ªv
+Y
+java:S1155m">Use isEmpty() to check whether the collection is empty or not.(ÂÉ¡Ïúÿÿÿÿ
+U
+java:S1155õ">Use isEmpty() to check whether the collection is empty or not.(Íã¹ê
