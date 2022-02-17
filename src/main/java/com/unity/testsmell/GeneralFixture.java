@@ -1,11 +1,12 @@
 package com.unity.testsmell;
 
+import com.github.gumtreediff.tree.Type;
 import org.javatuples.Pair;
 import com.config.Config;
 import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.github.gumtreediff.tree.ITree;
-import com.unity.testanalyzer.LineCountAssertCount;
 
+import java.security.Key;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -76,12 +77,67 @@ public class GeneralFixture {
         return namesList;
     }
 
-    public Map<String, List<AssertCall>> searchForGeneralFixture(ITree root) {
+    public boolean sub_tree_matcher(ITree tree1, ITree tree2, boolean objectMatch)
+    {
+        if ( tree1.getType() == tree2.getType() && Objects.equals(tree1.getLabel(), tree2.getLabel()))
+        {
+            if (tree1.isLeaf() && tree2.isLeaf()){
+                return true;
+            } else if (objectMatch){
+                return false;
+            } else{
+                if(tree1.getChildren().size() != tree2.getChildren().size())
+                {
+                    return false;
+                }
+                boolean total=true;
+                for (int counter = 0; counter<tree1.getChildren().size();counter++){
+                   total=total && sub_tree_matcher(tree1.getChild(counter),tree2.getChild(counter),false);
+                }
+                return total;
+            }
 
-        Map<String, List<AssertCall>> testfuncassertmap = new HashMap<>();
+        }
+        return false;
+    }
+
+    public double fields_in_test_func_matcher(ITree testfunc, List<Pair<String, ITree>> fields){
+        List<Pair<String, ITree>> fields_copy = new ArrayList<>();
+        int fields_number=fields.size();
+        if(fields_number==0)
+        {
+            return 0.0;
+        }
+        fields.forEach( p -> fields_copy.add(new Pair<>(p.getValue0(), p.getValue1())));
+        fields.forEach(p -> {
+            if(Objects.equals(p.getValue0(), "object"))
+            {
+                if ( sub_tree_matcher(p.getValue1(),testfunc,true))
+                {
+                    fields_copy.remove(p);
+                }
+            }
+            else if(Objects.equals(p.getValue0(), "property")){
+                if (sub_tree_matcher(p.getValue1(),testfunc,false))
+                {
+                        fields_copy.remove(p);
+                }
+                } else{
+                System.out.println("Unsupported field type");
+            }
+        });
+       int  new_number=fields_copy.size() ;
+
+       return (double) (new_number/fields_number)*100;
+    }
+
+
+    public Map<String,Double> searchForGeneralFixture(ITree root) {
+
+        Map<String,Double> generalFixtureMap = new HashMap<>();
         ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
         if (classnode == null)
-            return testfuncassertmap;
+            return generalFixtureMap;
         List<ITree> setupfuncslist = TreeNodeAnalyzer.getSetupFunctionsList(root);
         List<ITree> testfuncslist = TreeNodeAnalyzer.getTestFunctionList(root);
         List<ITree> allfuncs = TreeNodeAnalyzer.getFunctionList(root);
@@ -97,324 +153,45 @@ public class GeneralFixture {
         for (ITree setupfunc : setupfuncslist) {
             String funcnamenode = SrcmlUnityCsMetaDataGenerator.getFunctionName(setupfunc);
             String classtestfunc = lowerclassname + Config.separatorStr + funcnamenode;
-            System.out.println(classtestfunc);
+//            System.out.println(classtestfunc);
             List<Pair<String, ITree>> fields = collect_fields(allfuncs, setupfunc);
             initialized_fields.addAll(fields);
         }
 
         for (ITree testfunc: testfuncslist){
-            //TODO get fields of func, remove any fields that are touch from list of fields initialized by setupfuncs
+            String testfunc_name=SrcmlUnityCsMetaDataGenerator.getFunctionName(testfunc.deepCopy());
+            Double d;
+            if(initialized_fields.size()>0)
+            {d= fields_in_test_func_matcher(testfunc,initialized_fields);}
+            else{
+                d = 0.0;}
+            generalFixtureMap.put(testfunc_name,d);
         }
+//        System.out.println(generalFixtureMap);
+        return generalFixtureMap;
 
-        return testfuncassertmap;
     }
 
 
 
 
 
-
-
-//	public static List<ITree> breadthFirstSearchForNodeList(ITree node,String type,String nodevisitedmeta) {
-//
-//		// Just so we handle receiving an uninitialized Node, otherwise an
-//		// exception will be thrown when we try to add it to queue
-//		//ITree classnode = null;
-//		List<ITree> nodelist=new ArrayList<>();
-//		if (node == null)
-//			return null;
-//
-//		// Creating the queue, and adding the first node (step 1)
-//		LinkedList<ITree> queue = new LinkedList<>();
-//		queue.add(node);
-//
-//		while (!queue.isEmpty()) {
-//			ITree currentFirst = queue.removeFirst();
-//
-//			// In some cases we might have added a particular node more than once before
-//			// actually visiting that node, so we make sure to check and skip that node if
-//			// we have
-//			// encountered it before
-//
-//			if (currentFirst.getType().toString().contains(type)) {
-//				currentFirst.setMetadata("JUNIT", false);
-//				List<ITree> attributes=breadthFirstSearchForNodeList1(currentFirst,"attribute","an1");
-//				
-//				if(attributes!=null && attributes.size()>0)
-//				{
-//					List<ITree> anotations=breadthFirstSearchForLabel(attributes.get(0),"Test","an2");
-//					//System.out.println("test");
-//					
-//					if(anotations!=null && anotations.size()>0)
-//					{
-//						currentFirst.setMetadata("JUNIT", true);
-//					}
-//				}
-//				
-//				nodelist.add(currentFirst);
-//
-//			}
-//
-//			if (currentFirst.getMetadata(nodevisitedmeta) != null)
-//				continue;
-//
-//			// Mark the node as visited
-//			currentFirst.setMetadata(nodevisitedmeta, 1);
-//			// System.out.print(currentFirst.name + " ");
-//
-//			List<ITree> allNeighbors = currentFirst.getChildren();
-//
-//			// We have to check whether the list of neighbors is null before proceeding,
-//			// otherwise
-//			// the for-each loop will throw an exception
-//			if (allNeighbors == null)
-//				continue;
-//
-//			for (ITree neighbor : allNeighbors) {
-//				// We only add unvisited neighbors
-//				if (neighbor.getMetadata(nodevisitedmeta) == null) {
-//					queue.add(neighbor);
-//				}
-//			}
-//		}
-//		return nodelist;
-//	}
-//	
-//	public static List<ITree> breadthFirstSearchForNodeListUnityTest(ITree node,String type,String nodevisitedmeta) {
-//
-//		// Just so we handle receiving an uninitialized Node, otherwise an
-//		// exception will be thrown when we try to add it to queue
-//		//ITree classnode = null;
-//		List<ITree> nodelist=new ArrayList<>();
-//		if (node == null)
-//			return null;
-//
-//		// Creating the queue, and adding the first node (step 1)
-//		LinkedList<ITree> queue = new LinkedList<>();
-//		queue.add(node);
-//
-//		while (!queue.isEmpty()) {
-//			ITree currentFirst = queue.removeFirst();
-//
-//			// In some cases we might have added a particular node more than once before
-//			// actually visiting that node, so we make sure to check and skip that node if
-//			// we have
-//			// encountered it before
-//
-//			if (currentFirst.getType().toString().contains(type)) {
-//				currentFirst.setMetadata("UNITYTEST", false);
-//				List<ITree> attributes=breadthFirstSearchForNodeList1(currentFirst,"attribute","an1");
-//				
-//				if(attributes!=null && attributes.size()>0)
-//				{
-//					List<ITree> anotations=breadthFirstSearchForLabel(attributes.get(0),"UnityTest","an3");
-//					//System.out.println("test");
-//					
-//					if(anotations!=null && anotations.size()>0)
-//					{
-//						currentFirst.setMetadata("UNITYTEST", true);
-//					}
-//				}
-//				
-//				nodelist.add(currentFirst);
-//
-//			}
-//
-//			if (currentFirst.getMetadata(nodevisitedmeta) != null)
-//				continue;
-//
-//			// Mark the node as visited
-//			currentFirst.setMetadata(nodevisitedmeta, 1);
-//			// System.out.print(currentFirst.name + " ");
-//
-//			List<ITree> allNeighbors = currentFirst.getChildren();
-//
-//			// We have to check whether the list of neighbors is null before proceeding,
-//			// otherwise
-//			// the for-each loop will throw an exception
-//			if (allNeighbors == null)
-//				continue;
-//
-//			for (ITree neighbor : allNeighbors) {
-//				// We only add unvisited neighbors
-//				if (neighbor.getMetadata(nodevisitedmeta) == null) {
-//					queue.add(neighbor);
-//				}
-//			}
-//		}
-//		return nodelist;
-//	}
-//	
-//	
-//	public static ITree getClassName(ITree classnode)
-//	{
-//		ITree classnamenode=null;
-//		
-//		for(ITree node: classnode.getChildren())
-//		{
-//			if(node.getType().toString().contains("name"))
-//			{
-//				classnamenode=node;
-//				break;
-//			}
-//			
-//		}
-//		return classnamenode;		
-//	}
-//	
-//	public static ITree getTestAnotation(ITree classnode)
-//	{
-//		ITree classnamenode=null;
-//		
-//		for(ITree node: classnode.getChildren())
-//		{
-//			if(node.getLabel().equals("Test"))
-//			{
-//				classnamenode=node;
-//				break;
-//			}
-//			
-//		}
-//		return classnamenode;		
-//	}
-//	
-//	
-//	public static List<ITree> breadthFirstSearchForNodeList1(ITree node,String type,String nodevisitedmeta) {
-//
-//		// Just so we handle receiving an uninitialized Node, otherwise an
-//		// exception will be thrown when we try to add it to queue
-//		//ITree classnode = null;
-//		List<ITree> nodelist=new ArrayList<>();
-//		if (node == null)
-//			return null;
-//
-//		// Creating the queue, and adding the first node (step 1)
-//		LinkedList<ITree> queue = new LinkedList<>();
-//		queue.add(node);
-//
-//		while (!queue.isEmpty()) {
-//			ITree currentFirst = queue.removeFirst();
-//
-//			// In some cases we might have added a particular node more than once before
-//			// actually visiting that node, so we make sure to check and skip that node if
-//			// we have
-//			// encountered it before
-//
-//			if (currentFirst.getType().toString().contains(type)) {
-//				nodelist.add(currentFirst);
-//				
-//				
-//				
-//				
-//				
-//				//classnode = currentFirst;
-//			}
-//
-//			if (currentFirst.getMetadata(nodevisitedmeta) != null)
-//				continue;
-//
-//			// Mark the node as visited
-//			currentFirst.setMetadata(nodevisitedmeta, 1);
-//			// System.out.print(currentFirst.name + " ");
-//
-//			List<ITree> allNeighbors = currentFirst.getChildren();
-//
-//			// We have to check whether the list of neighbors is null before proceeding,
-//			// otherwise
-//			// the for-each loop will throw an exception
-//			if (allNeighbors == null)
-//				continue;
-//
-//			for (ITree neighbor : allNeighbors) {
-//				// We only add unvisited neighbors
-//				if (neighbor.getMetadata(nodevisitedmeta) == null) {
-//					queue.add(neighbor);
-//				}
-//			}
-//		}
-//		return nodelist;
-//	}
-//	
-//	public static List<ITree> breadthFirstSearchForLabel(ITree node,String label,String nodevisitedmeta) {
-//
-//		// Just so we handle receiving an uninitialized Node, otherwise an
-//		// exception will be thrown when we try to add it to queue
-//		//ITree classnode = null;
-//		List<ITree> nodelist=new ArrayList<>();
-//		if (node == null)
-//			return null;
-//
-//		// Creating the queue, and adding the first node (step 1)
-//		LinkedList<ITree> queue = new LinkedList<>();
-//		queue.add(node);
-//
-//		while (!queue.isEmpty()) {
-//			ITree currentFirst = queue.removeFirst();
-//
-//			// In some cases we might have added a particular node more than once before
-//			// actually visiting that node, so we make sure to check and skip that node if
-//			// we have
-//			// encountered it before
-//
-//			if (currentFirst.getLabel().equals(label)) {
-//				nodelist.add(currentFirst);
-//				
-//				//classnode = currentFirst;
-//			}
-//
-//			if (currentFirst.getMetadata(nodevisitedmeta) != null)
-//				continue;
-//
-//			// Mark the node as visited
-//			currentFirst.setMetadata(nodevisitedmeta, 1);
-//			// System.out.print(currentFirst.name + " ");
-//
-//			List<ITree> allNeighbors = currentFirst.getChildren();
-//
-//			// We have to check whether the list of neighbors is null before proceeding,
-//			// otherwise
-//			// the for-each loop will throw an exception
-//			if (allNeighbors == null)
-//				continue;
-//
-//			for (ITree neighbor : allNeighbors) {
-//				// We only add unvisited neighbors
-//				if (neighbor.getMetadata(nodevisitedmeta) == null) {
-//					queue.add(neighbor);
-//				}
-//			}
-//		}
-//		return nodelist;
-//	}
-
-    public double getAssertRoulteStats(Map<String, List<AssertCall>> testfuncassertmap) {
+    public double getGeneralFixtureStats(Map<String, Double> testfuncassertmap) {
         double percentage = 0.0;
         int total = 0;
-        int roulecount = 0;
-
-        for (String key : testfuncassertmap.keySet()) {
-            List<AssertCall> assertcall = testfuncassertmap.get(key);
-
-            if (assertcall != null && assertcall.size() > 1) {
-                int index = 1;
-
-                while (index < assertcall.size()) {
-                    if (assertcall.get(index).isHasMsg() == false) {
-                        roulecount++;
-                        break;
-                    }
-                    index++;
-                }
-
-            }
+        double percent_total=0.0;
+        for( Double s: testfuncassertmap.values())
+        {
+            percent_total+=s;
         }
-
         total = testfuncassertmap.keySet().size();
 
         if (total <= 0) {
             return -0.001;
         } else {
-            percentage = (((double) roulecount / (double) total) * 100.00);
+            percentage = percent_total/total;
+//            System.out.println(percent_total);
+
         }
 
         return percentage;

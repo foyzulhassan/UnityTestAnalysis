@@ -33,11 +33,11 @@ public class TestSmellDetector {
         testSmells.add(new DefaultTest());
         testSmells.add(new EmptyTest());
         testSmells.add(new ExceptionCatchingThrowing());
-        testSmells.add(new GeneralFixture()); // do this
+        testSmells.add(new GeneralFixture()); //done
         testSmells.add(new MysteryGuest()); // do this
         testSmells.add(new PrintStatement());
         testSmells.add(new RedundantAssertion());
-        testSmells.add(new SensitiveEquality()); // do this
+        testSmells.add(new SensitiveEquality()); // done
         testSmells.add(new VerboseTest());
         testSmells.add(new SleepyTest());
         testSmells.add(new EagerTest()); // do this

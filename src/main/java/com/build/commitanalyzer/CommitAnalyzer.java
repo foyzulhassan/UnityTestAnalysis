@@ -25,8 +25,7 @@ import java.util.Queue;
 
 //import org.apache.commons.compress.utils.IOUtils;
 import com.github.gumtreediff.tree.TreeContext;
-import com.unity.testsmell.ConditionalTestLogic;
-import com.unity.testsmell.GeneralFixture;
+import com.unity.testsmell.*;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -73,8 +72,6 @@ import com.unity.callgraph.ClassFunction;
 import com.unity.entity.PerfFixData;
 import com.unity.testanalysis.ClassFunctionTypeAnalyzer;
 import com.unity.testanalyzer.LineCountAssertCount;
-import com.unity.testsmell.AssertCall;
-import com.unity.testsmell.AssertionRoulette;
 
 import org.apache.commons.io.IOUtils;
 
@@ -710,12 +707,109 @@ public class CommitAnalyzer {
         return projtestfuncassertmap;
     }
 
-    // TODO General Fixture
 
-    public void getGeneralFixture(String commitid){
+    public Map<String,Boolean>  getSensitiveEquality(String commitid) {
+
         //List<ClassFunction> classfunclist=new ArrayList<>();
-        Map<String,Map<String,Integer>> projtestfuncassertmap=new HashMap<>();
-        Map<String,Map<String,Integer>>  map = new HashMap<>();
+        Map<String,Boolean> projtestfuncassertmap=new HashMap<>();
+        Map<String,Boolean>  map = new HashMap<>();
+        try {
+            ObjectId objectid = repository.resolve(commitid);
+            RevCommit commit = rw.parseCommit(objectid);
+
+            RevTree tree = commit.getTree();
+
+            // TreeWalk treeWalk = new TreeWalk(repository);
+            // treeWalk.addTree(tree);
+            // treeWalk.setRecursive(false);
+            // treeWalk.setPostOrderTraversal(false);
+
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
+
+            // treeWalk.setRecursive(true);
+
+            while (treeWalk.next()) {
+                // System.out.println("found:" + treeWalk.getPathString());
+//				System.out.println(treeWalk.getPathString()+"*****");
+                if (treeWalk.isSubtree()) {
+                    // System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                }
+
+
+
+                else if (treeWalk.getPathString().endsWith(".cs")) {
+
+                    ObjectId objectId = treeWalk.getObjectId(0);
+                    ObjectLoader loader = repository.open(objectId);
+
+                    // and then one can the loader to read the file
+                    // loader.copyTo(System.out);
+
+                    byte[] butestr = loader.getBytes();
+                    String str = new String(butestr);
+                    File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+
+
+
+                    Reader reader;
+                    try {
+//						System.out.println(treeWalk.getPathString());
+
+//						if(treeWalk.getPathString().contains("Resources.Designer.cs"))
+//						{
+//							System.out.print("debug");
+//						}
+                        reader = new FileReader(f1.toString());
+                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+
+                        //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
+                        //analyzer.getTestFunctionList(curtree);
+                        SensitiveEquality se=new SensitiveEquality();
+                        map = se.searchForSensitiveEquality(curtree);
+//                        System.out.println(map.size());
+//                        System.out.println(map);
+                        //Copy to project map
+                        for(String key:map.keySet())
+                        {
+                            if(!projtestfuncassertmap.containsKey(key))
+                            {
+                                projtestfuncassertmap.put(key, map.get(key));
+                            }
+
+
+                        }
+
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+
+
+                    f1.delete();
+
+
+                }
+
+            }
+            treeWalk.reset();
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+//        System.out.println(projtestfuncassertmap);
+        return projtestfuncassertmap;
+    }
+
+
+
+    public Map<String,Double>  getGeneralFixture(String commitid){
+        //List<ClassFunction> classfunclist=new ArrayList<>();
+        Map<String,Double> projtestfuncassertmap=new HashMap<>();
+        Map<String,Double> map = new HashMap<>();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -773,8 +867,7 @@ public class CommitAnalyzer {
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
                         GeneralFixture gf=new GeneralFixture();
-//                        map =
-                                gf.searchForGeneralFixture(curtree);
+                        map = gf.searchForGeneralFixture(curtree);
 //                        System.out.println(map);
                         //Copy to project map
                         for(String key:map.keySet())
@@ -806,7 +899,7 @@ public class CommitAnalyzer {
             System.out.print(ex.getMessage());
         }
 //        System.out.println(projtestfuncassertmap);
-//        return projtestfuncassertmap;
+        return projtestfuncassertmap;
 
 
     }

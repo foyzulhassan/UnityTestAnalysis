@@ -62,7 +62,7 @@ private int conditionCount, ifCount, switchCount, forCount, foreachCount, whileC
             {
                 switchCount++;
             }
-            //TODO
+
             //condition ternary
             List<ITree> ternary_stmt_list=TreeNodeAnalyzer.getSearchTypeLabel(testfunc,"ternary","");
 //            System.out.println(switch_stmt_list);
