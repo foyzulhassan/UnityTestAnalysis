@@ -174,6 +174,21 @@ public class MainClass {
 
         }
 
+        else if (inputid == 96) {
+            System.out.println("Mystery Guest Analysis(RQ3-a)");
+
+            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeMysteryGuest();
+            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("MysteryGuest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
         else if (inputid == 97) {
             System.out.println("Sensitive Equality Analysis(RQ3-a)");
 

@@ -100,6 +100,52 @@ public class SmellAnalysisMngr {
         return smellpercentage;
 
     }
+
+    public List<ProjectSmellEntity> analyzeMysteryGuest() {
+        String filepath = Config.gitProjList;
+
+        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+        // List<PerfFixData> fixdata = new ArrayList<>();
+        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+
+        int counter = 0;
+        for (String proj : projlist) {
+            String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            TestAnalysisData analysisdata = new TestAnalysisData(projname);
+
+            CommitAnalyzer cmtanalyzer = null;
+            System.out.println(counter + "-->" + projname);
+
+            counter++;
+            if (counter > 5)
+                return smellpercentage;
+
+            try {
+                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                String commitid = cmtanalyzer.getHeadCommitID();
+                Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getMysteryGuest(commitid);
+                MysteryGuest mysteryGuest = new MysteryGuest();
+                double percentage = mysteryGuest.getMysteryGuestStats(testfuncconditionalTestmap);
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("MysteryGuest");
+                projsmell.setProjName(projname);
+                projsmell.setSmellPercentage(percentage);
+                smellpercentage.add(projsmell);
+
+
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return smellpercentage;
+
+    }
+
     public List<ProjectSmellEntity> analyzeConditionalTest() {
         String filepath = Config.gitProjList;
 
@@ -151,8 +197,6 @@ public class SmellAnalysisMngr {
         return smellpercentage;
 
     }
-
-    // TODO General Fixture
     public  List<ProjectSmellEntity> analyzeGeneralFixture(){
         String filepath = Config.gitProjList;
 
