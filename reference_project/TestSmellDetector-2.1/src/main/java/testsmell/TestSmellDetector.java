@@ -40,8 +40,8 @@ public class TestSmellDetector {
         testSmells.add(new SensitiveEquality()); // done
         testSmells.add(new VerboseTest());
         testSmells.add(new SleepyTest());
-        testSmells.add(new EagerTest()); // TODO: WIP
-        testSmells.add(new LazyTest()); // do this
+        testSmells.add(new EagerTest()); // do this
+        testSmells.add(new LazyTest()); // TODO: WIP
         testSmells.add(new DuplicateAssert());
         testSmells.add(new UnknownTest());
         testSmells.add(new IgnoredTest());
