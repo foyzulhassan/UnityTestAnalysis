@@ -72,8 +72,8 @@ public class SmellAnalysisMngr {
             System.out.println(counter + "-->" + projname);
 
             counter++;
-            if (counter > 5)
-                return smellpercentage;
+//            if (counter > 5)
+//                return smellpercentage;
 
             try {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);
@@ -84,6 +84,51 @@ public class SmellAnalysisMngr {
                 double percentage = sensitiveEquality.getSensitiveEqualityStats(testfuncconditionalTestmap);
 
                 ProjectSmellEntity projsmell = new ProjectSmellEntity("SensitiveEquality");
+                projsmell.setProjName(projname);
+                projsmell.setSmellPercentage(percentage);
+                smellpercentage.add(projsmell);
+
+
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return smellpercentage;
+
+    }
+
+    public List<ProjectSmellEntity> analyzeLazyTest() {
+        String filepath = Config.gitProjList;
+
+        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+        // List<PerfFixData> fixdata = new ArrayList<>();
+        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+
+        int counter = 0;
+        for (String proj : projlist) {
+            String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            TestAnalysisData analysisdata = new TestAnalysisData(projname);
+
+            CommitAnalyzer cmtanalyzer = null;
+            System.out.println(counter + "-->" + projname);
+
+            counter++;
+//            if (counter > 5)
+//                return smellpercentage;
+
+            try {
+                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                String commitid = cmtanalyzer.getHeadCommitID();
+                Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getLazyTest(commitid);
+                LazyTest lazyTest = new LazyTest();
+                double percentage = lazyTest.getLazyTestStats(testfuncconditionalTestmap);
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("LazyTest");
                 projsmell.setProjName(projname);
                 projsmell.setSmellPercentage(percentage);
                 smellpercentage.add(projsmell);
@@ -117,8 +162,8 @@ public class SmellAnalysisMngr {
             System.out.println(counter + "-->" + projname);
 
             counter++;
-            if (counter > 5)
-                return smellpercentage;
+//            if (counter > 5)
+//                return smellpercentage;
 
             try {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);
@@ -213,9 +258,9 @@ public class SmellAnalysisMngr {
             System.out.println(counter + "-->" + projname);
 
             counter++;
-// TODO change counter
-            if (counter > 5)
-                return smellpercentage ;
+
+//            if (counter > 5)
+//                return smellpercentage ;
 
             try {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);

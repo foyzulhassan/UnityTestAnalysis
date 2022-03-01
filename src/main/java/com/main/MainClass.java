@@ -173,8 +173,22 @@ public class MainClass {
             }
 
         }
+        else  {  // if (inputid == 95)
+            System.out.println("Lazy Test Analysis(RQ3-a)");
 
-        else if (inputid == 96) {
+            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeLazyTest();
+            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("LazyTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+//        else if (inputid == 96) {
             System.out.println("Mystery Guest Analysis(RQ3-a)");
 
             SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
@@ -187,14 +201,17 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
+//        }
 
-        else if (inputid == 97) {
+//        else if (inputid == 97) {
             System.out.println("Sensitive Equality Analysis(RQ3-a)");
 
-            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
-            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeSensitiveEquality();
-            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+//            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+//            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeSensitiveEquality();
+//            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("SensitiveEqaulity"));
             } catch (IOException e) {
@@ -202,14 +219,17 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
+//        }
 
-        else if (inputid == 98) {
+//        else if (inputid == 98) {
             System.out.println("General Fixture Analysis(RQ3-a)");
 
-            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
-            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeGeneralFixture();
-            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+//            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+//            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeGeneralFixture();
+//            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("GeneralAnalysis"));
             } catch (IOException e) {
@@ -217,14 +237,17 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
+//        }
 
-        else if (inputid == 99) {
+//        else if (inputid == 99) {
             System.out.println("Conditional Test Analysis(RQ3-a)");
 
-            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
-            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeConditionalTest();
-            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+//            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+//            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeConditionalTest();
+//            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ConditionalTestLogic"));
             } catch (IOException e) {
@@ -232,10 +255,10 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
+//        }
 		
 		
-		else if (inputid == 24) {
+//		else if (inputid == 24) {
 			
 			ClassFunctionTypeAnalyzer typeanalyzer = new ClassFunctionTypeAnalyzer();
 			File f1 = new File("D:\\Research_Works\\VR_AR_Testing\\sample_Project\\AchievementTests.cs");
@@ -256,4 +279,4 @@ public class MainClass {
 		}
 
 	}
-}
+//}
