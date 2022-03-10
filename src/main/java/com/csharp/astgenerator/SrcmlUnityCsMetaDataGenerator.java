@@ -27,6 +27,23 @@ public class SrcmlUnityCsMetaDataGenerator {
 		return block;
 	}
 
+    public static List<ITree> getClassProperties(ITree node){
+        List<ITree> classProps = new ArrayList<>();
+        ITree tempnode=node.deepCopy();
+        tempnode.getChildren().forEach( ch->{
+            if(ch.getType().toString().equals("block")){
+                ch.getChildren().forEach( gch -> {
+
+                        if( gch.getType().toString().toLowerCase().equals("decl_stmt")){
+                            classProps.add(gch);
+                        }
+
+                });
+            }
+        });
+        return classProps;
+    }
+
 	public static String getFunctionName(ITree node) {
 		String label = "";
 

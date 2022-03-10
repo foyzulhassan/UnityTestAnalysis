@@ -49,4 +49,9 @@ public class AssertCall {
 		this.hasMsg = hasMsg;
 	}
 
+
+    public String toString(){
+        return getAssertName()+'_'+hasMsg;
+    }
+
 }

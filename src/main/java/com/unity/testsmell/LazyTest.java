@@ -58,6 +58,7 @@ public class LazyTest {
         AtomicBoolean result = new AtomicBoolean(false);
         tree_copy.getChildren().forEach(ch -> {
             List<ITree> literals_list = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNodeList(tree_copy,"literal","l1");
+            System.out.println(literals_list);
             for (ITree lit: literals_list){
                 String label = lit.getLabel();
                 if(ressources_paths.get(label)>1)
@@ -156,6 +157,8 @@ public class LazyTest {
             }
 
         }
+        if(ressources_paths.size() > 0)
+            System.out.println(ressources_paths);
         return LazyTest;
 
 

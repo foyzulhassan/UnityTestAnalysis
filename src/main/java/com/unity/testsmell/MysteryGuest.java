@@ -13,10 +13,13 @@ public class MysteryGuest {
 
     }
 
+
+
     private final List<String> mysteryGuestTypes = new ArrayList<>(
             Arrays.asList(
                     // file/db/webservice types classes in c#
                     "File",
+                    "FileSource",
                     "FileInfo",
                     "Directory",
                     "DirectoryInfo",
@@ -66,7 +69,96 @@ public class MysteryGuest {
         ITree classname = SrcmlUnityCsMetaDataGenerator.getClassName(classnode);
 
         String lowerclassname = classname.getLabel();
+        List<ITree> setupfuncslist = TreeNodeAnalyzer.getSetupFunctionsList(root);
+        List<ITree> classProps=SrcmlUnityCsMetaDataGenerator.getClassProperties(classnode);
 
+        List<String> mysteryGuestsList = new ArrayList<>();
+
+        for (ITree prop : classProps) {
+
+
+            // find possible mystery guests
+            List<ITree> type_list = TreeNodeAnalyzer.getSearchTypeLabel(prop, "type", "");
+            if (type_list != null && type_list.size() > 0) {
+                for (ITree type : type_list) {
+                    type.getChildren().forEach(ch -> {
+                        if (ch.getType().toString().equalsIgnoreCase("name")) {
+//                            System.out.println(ch.getLabel().toString());
+                            if (mysteryGuestTypes.contains(ch.getLabel().toString()) || ch.getLabel().toLowerCase().startsWith("sql")) {
+                                String name = get_var_name(type);
+                                mysteryGuestsList.add(name);
+                            }
+                        }
+                    });
+                }
+            }
+            List<ITree> init_list = TreeNodeAnalyzer.getSearchTypeLabel(prop, "init", "");
+            if (init_list != null && init_list.size() > 0) {
+                for (ITree init : init_list) {
+                    init.getChildren().forEach(ch -> {
+                        if (ch.getType().toString().equalsIgnoreCase("call")) {
+                            ch.getChildren().forEach(gch -> {
+                                if (gch.getType().toString().equalsIgnoreCase("name")) {
+                                    gch.getChildren().forEach(ggch -> {
+                                        if (ggch.getType().toString().equals("name") && ggch.getLabel().toLowerCase().contains("mock")) {
+                                            String name = get_var_name(init);
+                                            mysteryGuestsList.remove(name);
+                                        }
+                                    });
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+            }
+
+        }
+
+
+        for (ITree setupfunc : setupfuncslist) {
+            ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(setupfunc);
+
+            String classtestfunc = lowerclassname + Config.separatorStr + funcnamenode.getLabel();
+
+            // find possible mystery guests
+            List<ITree> type_list = TreeNodeAnalyzer.getSearchTypeLabel(setupfunc, "type", "");
+            if (type_list != null && type_list.size() > 0) {
+                for (ITree type : type_list) {
+                    type.getChildren().forEach(ch -> {
+                        if (ch.getType().toString().equalsIgnoreCase("name")) {
+                            if (mysteryGuestTypes.contains(ch.getLabel().toString()) || ch.getLabel().toLowerCase().startsWith("sql")) {
+                                String name = get_var_name(type);
+                                mysteryGuestsList.add(name);
+                            }
+                        }
+                    });
+                }
+            }
+            List<ITree> init_list = TreeNodeAnalyzer.getSearchTypeLabel(setupfunc, "init", "");
+            if (init_list != null && init_list.size() > 0) {
+                for (ITree init : init_list) {
+                    init.getChildren().forEach(ch -> {
+                        if (ch.getType().toString().equalsIgnoreCase("call")) {
+                            ch.getChildren().forEach(gch -> {
+                                if (gch.getType().toString().equalsIgnoreCase("name")) {
+                                    gch.getChildren().forEach(ggch -> {
+                                        if (ggch.getType().toString().equals("name") && ggch.getLabel().toLowerCase().contains("mock")) {
+                                            String name = get_var_name(init);
+                                            mysteryGuestsList.remove(name);
+                                        }
+                                    });
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+            }
+
+        }
 
         for (ITree testfunc : testfunclist) {
             ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
@@ -75,7 +167,7 @@ public class MysteryGuest {
 
             // find possible mystery guests
             List<ITree> type_list = TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "type", "");
-            List<String> mysteryGuestsList = new ArrayList<>();
+//            List<String> mysteryGuestsList = new ArrayList<>();
             if (type_list != null && type_list.size() > 0) {
                 for (ITree type : type_list) {
                     type.getChildren().forEach(ch -> {
@@ -118,27 +210,47 @@ public class MysteryGuest {
 //             classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
             if (calls_list != null && calls_list.size() > 0) {
                 for (ITree call : calls_list) {
+
                     call.getChildren().forEach(ch -> {
                         int found = 0;
                         if (ch.getType().toString().equalsIgnoreCase("name")) {
-                            int i = 0;
+                            boolean opFound = false;
+                            boolean resFound = false;
+                            boolean loadFound = false;
+//                            int i = 0;
                             for (ITree gch : ch.getChildren()) {
-                                if (i == 0 && gch.getLabel().equals("Resources")) {
-                                    found++;
+                                if (gch.getLabel().equals("Resources")) {
+
+//                                    System.out.println(ch.getChildren());
+                                    resFound = true;
                                 }
-                                if (i == 1 && gch.getLabel().equals(".")) {
-                                    found++;
+                                if (gch.getLabel().equals(".")) {
+//                                    System.out.println(ch.getChildren());
+                                    opFound = true;
                                 }
-                                if (i == 2 && (gch.getLabel().equals("Load") || gch.getLabel().equals("LoadAll"))) {
-                                    found++;
+                                if ((gch.getLabel().equals("Load") || gch.getLabel().equals("LoadAll"))) {
+//                                    System.out.println(ch.getChildren());
+                                    loadFound = true;
                                 }
-                                i++;
+                                if(resFound && gch.getLabel().equals("") ) {
+                                    for (ITree ggch:gch.getChildren())
+                                        {
+                                            if(ggch.getLabel().equals("Load") || ggch.getLabel().equals("LoadAll"))
+                                            {
+                                                loadFound=true;
+                                            }
+
+                                                                                }
+                                }
+
+
+                            }
+                            if (opFound&&resFound&&loadFound) {
+                                mysteryGuestsList.add("ResLoad");
                             }
 
                         }
-                        if (found > 2) {
-                            mysteryGuestsList.add("ResLoad");
-                        }
+
                     });
 
                 }

@@ -97,7 +97,7 @@ public class EagerTest {
 
 
 
-	public double getLazyTestStats(Map<String,Boolean> testfuncconditionalTestmap)
+	public double getEagerTestStats(Map<String,Boolean> testfuncconditionalTestmap)
 	{
 
         int total=testfuncconditionalTestmap.keySet().size();

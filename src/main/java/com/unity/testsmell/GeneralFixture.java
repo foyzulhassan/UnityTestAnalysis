@@ -18,63 +18,68 @@ public class GeneralFixture {
     }
 
     public List<Pair<String, ITree>> collect_fields(List<ITree> all_funcs, ITree func) {
-        ITree func_copy = func.deepCopy();
-        ArrayList<Pair<String, ITree>> namesList = new ArrayList<>();
-        func_copy.getChildren().forEach(
-                child -> {
-                    List<ITree> list_call = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNodeList(child, "call", "call1");
-                    for (ITree call : list_call) {
-                        call.getChildren().forEach(
-                                child2 -> {
-                                    if (child2.getType().toString().equals("name")) {
-                                        AtomicBoolean constructor = new AtomicBoolean(false);
-                                        call.getParent().getChildren().forEach(op -> {
-                                            if (op.getLabel().equals("new"))
-                                                constructor.set(true);
-                                        });
-                                        if (!constructor.get()) {
-                                            String func_name = child2.getLabel();
-//                                        System.out.println(func_name);
-                                            all_funcs.forEach(ftemp -> {
-                                                ftemp.getChildren().forEach(child3 -> {
-                                                    if (child3.getType().toString().equals("name") && child3.getLabel().equals(func_name)) {
-                                                        List<Pair<String, ITree>> add_list = collect_fields(all_funcs, ftemp);
-                                                        namesList.addAll(add_list);
-                                                    }
-                                                });
-
+        try {
+            ITree func_copy = func.deepCopy();
+            ArrayList<Pair<String, ITree>> namesList = new ArrayList<>();
+            func_copy.getChildren().forEach(
+                    child -> {
+                        List<ITree> list_call = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNodeList(child, "call", "call1");
+                        for (ITree call : list_call) {
+                            call.getChildren().forEach(
+                                    child2 -> {
+                                        if (child2.getType().toString().equals("name")) {
+                                            AtomicBoolean constructor = new AtomicBoolean(false);
+                                            call.getParent().getChildren().forEach(op -> {
+                                                if (op.getLabel().equals("new"))
+                                                    constructor.set(true);
                                             });
+                                            if (!constructor.get()) {
+                                                String func_name = child2.getLabel();
+//                                        System.out.println(func_name);
+                                                all_funcs.forEach(ftemp -> {
+                                                    ftemp.getChildren().forEach(child3 -> {
+                                                        if (child3.getType().toString().equals("name") && child3.getLabel().equals(func_name)) {
+                                                            List<Pair<String, ITree>> add_list = collect_fields(all_funcs, ftemp);
+                                                            namesList.addAll(add_list);
+                                                        }
+                                                    });
+
+                                                });
+                                            }
                                         }
                                     }
-                                }
-                        );
+                            );
+
+                        }
 
                     }
 
-                }
 
-
-        );
+            );
 //        System.out.println(func_copy.getChildren());
-        List<ITree> decls = TreeNodeAnalyzer.getSearchTypeLabel(func_copy, "operator", "=");
-        decls.forEach(d -> {
-            ITree ch = d.getParent().getChild(0);
-            if (ch.getType().toString().equals("name")) {
-                Pair<String, ITree> p = new Pair<>("property", ch);
-                namesList.add(p);
-            }
-        });
-        decls = TreeNodeAnalyzer.getSearchTypeLabel(func_copy, "init", "");
-        decls.forEach(d -> d.getParent().getChildren().forEach(ch ->
-                {
-                    if (ch.getType().toString().equals("name")) {
-                        Pair<String, ITree> p = new Pair<>("object", ch);
-                        namesList.add(p);
-                    }
-                })
-        );
+            List<ITree> decls = TreeNodeAnalyzer.getSearchTypeLabel(func_copy, "operator", "=");
+            decls.forEach(d -> {
+                ITree ch = d.getParent().getChild(0);
+                if (ch.getType().toString().equals("name")) {
+                    Pair<String, ITree> p = new Pair<>("property", ch);
+                    namesList.add(p);
+                }
+            });
+            decls = TreeNodeAnalyzer.getSearchTypeLabel(func_copy, "init", "");
+            decls.forEach(d -> d.getParent().getChildren().forEach(ch ->
+                    {
+                        if (ch.getType().toString().equals("name")) {
+                            Pair<String, ITree> p = new Pair<>("object", ch);
+                            namesList.add(p);
+                        }
+                    })
+            );
 //        System.out.println(decls.size());
-        return namesList;
+            return namesList;
+        }
+        catch (Exception e){
+            return new ArrayList<Pair<String, ITree>>() ;
+        }
     }
 
     public boolean sub_tree_matcher(ITree tree1, ITree tree2, boolean objectMatch)
@@ -196,4 +201,5 @@ public class GeneralFixture {
 
         return percentage;
     }
+
 }

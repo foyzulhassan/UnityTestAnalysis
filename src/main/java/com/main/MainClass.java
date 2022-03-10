@@ -173,7 +173,22 @@ public class MainClass {
             }
 
         }
-        else  {  // if (inputid == 95)
+        else  if (inputid == 94)  {  //
+            System.out.println("Eager Test Analysis(RQ3-a)");
+
+            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeEagerTest();
+            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("EagerTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else  if (inputid == 95)  {  //
             System.out.println("Lazy Test Analysis(RQ3-a)");
 
             SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
@@ -188,7 +203,7 @@ public class MainClass {
 
         }
 
-//        else if (inputid == 96) {
+        else if (inputid == 96) {
             System.out.println("Mystery Guest Analysis(RQ3-a)");
 
             SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
@@ -201,16 +216,16 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-//        }
+        }
 
-//        else if (inputid == 97) {
+        else if (inputid == 97) {
             System.out.println("Sensitive Equality Analysis(RQ3-a)");
 
-//            SmellAnalysisMngr
+            SmellAnalysisMngr
                     smellmgr=new SmellAnalysisMngr();
-//            List<ProjectSmellEntity>
+            List<ProjectSmellEntity>
                     projsemlllist=smellmgr.analyzeSensitiveEquality();
-//            ApacheCSVReaderWriter
+            ApacheCSVReaderWriter
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("SensitiveEqaulity"));
@@ -219,16 +234,16 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-//        }
+        }
 
-//        else if (inputid == 98) {
+        else if (inputid == 98) {
             System.out.println("General Fixture Analysis(RQ3-a)");
 
-//            SmellAnalysisMngr
+            SmellAnalysisMngr
                     smellmgr=new SmellAnalysisMngr();
-//            List<ProjectSmellEntity>
+            List<ProjectSmellEntity>
                     projsemlllist=smellmgr.analyzeGeneralFixture();
-//            ApacheCSVReaderWriter
+            ApacheCSVReaderWriter
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("GeneralAnalysis"));
@@ -237,16 +252,16 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-//        }
+        }
 
-//        else if (inputid == 99) {
+        else if (inputid == 99) {
             System.out.println("Conditional Test Analysis(RQ3-a)");
 
-//            SmellAnalysisMngr
+            SmellAnalysisMngr
                     smellmgr=new SmellAnalysisMngr();
-//            List<ProjectSmellEntity>
+            List<ProjectSmellEntity>
                     projsemlllist=smellmgr.analyzeConditionalTest();
-//            ApacheCSVReaderWriter
+            ApacheCSVReaderWriter
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ConditionalTestLogic"));
@@ -255,10 +270,10 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-//        }
+        }
 		
 		
-//		else if (inputid == 24) {
+		else if (inputid == 24) {
 			
 			ClassFunctionTypeAnalyzer typeanalyzer = new ClassFunctionTypeAnalyzer();
 			File f1 = new File("D:\\Research_Works\\VR_AR_Testing\\sample_Project\\AchievementTests.cs");
@@ -279,4 +294,4 @@ public class MainClass {
 		}
 
 	}
-//}
+}
