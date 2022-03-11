@@ -310,7 +310,12 @@ public class SmellAnalysisMngr {
 
 //            if (counter > 5)
 //                return smellpercentage ;
-            if (projname.equals("Unity-Technologies@InputSystem"))
+//            if (projname.equals("Unity-Technologies@InputSystem"))
+//            {
+//                continue;
+//            }
+
+            if (projname.equals("iamtomhewitt@vr-pacman"))
             {
                 continue;
             }
@@ -384,18 +389,18 @@ public class SmellAnalysisMngr {
                     cmtanalyzer = new CommitAnalyzer("test", projname, proj);
 
                     String commitid = cmtanalyzer.getHeadCommitID();
-//                    Map<String, Double> tempMap = cmtanalyzer.getGeneralFixture(commitid);
-//
-//                    Map<String, Double> newMap1 = new HashMap<>();
-//                    Iterator<Map.Entry<String, Double>> iterator1 = tempMap.entrySet().iterator();
-//                    while (iterator1.hasNext()) {
-//                        Map.Entry<String,  Double> entry = iterator1.next();
-//                        iterator1.remove();
-//                        newMap1.put(projname+'_'+entry.getKey(),entry.getValue());  // Whatever logic to compose new key/value pair.
-//                    }
-//                    tempMap.clear();
-//                    tempMap.putAll(newMap1);
-//                    generalFixtureSmells.add(tempMap);
+                    Map<String, Double> tempMap = cmtanalyzer.getGeneralFixture(commitid);
+
+                    Map<String, Double> newMap1 = new HashMap<>();
+                    Iterator<Map.Entry<String, Double>> iterator1 = tempMap.entrySet().iterator();
+                    while (iterator1.hasNext()) {
+                        Map.Entry<String,  Double> entry = iterator1.next();
+                        iterator1.remove();
+                        newMap1.put(projname+'_'+entry.getKey(),entry.getValue());  // Whatever logic to compose new key/value pair.
+                    }
+                    tempMap.clear();
+                    tempMap.putAll(newMap1);
+                    generalFixtureSmells.add(tempMap);
 
 
 //                    Map<String, Map<String, Integer>> tempMap_2 = cmtanalyzer.getConditionalTest(commitid);
@@ -413,18 +418,18 @@ public class SmellAnalysisMngr {
 //                    mysteryGuestSmells.add(tempMap_2);
 
 
-                    Map<String,Boolean> tempMap_3 = cmtanalyzer.getEagerTest(commitid);
-                    Map<String, Boolean> newMap3 = new HashMap<>();
-                    Iterator<Map.Entry<String, Boolean>> iterator3 = tempMap_3.entrySet().iterator();
-                    while (iterator3.hasNext()) {
-                        Map.Entry<String, Boolean> entry = iterator3.next();
-                        iterator3.remove();
-                        newMap3.put(projname+'_'+entry.getKey(),entry.getValue());  // Whatever logic to compose new key/value pair.
-                    }
-                    tempMap_3.clear();
-                    tempMap_3.putAll(newMap3);
-                    eagerTestSmells.add(tempMap_3);
-//
+//                    Map<String,Boolean> tempMap_3 = cmtanalyzer.getEagerTest(commitid);
+//                    Map<String, Boolean> newMap3 = new HashMap<>();
+//                    Iterator<Map.Entry<String, Boolean>> iterator3 = tempMap_3.entrySet().iterator();
+//                    while (iterator3.hasNext()) {
+//                        Map.Entry<String, Boolean> entry = iterator3.next();
+//                        iterator3.remove();
+//                        newMap3.put(projname+'_'+entry.getKey(),entry.getValue());  // Whatever logic to compose new key/value pair.
+//                    }
+//                    tempMap_3.clear();
+//                    tempMap_3.putAll(newMap3);
+//                    eagerTestSmells.add(tempMap_3);
+////
 //                    Map<String,Boolean> tempMap_4 = cmtanalyzer.getLazyTest(commitid);
 //                    Map<String, Boolean> newMap4 = new HashMap<>();
 //                    Iterator<Map.Entry<String, Boolean>> iterator4 = tempMap_4.entrySet().iterator();
@@ -480,12 +485,11 @@ public class SmellAnalysisMngr {
 
             }
 
-//        Map<String, Double> generalFixtureSmellsMap= new HashMap<>();
-//        final Optional<Map<String, Double>> generalFixtureSmellsMap = generalFixtureSmells.stream().reduce((firstMap, secondMap) -> {
-//            return Stream.concat(firstMap.entrySet().stream(), secondMap.entrySet().stream())
-//                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                            (countInFirstMap, countInSecondMap) -> countInFirstMap + countInSecondMap));
-//        });
+        final Optional<Map<String, Double>> generalFixtureSmellsMap = generalFixtureSmells.stream().reduce((firstMap, secondMap) -> {
+            return Stream.concat(firstMap.entrySet().stream(), secondMap.entrySet().stream())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                            (countInFirstMap, countInSecondMap) -> countInFirstMap + countInSecondMap));
+        });
 //
 //            List<Map<String, Map<String, Integer>>> conditionalTestSmells= new ArrayList<>();
 //
@@ -494,11 +498,11 @@ public class SmellAnalysisMngr {
 //                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
 //                            (countInFirstMap, countInSecondMap) -> countInFirstMap && countInSecondMap));
 //        });
-        final Optional<Map<String, Boolean>> eagerTestSmellsMap = eagerTestSmells.stream().reduce((firstMap, secondMap) -> {
-            return Stream.concat(firstMap.entrySet().stream(), secondMap.entrySet().stream())
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                            (countInFirstMap, countInSecondMap) -> countInFirstMap && countInSecondMap));
-        });
+//        final Optional<Map<String, Boolean>> eagerTestSmellsMap = eagerTestSmells.stream().reduce((firstMap, secondMap) -> {
+//            return Stream.concat(firstMap.entrySet().stream(), secondMap.entrySet().stream())
+//                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+//                            (countInFirstMap, countInSecondMap) -> countInFirstMap && countInSecondMap));
+//        });
 //        final Optional<Map<String, Boolean>> lazyTestSmellsMap = lazyTestSmells.stream().reduce((firstMap, secondMap) -> {
 //            return Stream.concat(firstMap.entrySet().stream(), secondMap.entrySet().stream())
 //                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
@@ -612,19 +616,19 @@ public class SmellAnalysisMngr {
 //            }
 //            tempList.add(keyList.get(randomIndex));
 //        }
-        try{
-            FileWriter fWriter  = new FileWriter("eager_test_smells.csv");
-            for(String key:eagerTestSmellsMap.get().keySet()){
-                boolean val = eagerTestSmellsMap.get().get(key);
-
-                String temp = key+','+val+'\n';
-                fWriter.write(temp);
-
-            }
-            fWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try{
+//            FileWriter fWriter  = new FileWriter("eager_test_smells.csv");
+//            for(String key:eagerTestSmellsMap.get().keySet()){
+//                boolean val = eagerTestSmellsMap.get().get(key);
+//
+//                String temp = key+','+val+'\n';
+//                fWriter.write(temp);
+//
+//            }
+//            fWriter.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 //
 //        rand = new Random();
 //        keyList = new ArrayList<>(lazyTestSmellsMap.get().keySet());
@@ -663,19 +667,19 @@ public class SmellAnalysisMngr {
 //            }
 //            tempList.add(keyList.get(randomIndex));
 //        }
-//        try{
-//            FileWriter fWriter  = new FileWriter("gen_fix_smells.csv");
-//            for(String key:generalFixtureSmellsMap.get().keySet()){
-//                Double val = generalFixtureSmellsMap.get().get(key);
-//
-//                String temp = key+','+val.toString()+'\n';
-//                fWriter.write(temp);
-//
-//            }
-//            fWriter.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try{
+            FileWriter fWriter  = new FileWriter("gen_fix_smells.csv");
+            for(String key:generalFixtureSmellsMap.get().keySet()){
+                Double val = generalFixtureSmellsMap.get().get(key);
+//                System.out.println(val);
+                String temp = key+','+val.toString()+'\n';
+                fWriter.write(temp);
+
+            }
+            fWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
 

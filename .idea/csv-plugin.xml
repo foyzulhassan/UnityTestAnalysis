@@ -59,6 +59,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\gen_fix_smells.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

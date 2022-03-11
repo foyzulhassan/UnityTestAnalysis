@@ -82,49 +82,64 @@ public class GeneralFixture {
         }
     }
 
-    public boolean sub_tree_matcher(ITree tree1, ITree tree2, boolean objectMatch)
+    public boolean sub_tree_matcher(ITree property, ITree testFuncTree, boolean objectMatch)
     {
-        if ( tree1.getType() == tree2.getType() && Objects.equals(tree1.getLabel(), tree2.getLabel()))
+        if ( property.getType() == testFuncTree.getType() && Objects.equals(property.getLabel(), testFuncTree.getLabel()))
         {
-            if (tree1.isLeaf() && tree2.isLeaf()){
+            if (property.isLeaf() && testFuncTree.isLeaf()){
                 return true;
             } else if (objectMatch){
                 return false;
             } else{
-                if(tree1.getChildren().size() != tree2.getChildren().size())
+                if(property.getChildren().size() != testFuncTree.getChildren().size())
                 {
                     return false;
                 }
                 boolean total=true;
-                for (int counter = 0; counter<tree1.getChildren().size();counter++){
-                   total=total && sub_tree_matcher(tree1.getChild(counter),tree2.getChild(counter),false);
+                for (int counter = 0; counter<property.getChildren().size();counter++){
+                   total=total && sub_tree_matcher(property.getChild(counter),testFuncTree.getChild(counter),false);
                 }
                 return total;
             }
 
         }
-        return false;
+        boolean result=false;
+        if(testFuncTree.getChildren().size() == 0){
+            return false;
+        } else{
+            for(ITree ch : testFuncTree.getChildren()){
+                result=  sub_tree_matcher(property,ch,objectMatch);
+                if(result){
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
-    public double fields_in_test_func_matcher(ITree testfunc, List<Pair<String, ITree>> fields){
+    public double fields_in_test_func_matcher(ITree testfunc, List<Pair<String, ITree>> init_fields){
         List<Pair<String, ITree>> fields_copy = new ArrayList<>();
-        int fields_number=fields.size();
+        int fields_number=init_fields.size();
         if(fields_number==0)
         {
             return 0.0;
         }
-        fields.forEach( p -> fields_copy.add(new Pair<>(p.getValue0(), p.getValue1())));
-        fields.forEach(p -> {
+        init_fields.forEach( p -> fields_copy.add(new Pair<>(p.getValue0(), p.getValue1())));
+        init_fields.forEach(p -> {
             if(Objects.equals(p.getValue0(), "object"))
             {
                 if ( sub_tree_matcher(p.getValue1(),testfunc,true))
                 {
+                    System.out.println("Found Object");
+                    System.out.println(p);
                     fields_copy.remove(p);
                 }
             }
             else if(Objects.equals(p.getValue0(), "property")){
                 if (sub_tree_matcher(p.getValue1(),testfunc,false))
                 {
+                    System.out.println("Found Property");
+                        System.out.println(p);
                         fields_copy.remove(p);
                 }
                 } else{
@@ -132,8 +147,9 @@ public class GeneralFixture {
             }
         });
        int  new_number=fields_copy.size() ;
-
-       return (double) (new_number/fields_number)*100;
+        System.out.println("Fields copy");
+        System.out.println(fields_copy);
+       return ( (double) new_number/fields_number)*100;
     }
 
 
@@ -167,7 +183,12 @@ public class GeneralFixture {
             String testfunc_name=SrcmlUnityCsMetaDataGenerator.getFunctionName(testfunc.deepCopy());
             Double d;
             if(initialized_fields.size()>0)
-            {d= fields_in_test_func_matcher(testfunc,initialized_fields);}
+            {
+                System.out.println("Init Fields");
+                System.out.println(initialized_fields);
+                d= fields_in_test_func_matcher(testfunc,initialized_fields);
+                System.out.println(d);
+            }
             else{
                 d = 0.0;}
             generalFixtureMap.put(testfunc_name,d);
