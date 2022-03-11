@@ -68,20 +68,36 @@ public class EagerTest {
             ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
 //            List<AssertCall> assercalllist=new ArrayList<>();
             String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
-            Set<String> methodsSet=new HashSet<>();
+            List<ITree> paramSet=new ArrayList<>();
+            List<AssertCall> assercalllist=new ArrayList<>();
             if(assertlist!=null && assertlist.size()>0)
             {
-                List<AssertCall> assercalllist=new ArrayList<>();
                 for(ITree assertitem:assertlist)
                 {
                     AssertCall assertcall=TreeNodeAnalyzer.getAssertCall(assertitem);
                     assercalllist.add(assertcall);
-                    String method_name = assertcall.getAssertName();
-                    methodsSet.add(method_name);
-                    //System.out.println("test");
                 }
             }
-            if(methodsSet.size() >1 ){
+            for( AssertCall assertCall:assercalllist){
+                List<ITree> paramITrees =assertCall.getParamListTrees();
+                 for(ITree param:paramITrees){
+                     if(isProperty(param)){
+                         continue;
+                     }
+                     boolean alreadyInList = false;
+                     for(ITree paramFromList:paramSet){
+                         if(sub_tree_matcher(paramFromList,param,false)){
+                             alreadyInList=true;
+                             break;
+                         }
+                     }
+                     if(!alreadyInList){
+                         paramSet.add(param);
+                     }
+
+                 }
+            }
+            if(paramSet.size() >1 ){
                 EagerTest.put(classtestfunc,true);
             } else {
                 EagerTest.put(classtestfunc,false);
@@ -94,10 +110,20 @@ public class EagerTest {
 
 	}
 
+    private boolean isProperty(ITree param) {
+        ITree local_tree= param.deepCopy();
+        for (ITree ch: local_tree.getChildren()){
+            List<ITree> argList = TreeNodeAnalyzer.getSearchTypeLabel(ch,"argument_list","");
+            if (argList.size() > 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
-
-	public double getEagerTestStats(Map<String,Boolean> testfuncconditionalTestmap)
+    public double getEagerTestStats(Map<String,Boolean> testfuncconditionalTestmap)
 	{
 
         int total=testfuncconditionalTestmap.keySet().size();

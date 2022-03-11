@@ -52,6 +52,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\eager_test_smells.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

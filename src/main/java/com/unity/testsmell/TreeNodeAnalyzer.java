@@ -132,6 +132,8 @@ public class TreeNodeAnalyzer {
 
             for (ITree node : paramlist) {
                 assertcall.addParam(node.getType().toString());
+                assertcall.addParamTree(node.deepCopy());
+
             }
         }
 
