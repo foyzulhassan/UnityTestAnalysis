@@ -25,6 +25,7 @@ import java.util.Queue;
 
 //import org.apache.commons.compress.utils.IOUtils;
 import com.github.gumtreediff.tree.TreeContext;
+import com.unity.testanalysis.FunctionalCodeLOCExtractor;
 import com.unity.testsmell.*;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
@@ -611,6 +612,73 @@ public class CommitAnalyzer {
 		
 		return projtestloclinecount;
 	}
+
+    public LineCountAssertCount getFuncCodeLOC(String commitid) {
+
+        List<ClassFunction> classfunclist=new ArrayList<>();
+        LineCountAssertCount projtestloclinecount=new LineCountAssertCount();
+        try {
+            ObjectId objectid = repository.resolve(commitid);
+            RevCommit commit = rw.parseCommit(objectid);
+
+            RevTree tree = commit.getTree();
+
+            // TreeWalk treeWalk = new TreeWalk(repository);
+            // treeWalk.addTree(tree);
+            // treeWalk.setRecursive(false);
+            // treeWalk.setPostOrderTraversal(false);
+
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
+
+            // treeWalk.setRecursive(true);
+
+            while (treeWalk.next()) {
+                // System.out.println("found:" + treeWalk.getPathString());
+
+                if (treeWalk.isSubtree()) {
+                    // System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                }
+
+
+
+                else if (treeWalk.getPathString().endsWith(".cs")) {
+                    if(treeWalk.getPathString().contains("WalkingTests.cs"))
+                        System.out.println("Debug");
+
+                    ObjectId objectId = treeWalk.getObjectId(0);
+                    ObjectLoader loader = repository.open(objectId);
+
+                    // and then one can the loader to read the file
+                    // loader.copyTo(System.out);
+
+                    byte[] butestr = loader.getBytes();
+                    String str = new String(butestr);
+                    File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+
+
+                    //CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
+                    FunctionalCodeLOCExtractor typeanalyzer=new FunctionalCodeLOCExtractor();
+                    LineCountAssertCount testclasslocassert=typeanalyzer.getClassLoc(f1);
+                    projtestloclinecount.addAssertCount(testclasslocassert.getAssertCount());
+                    projtestloclinecount.addLineCount(testclasslocassert.getLineCount());
+
+                    f1.delete();
+
+
+                }
+
+            }
+            treeWalk.reset();
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+
+        return projtestloclinecount;
+    }
 
     public Map<String,Map<String,Integer>>  getConditionalTest(String commitid) {
 

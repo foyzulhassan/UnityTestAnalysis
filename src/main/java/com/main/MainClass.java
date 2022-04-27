@@ -38,6 +38,7 @@ import com.unity.testanalysis.ClassFunctionTypeAnalyzer;
 import com.unity.testanalysis.ProjectTestAnalyzer;
 import com.unity.testanalysis.ProjectTestData;
 import com.unity.testanalyzer.AssertDensityAnalyzer;
+import com.unity.testanalyzer.FuncCodeLOCAnalyzer;
 import com.unity.testanalyzer.LineCountAssertCount;
 import com.unity.testanalyzer.ProjectLocAssertCount;
 import com.unity.testsmell.AssertCall;
@@ -158,8 +159,55 @@ public class MainClass {
 				}
 			}
 
-		} 
-		else if (inputid == 23) {
+		}
+
+        else if (inputid == 220) {
+
+            System.out.println("LOC Analysis(RQ1)");
+
+            FuncCodeLOCAnalyzer analyzer = new FuncCodeLOCAnalyzer();
+            ProjectLocAssertCount projdata = analyzer.PerformLOC();
+
+            List<ProjAssertDensity> projassertdensity=new ArrayList<>();
+            if (projdata!=null) {
+                Map<String,LineCountAssertCount> projectTestData=projdata.getProjectTestData();
+                try {
+                    for(String proj:projectTestData.keySet())
+                    {
+
+                        LineCountAssertCount locassertcount=projectTestData.get(proj);
+
+                        ProjAssertDensity projassdensity=new ProjAssertDensity();
+                        projassdensity.setProjName(proj);
+                        projassdensity.setTestlineCount(locassertcount.getLineCount());
+
+
+                        if(locassertcount.getLineCount()<=0)
+                        {
+                            System.out.println(proj+"==>"+locassertcount.getLineCount());
+                            projassdensity.setAssertDensity(-0.01);
+                        }
+                        else
+                        {
+                            float density=(float)((float)locassertcount.getAssertCount()/(float)locassertcount.getLineCount());
+                            projassdensity.setAssertDensity(density);
+                            System.out.println(proj+"==>"+density);
+                        }
+
+                        projassertdensity.add(projassdensity);
+                    }
+
+                    ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+                    writer.WriteAssertDensityCSVFile(projassertdensity, Config.csvFileLOCStat);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        else if (inputid == 23) {
 			System.out.println("Assert Roulette Analysis(RQ3-a)");
 			
 			SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();

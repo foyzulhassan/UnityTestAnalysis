@@ -310,15 +310,15 @@ public class SmellAnalysisMngr {
 
 //            if (counter > 5)
 //                return smellpercentage ;
-//            if (projname.equals("Unity-Technologies@InputSystem"))
-//            {
-//                continue;
-//            }
-
-            if (projname.equals("iamtomhewitt@vr-pacman"))
+            if (projname.equals("Unity-Technologies@InputSystem"))
             {
                 continue;
             }
+//
+//            if (projname.equals("iamtomhewitt@vr-pacman"))
+//            {
+//                continue;
+//            }
             try {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);
 
@@ -376,6 +376,11 @@ public class SmellAnalysisMngr {
                 System.out.println(counter + "-->" + projname);
 
                 counter++;
+                if (projname.equals("Unity-Technologies@InputSystem"))
+                {
+                    continue;
+                }
+//
 //                if(!projname.equals("iamtomhewitt@jet-dash-vr")) {
 //                    continue;
 //                }

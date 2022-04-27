@@ -130,16 +130,16 @@ public class GeneralFixture {
             {
                 if ( sub_tree_matcher(p.getValue1(),testfunc,true))
                 {
-                    System.out.println("Found Object");
-                    System.out.println(p);
+//                    System.out.println("Found Object");
+//                    System.out.println(p);
                     fields_copy.remove(p);
                 }
             }
             else if(Objects.equals(p.getValue0(), "property")){
                 if (sub_tree_matcher(p.getValue1(),testfunc,false))
                 {
-                    System.out.println("Found Property");
-                        System.out.println(p);
+//                    System.out.println("Found Property");
+//                        System.out.println(p);
                         fields_copy.remove(p);
                 }
                 } else{
@@ -147,8 +147,8 @@ public class GeneralFixture {
             }
         });
        int  new_number=fields_copy.size() ;
-        System.out.println("Fields copy");
-        System.out.println(fields_copy);
+//        System.out.println("Fields copy");
+//        System.out.println(fields_copy);
        return ( (double) new_number/fields_number)*100;
     }
 
@@ -180,18 +180,19 @@ public class GeneralFixture {
         }
 
         for (ITree testfunc: testfuncslist){
-            String testfunc_name=SrcmlUnityCsMetaDataGenerator.getFunctionName(testfunc.deepCopy());
+            String funcnamenode = SrcmlUnityCsMetaDataGenerator.getFunctionName(testfunc);
+            String classtestfunc = lowerclassname + Config.separatorStr + funcnamenode;
             Double d;
             if(initialized_fields.size()>0)
             {
-                System.out.println("Init Fields");
-                System.out.println(initialized_fields);
+//                System.out.println("Init Fields");
+//                System.out.println(initialized_fields);
                 d= fields_in_test_func_matcher(testfunc,initialized_fields);
-                System.out.println(d);
+//                System.out.println(d);
             }
             else{
                 d = 0.0;}
-            generalFixtureMap.put(testfunc_name,d);
+            generalFixtureMap.put(classtestfunc,d);
         }
 //        System.out.println(generalFixtureMap);
         return generalFixtureMap;
