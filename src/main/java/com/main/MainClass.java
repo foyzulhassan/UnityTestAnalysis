@@ -56,11 +56,22 @@ public class MainClass {
 
 		System.out.println("Enter your action:");
 
-		System.out.println("1->Download Projects" + "\n2->Commit Change Analysis"
-				+ "\n3->Read CSV File and Generate Patch" 
-				+ "\n21->Generate Test Statistics (RQ1)"
-				+ "\n22->Test Assert Density Analysis(RQ2(b))"
-				+ "\n23->Assert Roulette Analysis(RQ3(a)");
+		System.out.println("0->Download Projects" +
+//                "\n2->Commit Change Analysis"
+//				+ "\n3->Read CSV File and Generate Patch"
+				 "\n11->Generate Test and Functional code Method and Class Count (RQ1)"
+                +"\n12->Generate Functional code LOC (RQ1)"
+				+ "\n2->Test Assert Density(RQ2 + LOC(RQ1) analysis)"
+				+ "\n31->Assert Roulette Analysis(RQ3)"
+				+ "\n32->Eager Test Analysis(RQ3)"
+				+ "\n33->Lazy Test Analysis(RQ3)"
+				+ "\n34->Mystery Guest  Analysis(RQ3)"
+				+ "\n35->Sensitive Equality Analysis(RQ3)"
+				+ "\n35->General Fixture Analysis(RQ3)"
+
+
+
+        );
 
 		Scanner cin = new Scanner(System.in);
 
@@ -72,23 +83,23 @@ public class MainClass {
 			projloader.LoadDownloadProjects();
 			System.out.println("Download Projects->Completed");
 
-		} else if (inputid == 2) {
-			CommitAnalysisMngr commitmngr = new CommitAnalysisMngr();
-			commitmngr.PerformCommitAnalysis();
-		} else if (inputid == 3) {
-			CSVReaderWriter csvrw = new CSVReaderWriter();
-			try {
-				List<PerfFixData> cmtlist = csvrw.getListBeanFromCSV(Config.csvFile);
-				CSharpDiffGenMngr diffgen = new CSharpDiffGenMngr();
-				diffgen.generateCSharpDiff(cmtlist);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} 
-		else if (inputid == 21) {
+		}
+//        else if (inputid == 2) {
+//			CommitAnalysisMngr commitmngr = new CommitAnalysisMngr();
+//			commitmngr.PerformCommitAnalysis();
+//		} else if (inputid == 3) {
+//			CSVReaderWriter csvrw = new CSVReaderWriter();
+//			try {
+//				List<PerfFixData> cmtlist = csvrw.getListBeanFromCSV(Config.csvFile);
+//				CSharpDiffGenMngr diffgen = new CSharpDiffGenMngr();
+//				diffgen.generateCSharpDiff(cmtlist);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+		else if (inputid == 11) {
 
-			System.out.println("\n\n\nGenerate Test Statistics (RQ1)\n\n\n");
+			System.out.println("\n\n\nGenerate Test and Functional code Method and Class Count (RQ1)\n\n\n");
 			
 			ProjectTestAnalyzer analyzer = new ProjectTestAnalyzer();
 			ProjectTestData projdata = analyzer.PerformClassFunctionType();
@@ -115,9 +126,10 @@ public class MainClass {
 			System.out.print("*********Done************");
 
 
-		} else if (inputid == 22) {
+		}
+        else if (inputid == 2) {
 
-			System.out.println("Assert Density Analysis(RQ2-b)");
+			System.out.println("Assert Density  + LOC  Analysis(RQ2-b)");
 
 			AssertDensityAnalyzer analyzer = new AssertDensityAnalyzer();
 			ProjectLocAssertCount projdata = analyzer.PerformAssertDensity();
@@ -161,9 +173,9 @@ public class MainClass {
 
 		}
 
-        else if (inputid == 220) {
+        else if (inputid == 12) {
 
-            System.out.println("LOC Analysis(RQ1)");
+            System.out.println("Generate Functional code LOC (RQ1)");
 
             FuncCodeLOCAnalyzer analyzer = new FuncCodeLOCAnalyzer();
             ProjectLocAssertCount projdata = analyzer.PerformLOC();
@@ -207,8 +219,8 @@ public class MainClass {
             }
 
         }
-        else if (inputid == 23) {
-			System.out.println("Assert Roulette Analysis(RQ3-a)");
+        else if (inputid == 31) {
+			System.out.println("Assert Roulette Analysis(RQ3)");
 			
 			SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
 			List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeAssertionRoulette();
@@ -221,8 +233,8 @@ public class MainClass {
             }
 
         }
-        else  if (inputid == 94)  {  //
-            System.out.println("Eager Test Analysis(RQ3-a)");
+        else  if (inputid == 32)  {  //
+            System.out.println("Eager Test Analysis(RQ3)");
 
             SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
             List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeEagerTest();
@@ -236,8 +248,8 @@ public class MainClass {
 
         }
 
-        else  if (inputid == 95)  {  //
-            System.out.println("Lazy Test Analysis(RQ3-a)");
+        else  if (inputid == 33)  {  //
+            System.out.println("Lazy Test Analysis(RQ3)");
 
             SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
             List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeLazyTest();
@@ -251,8 +263,8 @@ public class MainClass {
 
         }
 
-        else if (inputid == 96) {
-            System.out.println("Mystery Guest Analysis(RQ3-a)");
+        else if (inputid == 34) {
+            System.out.println("Mystery Guest Analysis(RQ3)");
 
             SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
             List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeMysteryGuest();
@@ -266,8 +278,8 @@ public class MainClass {
 
         }
 
-        else if (inputid == 97) {
-            System.out.println("Sensitive Equality Analysis(RQ3-a)");
+        else if (inputid == 35) {
+            System.out.println("Sensitive Equality Analysis(RQ3)");
 
             SmellAnalysisMngr
                     smellmgr=new SmellAnalysisMngr();
@@ -284,8 +296,8 @@ public class MainClass {
 
         }
 
-        else if (inputid == 98) {
-            System.out.println("General Fixture Analysis(RQ3-a)");
+        else if (inputid == 36) {
+            System.out.println("General Fixture Analysis(RQ3)");
 
             SmellAnalysisMngr
                     smellmgr=new SmellAnalysisMngr();
@@ -302,44 +314,7 @@ public class MainClass {
 
         }
 
-        else if (inputid == 99) {
-            System.out.println("Conditional Test Analysis(RQ3-a)");
 
-            SmellAnalysisMngr
-                    smellmgr=new SmellAnalysisMngr();
-            List<ProjectSmellEntity>
-                    projsemlllist=smellmgr.analyzeConditionalTest();
-            ApacheCSVReaderWriter
-                    writer = new ApacheCSVReaderWriter();
-            try {
-                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ConditionalTestLogic"));
-            } catch (IOException e) {
-//                 TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        }
-		
-		
-		else if (inputid == 24) {
-			
-			ClassFunctionTypeAnalyzer typeanalyzer = new ClassFunctionTypeAnalyzer();
-			File f1 = new File("D:\\Research_Works\\VR_AR_Testing\\sample_Project\\AchievementTests.cs");
-			Reader reader;
-			try {
-				reader = new FileReader(f1.toString());
-				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
-				
-				//TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
-				//analyzer.getTestFunctionList(curtree);
-				AssertionRoulette ar=new AssertionRoulette();
-				Map<String,List<AssertCall>> testfuncassertmap=ar.searchForAssertionRoulette(curtree);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
 
 	}
 }
