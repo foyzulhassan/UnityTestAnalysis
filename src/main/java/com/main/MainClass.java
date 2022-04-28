@@ -141,12 +141,9 @@ public class MainClass {
 					for(String proj:projectTestData.keySet())	
 					{
 						LineCountAssertCount locassertcount=projectTestData.get(proj);
-						
 						ProjAssertDensity projassdensity=new ProjAssertDensity();
 						projassdensity.setProjName(proj);
 						projassdensity.setTestlineCount(locassertcount.getLineCount());
-						
-						
 						if(locassertcount.getLineCount()<=0)
 						{
 							System.out.println(proj+"==>"+locassertcount.getLineCount());
@@ -210,7 +207,7 @@ public class MainClass {
                     }
 
                     ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
-                    writer.WriteAssertDensityCSVFile(projassertdensity, Config.csvFileLOCStat);
+                    writer.WriteFuncLOCCSVFile(projassertdensity, Config.csvFileLOCStat);
 
                 } catch (Exception e) {
                     // TODO Auto-generated catch block

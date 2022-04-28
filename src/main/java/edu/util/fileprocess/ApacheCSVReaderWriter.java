@@ -21,6 +21,19 @@ import com.unity.testsmell.ProjectSmellEntity;
 
 public class ApacheCSVReaderWriter {
 
+    public void WriteFuncLOCCSVFile(List<ProjAssertDensity> fixdata, String csvfilepath) throws IOException {
+        FileWriter out = new FileWriter(csvfilepath);
+        String[] HEADERS = { "project", "funclinecount" };
+
+        try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(HEADERS))) {
+
+            for (ProjAssertDensity item : fixdata) {
+                printer.printRecord(item.getProjName(), item.getTestlineCount());
+            }
+
+        }
+    }
+
 	public void WriteAssertDensityCSVFile(List<ProjAssertDensity> fixdata, String csvfilepath) throws IOException {
 		FileWriter out = new FileWriter(csvfilepath);
 		String[] HEADERS = { "project", "testlinecount", "assertdensity" };

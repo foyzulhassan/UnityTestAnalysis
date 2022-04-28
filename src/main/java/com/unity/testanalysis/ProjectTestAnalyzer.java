@@ -40,6 +40,9 @@ public class ProjectTestAnalyzer {
 			CommitAnalyzer cmtanalyzer = null;
 			System.out.println(counter+"-->"+projname);;
 			counter++;
+//            if(counter >5){
+//                break;
+//            }
 			
 
 			try {

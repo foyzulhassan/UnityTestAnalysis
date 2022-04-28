@@ -67,11 +67,11 @@ public class ClassFunctionTypeAnalyzer {
 
 //						if (funcnode.getMetadata("UNITYTEST").equals(true) || funcnode.getMetadata("TEST").equals(true) || funcnode.getMetadata("UnityTest").equals(true) || funcnode.getMetadata("Test").equals(true) ) {
 
-                        List<ITree> attributes = breadthFirstSearchForNodeList(funcnode, "attribute", "an1");
+                        List<ITree> attributes = breadthFirstSearchForNodeList(funcnode, "attribute", "an11");
 
                         if (attributes != null && attributes.size() > 0) {
-                            List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
-                            List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
+                            List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an22");
+                            List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an33");
                             //System.out.println("test");
 
                             if (unitytestanotations != null && unitytestanotations.size() > 0) {
@@ -151,7 +151,6 @@ public class ClassFunctionTypeAnalyzer {
                             List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
                             List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
                             //System.out.println("test");
-
                             if (unitytestanotations != null && unitytestanotations.size() > 0) {
                                 funccall.setTestFunction(true);
                                 istestclass=true;
