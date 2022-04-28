@@ -12,6 +12,10 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.util.List;
 
+import static com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNodeList;
+import static com.unity.testsmell.TreeNodeAnalyzer.breadthFirstSearchForLabel;
+import static com.unity.testsmell.TreeNodeAnalyzer.getTestFunctionList;
+
 public class FunctionalCodeLOCExtractor {
 	public ClassFunction getClassFunctionType(File cursrc) {
 
@@ -108,9 +112,9 @@ public class FunctionalCodeLOCExtractor {
 
 					String lowerclassname = classname.getLabel().toLowerCase();
 
-					if (lowerclassname.startsWith("test") || lowerclassname.endsWith("test")
-							|| lowerclassname.startsWith("tests") || lowerclassname.endsWith("tests")) {
-						istestclass=true;					
+                    List<ITree> testFuncList= getTestFunctionList(classnode);
+                    if (testFuncList.size()>0){
+                        istestclass=true;
 						}
 					
 					
@@ -128,11 +132,20 @@ public class FunctionalCodeLOCExtractor {
 						String funcnameparm = classstrname + "_" + funcname + "_" + Integer.toString(paramcnt);
 						String lowerfuncname = funcname.toLowerCase();
 
-						if (lowerfuncname.startsWith("test") || lowerfuncname.endsWith("test") || funcnode
-								.getMetadata("UNITYTEST").equals(true)) {
-							funccall.setTestFunction(true);
-							istestclass=true;
-						}
+                        List<ITree> attributes = breadthFirstSearchForNodeList(funcnode, "attribute", "an1");
+                        if (attributes != null && attributes.size() > 0) {
+                            List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
+                            List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
+                            //System.out.println("test");
+
+                            if (unitytestanotations != null && unitytestanotations.size() > 0) {
+                                funccall.setTestFunction(true);
+                                istestclass=true;
+                            } else if (testanotations != null && testanotations.size() > 0) {
+                                funccall.setTestFunction(true);
+                                istestclass=true;
+                            }
+                        }
 
 						funccall.setFuncName(funcnameparm);
 
