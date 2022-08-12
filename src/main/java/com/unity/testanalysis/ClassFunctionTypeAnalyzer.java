@@ -28,10 +28,11 @@ public class ClassFunctionTypeAnalyzer {
 				Reader reader = new FileReader(cursrc.toString());
 				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
-				ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(curtree, "class", "c1");
+				List<ITree> classnodes = SrcmlUnityCsMetaDataGenerator.ListbreadthFirstSearchForNode(curtree, "class", "c1");
 
 				List<ITree> funcnodelist = null;
 				ITree classname = null;
+                for (ITree classnode:classnodes){
 				if (classnode != null) {
 
 					classname = SrcmlUnityCsMetaDataGenerator.getClassName(classnode);
@@ -40,6 +41,7 @@ public class ClassFunctionTypeAnalyzer {
 //						System.out.println("sdafadf");
 
 					String lowerclassname = classname.getLabel();
+//                    System.out.println(lowerclassname);
 
 //					if (lowerclassname.startsWith("test") || lowerclassname.endsWith("test")
 //							|| lowerclassname.startsWith("tests") || lowerclassname.endsWith("tests")) {
@@ -50,6 +52,7 @@ public class ClassFunctionTypeAnalyzer {
                     if (testFuncList.size()>0){
                         clsfunc.setTestClass(true);
                     }
+
                     clsfunc.setClassname(classname.getLabel());
 					funcnodelist = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNodeListUnityTest(classnode,
 							"function", "f1");
@@ -72,6 +75,8 @@ public class ClassFunctionTypeAnalyzer {
                         if (attributes != null && attributes.size() > 0) {
                             List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an22");
                             List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an33");
+                            List<ITree> mtestanotations = breadthFirstSearchForLabel(attributes.get(0), "MTest", "an44");
+
                             //System.out.println("test");
 
                             if (unitytestanotations != null && unitytestanotations.size() > 0) {
@@ -80,13 +85,17 @@ public class ClassFunctionTypeAnalyzer {
                             } else if (testanotations != null && testanotations.size() > 0) {
                                 funccall.setTestFunction(true);
                                 hastest = true;
+                            } else if (mtestanotations != null && mtestanotations.size() > 0) {
+                                funccall.setTestFunction(true);
+                                hastest = true;
                             }
+
                         }
 						funccall.setFuncName(funcnameparm);
 
 						clsfunc.addItemToFuncList(funccall);
 					}
-				}
+				}}
 			}
 
 			catch (Exception e) {
@@ -150,11 +159,15 @@ public class ClassFunctionTypeAnalyzer {
                         if (attributes != null && attributes.size() > 0) {
                             List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
                             List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
+                            List<ITree> mtestanotations = breadthFirstSearchForLabel(attributes.get(0), "MTest", "an4");
                             //System.out.println("test");
                             if (unitytestanotations != null && unitytestanotations.size() > 0) {
                                 funccall.setTestFunction(true);
                                 istestclass=true;
                             } else if (testanotations != null && testanotations.size() > 0) {
+                                funccall.setTestFunction(true);
+                                istestclass=true;
+                            } else if (mtestanotations != null && mtestanotations.size() > 0) {
                                 funccall.setTestFunction(true);
                                 istestclass=true;
                             }

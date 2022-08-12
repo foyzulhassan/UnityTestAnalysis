@@ -77,546 +77,366 @@ import com.unity.testanalyzer.LineCountAssertCount;
 import org.apache.commons.io.IOUtils;
 
 /**
- * 
  * @author Foyzul Hassan
- *
- * 
  */
 
 public class CommitAnalyzer {
 
-	/** Various methods encapsulating methods to treats Git and commits datas */
-	private CommitAnalyzingUtils commitAnalyzingUtils;
+    /**
+     * Various methods encapsulating methods to treats Git and commits datas
+     */
+    private CommitAnalyzingUtils commitAnalyzingUtils;
+
+    /**
+     * All the statistical datas (number of faulty commit, actions, etc)
+     */
+    private DataStatsHolder statsHolder;
+
+    /**
+     * File managing object for tables
+     */
+    private DataResultsHolder resultsHolder;
+
+    /**
+     * Name of the project
+     */
+    private String project;
+
+    /**
+     * Owner of the project (necessary for Markdown parsing)
+     */
+    private String projectOwner;
+
+    /**
+     * Path to the directory
+     */
+    private String directoryPath;
+
+    /**
+     * Repository object, representing the directory
+     */
+    private Repository repository;
+
+    /**
+     * Git entity to treat with the Repository data
+     */
+    private Git git;
+
+    /**
+     * Revision walker from JGit
+     */
+    private RevWalk rw;
+
+    private CommitChange commitChangeTracker;
+
+    private String gradleChanges;
+
+    private String gitUrl;
+
+    /**
+     * Classic constructor
+     */
+    public CommitAnalyzer(String projectOwner, String project) throws Exception {
+        this.projectOwner = projectOwner;
+        this.project = project;
+
+        directoryPath = Config.repoDir + project + "/.git";
+
+        commitAnalyzingUtils = new CommitAnalyzingUtils();
+        statsHolder = new DataStatsHolder();
+        repository = commitAnalyzingUtils.setRepository(directoryPath);
+        git = new Git(repository);
+        rw = new RevWalk(repository);
+        this.commitChangeTracker = new CommitChange();
+        this.gradleChanges = "";
+    }
+
+    /**
+     * Classic constructor
+     */
+    public CommitAnalyzer(String projectOwner, String project, String giturl) throws Exception {
+        this.projectOwner = projectOwner;
+        this.project = project;
+
+        directoryPath = Config.repoDir + project + "/.git";
+
+        commitAnalyzingUtils = new CommitAnalyzingUtils();
+        statsHolder = new DataStatsHolder();
+        repository = commitAnalyzingUtils.setRepository(directoryPath);
+        git = new Git(repository);
+        rw = new RevWalk(repository);
+        this.commitChangeTracker = new CommitChange();
+        this.gradleChanges = "";
+        this.gitUrl = giturl;
+    }
+
+    public CommitChange getCommitChangeTracker() {
+        return commitChangeTracker;
+    }
+
+    public void commitSampleTry(String ID) {
+        List<Action> totalactions = new ArrayList<Action>();
+        List<Action> act = new ArrayList<Action>();
+        List<String> debugging = new ArrayList<String>();
+        String r = "";
+        // File debug = new File("debug-" + ID + ".txt");
+
+        try {
+            ObjectId objectid = repository.resolve(ID);
 
-	/** All the statistical datas (number of faulty commit, actions, etc) */
-	private DataStatsHolder statsHolder;
+            if (objectid == null)
+                return;
 
-	/** File managing object for tables */
-	private DataResultsHolder resultsHolder;
+            RevCommit commit = rw.parseCommit(objectid);
 
-	/** Name of the project */
-	private String project;
+            // System.out.println(commit.getFullMessage());
 
-	/** Owner of the project (necessary for Markdown parsing) */
-	private String projectOwner;
+            if (commit.getParentCount() > 0) {
+                RevCommit parent = rw.parseCommit(commit.getParent(0).getId());
 
-	/** Path to the directory */
-	private String directoryPath;
+                DiffFormatter df = commitAnalyzingUtils.setDiffFormatter(repository, true);
 
-	/** Repository object, representing the directory */
-	private Repository repository;
+                List<DiffEntry> diffs = df.scan(parent.getTree(), commit.getTree());
 
-	/** Git entity to treat with the Repository data */
-	private Git git;
+                for (DiffEntry diff : diffs) {
+                    if (diff.getNewPath().contains("build.gradle")) {
 
-	/** Revision walker from JGit */
-	private RevWalk rw;
+                        commitChangeTracker.setBuildFileChange(commitChangeTracker.getBuildFileChange() + 1);
 
-	private CommitChange commitChangeTracker;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-	private String gradleChanges;
+    }
 
-	private String gitUrl;
+    public List<PerfFixData> getAllPerformanceCommits()
+            throws MissingObjectException, IncorrectObjectTypeException, IOException {
+        List<PerfFixData> perffixdata = new ArrayList<>();
 
-	/** Classic constructor */
-	public CommitAnalyzer(String projectOwner, String project) throws Exception {
-		this.projectOwner = projectOwner;
-		this.project = project;
+        Collection<Ref> allRefs = repository.getAllRefs().values();
 
-		directoryPath = Config.repoDir + project + "/.git";
+        // a RevWalk allows to walk over commits based on some filtering that is defined
+        try (RevWalk revWalk = new RevWalk(repository)) {
+            for (Ref ref : allRefs) {
+                revWalk.markStart(revWalk.parseCommit(ref.getObjectId()));
+            }
+            // System.out.println("Walking all commits starting with " + allRefs.size() + "
+            // refs: " + allRefs);
+            int count = 0;
+            for (RevCommit commit : revWalk) {
+                System.out.println("Commit: " + commit);
+                count++;
 
-		commitAnalyzingUtils = new CommitAnalyzingUtils();
-		statsHolder = new DataStatsHolder();
-		repository = commitAnalyzingUtils.setRepository(directoryPath);
-		git = new Git(repository);
-		rw = new RevWalk(repository);
-		this.commitChangeTracker = new CommitChange();
-		this.gradleChanges = "";
-	}
+                String commitmsg = commit.getFullMessage().toLowerCase();
+                commitmsg = commitmsg.replaceAll(",", " cma ");
+                commitmsg = commitmsg.replaceAll("\"", " quote ");
 
-	/** Classic constructor */
-	public CommitAnalyzer(String projectOwner, String project, String giturl) throws Exception {
-		this.projectOwner = projectOwner;
-		this.project = project;
-
-		directoryPath = Config.repoDir + project + "/.git";
+                if (isPerformanceCommit(commitmsg) && !commitmsg.contains("merge")) {
+                    String commitid = commit.getName();
+                    PerfFixData fixdata = new PerfFixData(this.project, this.getGitUrl(), commitid);
+                    fixdata.setFixCommitMsg(commitmsg);
+                    fixdata.setPatchPath("");
+                    fixdata.setAssetChangeCount(0);
+                    fixdata.setSrcFileChangeCount(0);
+                    perffixdata.add(fixdata);
+                }
 
-		commitAnalyzingUtils = new CommitAnalyzingUtils();
-		statsHolder = new DataStatsHolder();
-		repository = commitAnalyzingUtils.setRepository(directoryPath);
-		git = new Git(repository);
-		rw = new RevWalk(repository);
-		this.commitChangeTracker = new CommitChange();
-		this.gradleChanges = "";
-		this.gitUrl = giturl;
-	}
-
-	public CommitChange getCommitChangeTracker() {
-		return commitChangeTracker;
-	}
-
-	public void commitSampleTry(String ID) {
-		List<Action> totalactions = new ArrayList<Action>();
-		List<Action> act = new ArrayList<Action>();
-		List<String> debugging = new ArrayList<String>();
-		String r = "";
-		// File debug = new File("debug-" + ID + ".txt");
+            }
+            // System.out.println("Had " + count + " commits");
+            // System.out.println(this.project);
+        }
 
-		try {
-			ObjectId objectid = repository.resolve(ID);
+        return perffixdata;
+    }
 
-			if (objectid == null)
-				return;
+    private boolean isPerformanceCommit(String commitmsg) {
+        for (String token : Config.perfCommitToken) {
+            if (commitmsg.contains(token)) {
+                return true;
+            }
+        }
 
-			RevCommit commit = rw.parseCommit(objectid);
+        return false;
+    }
 
-			// System.out.println(commit.getFullMessage());
+    public String getGitUrl() {
+        return gitUrl;
+    }
 
-			if (commit.getParentCount() > 0) {
-				RevCommit parent = rw.parseCommit(commit.getParent(0).getId());
+    public void setGitUrl(String gitUrl) {
+        this.gitUrl = gitUrl;
+    }
 
-				DiffFormatter df = commitAnalyzingUtils.setDiffFormatter(repository, true);
+    public List<EditScript> extractCSharpFileChange(String ID) {
+        // File debug = new File("debug-" + ID + ".txt");
+        List<EditScript> actionslist = new ArrayList<>();
 
-				List<DiffEntry> diffs = df.scan(parent.getTree(), commit.getTree());
+        try {
+            ObjectId objectid = repository.resolve(ID);
 
-				for (DiffEntry diff : diffs) {
-					if (diff.getNewPath().contains("build.gradle")) {
+            if (objectid == null)
+                return null;
 
-						commitChangeTracker.setBuildFileChange(commitChangeTracker.getBuildFileChange() + 1);
+            RevCommit commit = rw.parseCommit(objectid);
 
-					}
-				}
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
-	}
+            /// System.out.println(commit.getFullMessage());
 
-	public List<PerfFixData> getAllPerformanceCommits()
-			throws MissingObjectException, IncorrectObjectTypeException, IOException {
-		List<PerfFixData> perffixdata = new ArrayList<>();
+            if (commit.getParentCount() > 0) {
+                RevCommit parent = rw.parseCommit(commit.getParent(0).getId());
+                DiffFormatter df = commitAnalyzingUtils.setDiffFormatter(repository, true);
 
-		Collection<Ref> allRefs = repository.getAllRefs().values();
+                List<DiffEntry> diffs = df.scan(parent.getTree(), commit.getTree());
 
-		// a RevWalk allows to walk over commits based on some filtering that is defined
-		try (RevWalk revWalk = new RevWalk(repository)) {
-			for (Ref ref : allRefs) {
-				revWalk.markStart(revWalk.parseCommit(ref.getObjectId()));
-			}
-			// System.out.println("Walking all commits starting with " + allRefs.size() + "
-			// refs: " + allRefs);
-			int count = 0;
-			for (RevCommit commit : revWalk) {
-				System.out.println("Commit: " + commit);
-				count++;
+                for (DiffEntry diff : diffs) {
 
-				String commitmsg = commit.getFullMessage().toLowerCase();
-				commitmsg = commitmsg.replaceAll(",", " cma ");
-				commitmsg = commitmsg.replaceAll("\"", " quote ");
+                    if (diff.getNewPath().endsWith(".cs")) {
 
-				if (isPerformanceCommit(commitmsg) && !commitmsg.contains("merge")) {
-					String commitid = commit.getName();
-					PerfFixData fixdata = new PerfFixData(this.project, this.getGitUrl(), commitid);
-					fixdata.setFixCommitMsg(commitmsg);
-					fixdata.setPatchPath("");
-					fixdata.setAssetChangeCount(0);
-					fixdata.setSrcFileChangeCount(0);
-					perffixdata.add(fixdata);
-				}
+                        String currentContent = getFileContentAtCommit(ID, diff);
+                        String previousContent = getFileContentAtCommit(parent.getName(), diff);
 
-			}
-			// System.out.println("Had " + count + " commits");
-			// System.out.println(this.project);
-		}
+                        File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", currentContent);
 
-		return perffixdata;
-	}
+                        File f2 = commitAnalyzingUtils.writeContentInFile("g2.cs", previousContent);
 
-	private boolean isPerformanceCommit(String commitmsg) {
-		for (String token : Config.perfCommitToken) {
-			if (commitmsg.contains(token)) {
-				return true;
-			}
-		}
+                        CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
+                        EditScript actions = diffgen.generateDiff(f1, f2);
+                        if (actions != null) {
+                            actionslist.add(actions);
+                        }
 
-		return false;
-	}
+                        f1.delete();
+                        f2.delete();
 
-	public String getGitUrl() {
-		return gitUrl;
-	}
+                    }
+                }
 
-	public void setGitUrl(String gitUrl) {
-		this.gitUrl = gitUrl;
-	}
+            }
+            // gradleChanges = gradlechgmgr.getXMLChange();
 
-	public List<EditScript> extractCSharpFileChange(String ID) {
-		// File debug = new File("debug-" + ID + ".txt");
-		List<EditScript> actionslist = new ArrayList<>();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-		try {
-			ObjectId objectid = repository.resolve(ID);
+        return actionslist;
+    }
 
-			if (objectid == null)
-				return null;
+    public PerfFixData extractFileChangeData(String ID, PerfFixData fixcommit) {
+        // File debug = new File("debug-" + ID + ".txt");
+        List<EditScript> actionslist = new ArrayList<>();
+        int srcfilecount = 0;
+        int otherfilecount = 0;
 
-			RevCommit commit = rw.parseCommit(objectid);
+        try {
+            ObjectId objectid = repository.resolve(ID);
 
-			/// System.out.println(commit.getFullMessage());
+            if (objectid == null)
+                return null;
 
-			if (commit.getParentCount() > 0) {
-				RevCommit parent = rw.parseCommit(commit.getParent(0).getId());
-				DiffFormatter df = commitAnalyzingUtils.setDiffFormatter(repository, true);
+            RevCommit commit = rw.parseCommit(objectid);
 
-				List<DiffEntry> diffs = df.scan(parent.getTree(), commit.getTree());
+            /// System.out.println(commit.getFullMessage());
 
-				for (DiffEntry diff : diffs) {
+            if (commit.getParentCount() > 0) {
+                RevCommit parent = rw.parseCommit(commit.getParent(0).getId());
+                DiffFormatter df = commitAnalyzingUtils.setDiffFormatter(repository, true);
 
-					if (diff.getNewPath().endsWith(".cs")) {
+                List<DiffEntry> diffs = df.scan(parent.getTree(), commit.getTree());
 
-						String currentContent = getFileContentAtCommit(ID, diff);
-						String previousContent = getFileContentAtCommit(parent.getName(), diff);
+                for (DiffEntry diff : diffs) {
+                    String changepath = diff.getNewPath();
+                    changepath = changepath.toLowerCase();
+                    if (changepath.endsWith(".cs")) {
+                        srcfilecount++;
+                    } else if (!changepath.endsWith(".md") && !changepath.contains("readme")) {
+                        otherfilecount++;
+                    }
+                }
 
-						File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", currentContent);
+            }
 
-						File f2 = commitAnalyzingUtils.writeContentInFile("g2.cs", previousContent);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-						CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
-						EditScript actions = diffgen.generateDiff(f1, f2);
-						if (actions != null) {
-							actionslist.add(actions);
-						}
+        fixcommit.setAssetChangeCount(otherfilecount);
+        fixcommit.setSrcFileChangeCount(srcfilecount);
 
-						f1.delete();
-						f2.delete();
+        return fixcommit;
+    }
 
-					}
-				}
+    public String getFileContentAtCommit(String commitid, DiffEntry diff) {
+        String content = "";
+        try {
+            ObjectId objectid1 = repository.resolve(commitid);
 
-			}
-			// gradleChanges = gradlechgmgr.getXMLChange();
+            if (objectid1 == null)
+                return null;
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+            RevCommit parent = rw.parseCommit(objectid1);
 
-		return actionslist;
-	}
+            RevTree tree = getTree(commitid);
 
-	public PerfFixData extractFileChangeData(String ID, PerfFixData fixcommit) {
-		// File debug = new File("debug-" + ID + ".txt");
-		List<EditScript> actionslist = new ArrayList<>();
-		int srcfilecount = 0;
-		int otherfilecount = 0;
+            content = getStringFile(tree, diff.getNewPath());
 
-		try {
-			ObjectId objectid = repository.resolve(ID);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-			if (objectid == null)
-				return null;
+        return content;
+    }
 
-			RevCommit commit = rw.parseCommit(objectid);
+    public RevTree getTree(String cmtid) throws IOException {
+        ObjectId lastCommitId = repository.resolve(cmtid);
 
-			/// System.out.println(commit.getFullMessage());
+        // a RevWalk allows to walk over commits based on some filtering
+        try (RevWalk revWalk = new RevWalk(repository)) {
+            RevCommit commit = revWalk.parseCommit(lastCommitId);
 
-			if (commit.getParentCount() > 0) {
-				RevCommit parent = rw.parseCommit(commit.getParent(0).getId());
-				DiffFormatter df = commitAnalyzingUtils.setDiffFormatter(repository, true);
+            // System.out.println("Time of commit (seconds since epoch): " +
+            // commit.getCommitTime());
 
-				List<DiffEntry> diffs = df.scan(parent.getTree(), commit.getTree());
+            // and using commit's tree find the path
+            RevTree tree = commit.getTree();
+            // System.out.println("Having tree: " + tree);
+            return tree;
+        }
+    }
 
-				for (DiffEntry diff : diffs) {
-					String changepath = diff.getNewPath();
-					changepath = changepath.toLowerCase();
-					if (changepath.endsWith(".cs")) {
-						srcfilecount++;
-					} else if (!changepath.endsWith(".md") && !changepath.contains("readme")) {
-						otherfilecount++;
-					}
-				}
+    public String getStringFile(RevTree tree, String filter) throws IOException {
+        // now try to find a specific file
+        try (TreeWalk treeWalk = new TreeWalk(repository)) {
 
-			}
+            treeWalk.addTree(tree);
+            treeWalk.setRecursive(true);
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+            treeWalk.setFilter(PathFilter.create(filter));
+            if (!treeWalk.next()) {
+                throw new IllegalStateException("Did not find expected file:" + filter);
+            }
 
-		fixcommit.setAssetChangeCount(otherfilecount);
-		fixcommit.setSrcFileChangeCount(srcfilecount);
+            // FileMode specifies the type of file, FileMode.REGULAR_FILE for
+            // normal file, FileMode.EXECUTABLE_FILE for executable bit
+            // set
+            FileMode fileMode = treeWalk.getFileMode(0);
+            ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
 
-		return fixcommit;
-	}
+            // loader.copyTo(System.out);
+            byte[] butestr = loader.getBytes();
 
-	public String getFileContentAtCommit(String commitid, DiffEntry diff) {
-		String content = "";
-		try {
-			ObjectId objectid1 = repository.resolve(commitid);
+            String str = new String(butestr);
 
-			if (objectid1 == null)
-				return null;
+            return str;
 
-			RevCommit parent = rw.parseCommit(objectid1);
+        }
+    }
 
-			RevTree tree = getTree(commitid);
+    public List<ClassFunction> getClassFunctionCall(String commitid) {
 
-			content = getStringFile(tree, diff.getNewPath());
+        List<ClassFunction> classfunclist = new ArrayList<>();
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
-		return content;
-	}
-
-	public RevTree getTree(String cmtid) throws IOException {
-		ObjectId lastCommitId = repository.resolve(cmtid);
-
-		// a RevWalk allows to walk over commits based on some filtering
-		try (RevWalk revWalk = new RevWalk(repository)) {
-			RevCommit commit = revWalk.parseCommit(lastCommitId);
-
-			// System.out.println("Time of commit (seconds since epoch): " +
-			// commit.getCommitTime());
-
-			// and using commit's tree find the path
-			RevTree tree = commit.getTree();
-			// System.out.println("Having tree: " + tree);
-			return tree;
-		}
-	}
-
-	public String getStringFile(RevTree tree, String filter) throws IOException {
-		// now try to find a specific file
-		try (TreeWalk treeWalk = new TreeWalk(repository)) {
-
-			treeWalk.addTree(tree);
-			treeWalk.setRecursive(true);
-
-			treeWalk.setFilter(PathFilter.create(filter));
-			if (!treeWalk.next()) {
-				throw new IllegalStateException("Did not find expected file:" + filter);
-			}
-
-			// FileMode specifies the type of file, FileMode.REGULAR_FILE for
-			// normal file, FileMode.EXECUTABLE_FILE for executable bit
-			// set
-			FileMode fileMode = treeWalk.getFileMode(0);
-			ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
-
-			// loader.copyTo(System.out);
-			byte[] butestr = loader.getBytes();
-
-			String str = new String(butestr);
-
-			return str;
-
-		}
-	}
-
-	public List<ClassFunction> getClassFunctionCall(String commitid) {
-
-		List<ClassFunction> classfunclist=new ArrayList<>();
-		
-		try {
-			ObjectId objectid = repository.resolve(commitid);
-			RevCommit commit = rw.parseCommit(objectid);
-
-			RevTree tree = commit.getTree();
-
-			// TreeWalk treeWalk = new TreeWalk(repository);
-			// treeWalk.addTree(tree);
-			// treeWalk.setRecursive(false);
-			// treeWalk.setPostOrderTraversal(false);
-
-			TreeWalk treeWalk = new TreeWalk(repository);
-			treeWalk.addTree(commit.getTree());
-			treeWalk.setRecursive(false);
-
-			// treeWalk.setRecursive(true);
-
-			while (treeWalk.next()) {
-				// System.out.println("found:" + treeWalk.getPathString());
-
-				if (treeWalk.isSubtree()) {
-					// System.out.println("dir: " + treeWalk.getPathString());
-					treeWalk.enterSubtree();
-				}
-
-				else if (treeWalk.getPathString().endsWith(".cs")) {
-					ObjectId objectId = treeWalk.getObjectId(0);
-					ObjectLoader loader = repository.open(objectId);
-
-					// and then one can the loader to read the file
-					// loader.copyTo(System.out);
-
-					byte[] butestr = loader.getBytes();
-					String str = new String(butestr);
-					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-					CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
-					ClassFunction clsfunc=diffgen.getClassFunction(f1);
-					classfunclist.add(clsfunc);
-					
-					f1.delete();
-
-
-				}
-
-			}
-			treeWalk.reset();
-
-		} catch (Exception ex) {
-			System.out.print(ex.getMessage());
-		}
-		
-		return classfunclist;
-	}
-	
-	public String getHeadCommitID()
-	{
-		Ref head = repository.getAllRefs().get("HEAD");
-		
-		return head.getObjectId().getName();
-	}
-	
-	
-	public List<ClassFunction> getClassFunctionTypeList(String commitid) {
-
-		List<ClassFunction> classfunclist=new ArrayList<>();
-		
-		try {
-			ObjectId objectid = repository.resolve(commitid);
-			RevCommit commit = rw.parseCommit(objectid);
-
-			RevTree tree = commit.getTree();
-
-			// TreeWalk treeWalk = new TreeWalk(repository);
-			// treeWalk.addTree(tree);
-			// treeWalk.setRecursive(false);
-			// treeWalk.setPostOrderTraversal(false);
-
-			TreeWalk treeWalk = new TreeWalk(repository);
-			treeWalk.addTree(commit.getTree());
-			treeWalk.setRecursive(false);
-
-			// treeWalk.setRecursive(true);
-
-			while (treeWalk.next()) {
-				// System.out.println("found:" + treeWalk.getPathString());
-
-				if (treeWalk.isSubtree()) {
-					// System.out.println("dir: " + treeWalk.getPathString());
-					treeWalk.enterSubtree();
-				}
-				
-
-
-				else if (treeWalk.getPathString().endsWith(".cs")) {
-					if(treeWalk.getPathString().contains("WalkingTests.cs"))
-						System.out.println("Debug");
-					
-					ObjectId objectId = treeWalk.getObjectId(0);
-					ObjectLoader loader = repository.open(objectId);
-
-					// and then one can the loader to read the file
-					// loader.copyTo(System.out);
-
-					byte[] butestr = loader.getBytes();
-					String str = new String(butestr);
-					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-					
-					
-					//CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
-					ClassFunctionTypeAnalyzer typeanalyzer=new ClassFunctionTypeAnalyzer();
-					ClassFunction clsfunc=typeanalyzer.getClassFunctionType(f1);
-					classfunclist.add(clsfunc);
-					
-					f1.delete();
-
-
-				}
-
-			}
-			treeWalk.reset();
-
-		} catch (Exception ex) {
-			System.out.print(ex.getMessage());
-		}
-		
-		return classfunclist;
-	}
-	
-	public LineCountAssertCount getTestLocAndAssertCount(String commitid) {
-
-		List<ClassFunction> classfunclist=new ArrayList<>();
-		LineCountAssertCount projtestloclinecount=new LineCountAssertCount();
-		try {
-			ObjectId objectid = repository.resolve(commitid);
-			RevCommit commit = rw.parseCommit(objectid);
-
-			RevTree tree = commit.getTree();
-
-			// TreeWalk treeWalk = new TreeWalk(repository);
-			// treeWalk.addTree(tree);
-			// treeWalk.setRecursive(false);
-			// treeWalk.setPostOrderTraversal(false);
-
-			TreeWalk treeWalk = new TreeWalk(repository);
-			treeWalk.addTree(commit.getTree());
-			treeWalk.setRecursive(false);
-
-			// treeWalk.setRecursive(true);
-
-			while (treeWalk.next()) {
-				// System.out.println("found:" + treeWalk.getPathString());
-
-				if (treeWalk.isSubtree()) {
-					// System.out.println("dir: " + treeWalk.getPathString());
-					treeWalk.enterSubtree();
-				}
-				
-
-
-				else if (treeWalk.getPathString().endsWith(".cs")) {
-					if(treeWalk.getPathString().contains("WalkingTests.cs"))
-						System.out.println("Debug");
-					
-					ObjectId objectId = treeWalk.getObjectId(0);
-					ObjectLoader loader = repository.open(objectId);
-
-					// and then one can the loader to read the file
-					// loader.copyTo(System.out);
-
-					byte[] butestr = loader.getBytes();
-					String str = new String(butestr);
-					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-					
-					
-					//CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
-					ClassFunctionTypeAnalyzer typeanalyzer=new ClassFunctionTypeAnalyzer();
-					LineCountAssertCount testclasslocassert=typeanalyzer.getClassTestLocAssert(f1);
-					projtestloclinecount.addAssertCount(testclasslocassert.getAssertCount());
-					projtestloclinecount.addLineCount(testclasslocassert.getLineCount());
-					
-					f1.delete();
-
-
-				}
-
-			}
-			treeWalk.reset();
-
-		} catch (Exception ex) {
-			System.out.print(ex.getMessage());
-		}
-		
-		return projtestloclinecount;
-	}
-
-    public LineCountAssertCount getFuncCodeLOC(String commitid) {
-
-        List<ClassFunction> classfunclist=new ArrayList<>();
-        LineCountAssertCount projtestloclinecount=new LineCountAssertCount();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -640,12 +460,71 @@ public class CommitAnalyzer {
                 if (treeWalk.isSubtree()) {
                     // System.out.println("dir: " + treeWalk.getPathString());
                     treeWalk.enterSubtree();
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
+                    ObjectId objectId = treeWalk.getObjectId(0);
+                    ObjectLoader loader = repository.open(objectId);
+
+                    // and then one can the loader to read the file
+                    // loader.copyTo(System.out);
+
+                    byte[] butestr = loader.getBytes();
+                    String str = new String(butestr);
+                    File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+                    CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
+                    ClassFunction clsfunc = diffgen.getClassFunction(f1);
+                    classfunclist.add(clsfunc);
+
+                    f1.delete();
+
+
                 }
 
+            }
+            treeWalk.reset();
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+
+        return classfunclist;
+    }
+
+    public String getHeadCommitID() {
+        Ref head = repository.getAllRefs().get("HEAD");
+
+        return head.getObjectId().getName();
+    }
 
 
-                else if (treeWalk.getPathString().endsWith(".cs")) {
-                    if(treeWalk.getPathString().contains("WalkingTests.cs"))
+    public List<ClassFunction> getClassFunctionTypeList(String commitid) {
+
+        List<ClassFunction> classfunclist = new ArrayList<>();
+
+        try {
+            ObjectId objectid = repository.resolve(commitid);
+            RevCommit commit = rw.parseCommit(objectid);
+
+            RevTree tree = commit.getTree();
+
+            // TreeWalk treeWalk = new TreeWalk(repository);
+            // treeWalk.addTree(tree);
+            // treeWalk.setRecursive(false);
+            // treeWalk.setPostOrderTraversal(false);
+
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
+
+            // treeWalk.setRecursive(true);
+
+            while (treeWalk.next()) {
+                // System.out.println("found:" + treeWalk.getPathString());
+
+                if (treeWalk.isSubtree()) {
+                    // System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
+                    if (treeWalk.getPathString().contains("WalkingTests.cs"))
                         System.out.println("Debug");
 
                     ObjectId objectId = treeWalk.getObjectId(0);
@@ -660,8 +539,70 @@ public class CommitAnalyzer {
 
 
                     //CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
-                    FunctionalCodeLOCExtractor typeanalyzer=new FunctionalCodeLOCExtractor();
-                    LineCountAssertCount testclasslocassert=typeanalyzer.getClassLoc(f1);
+                    ClassFunctionTypeAnalyzer typeanalyzer = new ClassFunctionTypeAnalyzer();
+                    ClassFunction clsfunc = typeanalyzer.getClassFunctionType(f1);
+                    classfunclist.add(clsfunc);
+
+                    f1.delete();
+
+
+                }
+
+            }
+            treeWalk.reset();
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+
+        return classfunclist;
+    }
+
+    public LineCountAssertCount getTestLocAndAssertCount(String commitid) {
+
+        List<ClassFunction> classfunclist = new ArrayList<>();
+        LineCountAssertCount projtestloclinecount = new LineCountAssertCount();
+        try {
+            ObjectId objectid = repository.resolve(commitid);
+            RevCommit commit = rw.parseCommit(objectid);
+
+            RevTree tree = commit.getTree();
+
+            // TreeWalk treeWalk = new TreeWalk(repository);
+            // treeWalk.addTree(tree);
+            // treeWalk.setRecursive(false);
+            // treeWalk.setPostOrderTraversal(false);
+
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
+
+            // treeWalk.setRecursive(true);
+
+            while (treeWalk.next()) {
+                // System.out.println("found:" + treeWalk.getPathString());
+
+                if (treeWalk.isSubtree()) {
+                    // System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
+                    if (treeWalk.getPathString().contains("WalkingTests.cs"))
+                        System.out.println("Debug");
+
+                    ObjectId objectId = treeWalk.getObjectId(0);
+                    ObjectLoader loader = repository.open(objectId);
+
+                    // and then one can the loader to read the file
+                    // loader.copyTo(System.out);
+
+                    byte[] butestr = loader.getBytes();
+                    String str = new String(butestr);
+                    File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+
+
+                    //CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
+                    ClassFunctionTypeAnalyzer typeanalyzer = new ClassFunctionTypeAnalyzer();
+                    LineCountAssertCount testclasslocassert = typeanalyzer.getClassTestLocAssert(f1);
                     projtestloclinecount.addAssertCount(testclasslocassert.getAssertCount());
                     projtestloclinecount.addLineCount(testclasslocassert.getLineCount());
 
@@ -680,11 +621,74 @@ public class CommitAnalyzer {
         return projtestloclinecount;
     }
 
-    public Map<String,Map<String,Integer>>  getConditionalTest(String commitid) {
+    public LineCountAssertCount getFuncCodeLOC(String commitid) {
+
+        List<ClassFunction> classfunclist = new ArrayList<>();
+        LineCountAssertCount projtestloclinecount = new LineCountAssertCount();
+        try {
+            ObjectId objectid = repository.resolve(commitid);
+            RevCommit commit = rw.parseCommit(objectid);
+
+            RevTree tree = commit.getTree();
+
+            // TreeWalk treeWalk = new TreeWalk(repository);
+            // treeWalk.addTree(tree);
+            // treeWalk.setRecursive(false);
+            // treeWalk.setPostOrderTraversal(false);
+
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
+
+            // treeWalk.setRecursive(true);
+
+            while (treeWalk.next()) {
+                // System.out.println("found:" + treeWalk.getPathString());
+
+                if (treeWalk.isSubtree()) {
+                    // System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
+                    if (treeWalk.getPathString().contains("WalkingTests.cs"))
+                        System.out.println("Debug");
+
+                    ObjectId objectId = treeWalk.getObjectId(0);
+                    ObjectLoader loader = repository.open(objectId);
+
+                    // and then one can the loader to read the file
+                    // loader.copyTo(System.out);
+
+                    byte[] butestr = loader.getBytes();
+                    String str = new String(butestr);
+                    File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+
+
+                    //CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
+                    FunctionalCodeLOCExtractor typeanalyzer = new FunctionalCodeLOCExtractor();
+                    LineCountAssertCount testclasslocassert = typeanalyzer.getClassLoc(f1);
+                    projtestloclinecount.addAssertCount(testclasslocassert.getAssertCount());
+                    projtestloclinecount.addLineCount(testclasslocassert.getLineCount());
+
+                    f1.delete();
+
+
+                }
+
+            }
+            treeWalk.reset();
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+
+        return projtestloclinecount;
+    }
+
+    public Map<String, Map<String, Integer>> getConditionalTest(String commitid) {
 
         //List<ClassFunction> classfunclist=new ArrayList<>();
-        Map<String,Map<String,Integer>> projtestfuncassertmap=new HashMap<>();
-        Map<String,Map<String,Integer>>  map = new HashMap<>();
+        Map<String, Map<String, Integer>> projtestfuncassertmap = new HashMap<>();
+        Map<String, Map<String, Integer>> map = new HashMap<>();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -708,11 +712,7 @@ public class CommitAnalyzer {
                 if (treeWalk.isSubtree()) {
                     // System.out.println("dir: " + treeWalk.getPathString());
                     treeWalk.enterSubtree();
-                }
-
-
-
-                else if (treeWalk.getPathString().endsWith(".cs")) {
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
 
                     ObjectId objectId = treeWalk.getObjectId(0);
                     ObjectLoader loader = repository.open(objectId);
@@ -723,7 +723,6 @@ public class CommitAnalyzer {
                     byte[] butestr = loader.getBytes();
                     String str = new String(butestr);
                     File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-
 
 
                     Reader reader;
@@ -739,14 +738,12 @@ public class CommitAnalyzer {
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
-                        ConditionalTestLogic ct=new ConditionalTestLogic();
+                        ConditionalTestLogic ct = new ConditionalTestLogic();
                         map = ct.searchForConditionalTestLogic(curtree);
 //                        System.out.println(map);
                         //Copy to project map
-                        for(String key:map.keySet())
-                        {
-                            if(!projtestfuncassertmap.containsKey(key))
-                            {
+                        for (String key : map.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
                                 projtestfuncassertmap.put(key, map.get(key));
                             }
 
@@ -757,7 +754,6 @@ public class CommitAnalyzer {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
 
 
                     f1.delete();
@@ -775,11 +771,11 @@ public class CommitAnalyzer {
         return projtestfuncassertmap;
     }
 
-    public Map<String,Boolean>  getSensitiveEquality(String commitid) {
+    public Map<String, Boolean> getSensitiveEquality(String commitid) {
 
         //List<ClassFunction> classfunclist=new ArrayList<>();
-        Map<String,Boolean> projtestfuncassertmap=new HashMap<>();
-        Map<String,Boolean>  map = new HashMap<>();
+        Map<String, Boolean> projtestfuncassertmap = new HashMap<>();
+        Map<String, Boolean> map = new HashMap<>();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -803,11 +799,7 @@ public class CommitAnalyzer {
                 if (treeWalk.isSubtree()) {
                     // System.out.println("dir: " + treeWalk.getPathString());
                     treeWalk.enterSubtree();
-                }
-
-
-
-                else if (treeWalk.getPathString().endsWith(".cs")) {
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
 
                     ObjectId objectId = treeWalk.getObjectId(0);
                     ObjectLoader loader = repository.open(objectId);
@@ -818,7 +810,6 @@ public class CommitAnalyzer {
                     byte[] butestr = loader.getBytes();
                     String str = new String(butestr);
                     File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-
 
 
                     Reader reader;
@@ -834,15 +825,13 @@ public class CommitAnalyzer {
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
-                        SensitiveEquality se=new SensitiveEquality();
+                        SensitiveEquality se = new SensitiveEquality();
                         map = se.searchForSensitiveEquality(curtree);
 //                        System.out.println(map.size());
 //                        System.out.println(map);
                         //Copy to project map
-                        for(String key:map.keySet())
-                        {
-                            if(!projtestfuncassertmap.containsKey(key))
-                            {
+                        for (String key : map.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
                                 projtestfuncassertmap.put(key, map.get(key));
                             }
 
@@ -853,7 +842,6 @@ public class CommitAnalyzer {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
 
 
                     f1.delete();
@@ -870,11 +858,12 @@ public class CommitAnalyzer {
 //        System.out.println(projtestfuncassertmap);
         return projtestfuncassertmap;
     }
-    public Map<String,Boolean>  getLazyTest(String commitid) {
+
+    public Map<String, Boolean> getLazyTest(String commitid) {
 
         //List<ClassFunction> classfunclist=new ArrayList<>();
-        Map<String,Boolean> projtestfuncassertmap=new HashMap<>();
-        Map<String,Boolean>  map = new HashMap<>();
+        Map<String, Boolean> projtestfuncassertmap = new HashMap<>();
+        Map<String, Boolean> map = new HashMap<>();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -898,11 +887,7 @@ public class CommitAnalyzer {
                 if (treeWalk.isSubtree()) {
                     // System.out.println("dir: " + treeWalk.getPathString());
                     treeWalk.enterSubtree();
-                }
-
-
-
-                else if (treeWalk.getPathString().endsWith(".cs")) {
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
 
                     ObjectId objectId = treeWalk.getObjectId(0);
                     ObjectLoader loader = repository.open(objectId);
@@ -913,7 +898,6 @@ public class CommitAnalyzer {
                     byte[] butestr = loader.getBytes();
                     String str = new String(butestr);
                     File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-
 
 
                     Reader reader;
@@ -929,15 +913,13 @@ public class CommitAnalyzer {
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
-                        LazyTest lt=new LazyTest();
+                        LazyTest lt = new LazyTest();
                         map = lt.searchForLazyTest(curtree);
 //                        System.out.println(map.size());
 //                        System.out.println(map);
                         //Copy to project map
-                        for(String key:map.keySet())
-                        {
-                            if(!projtestfuncassertmap.containsKey(key))
-                            {
+                        for (String key : map.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
                                 projtestfuncassertmap.put(key, map.get(key));
                             }
 
@@ -948,7 +930,6 @@ public class CommitAnalyzer {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
 
 
                     f1.delete();
@@ -966,11 +947,11 @@ public class CommitAnalyzer {
         return projtestfuncassertmap;
     }
 
-    public Map<String,Boolean>  getMysteryGuest(String commitid) {
+    public Map<String, Boolean> getMysteryGuest(String commitid) {
 
         //List<ClassFunction> classfunclist=new ArrayList<>();
-        Map<String,Boolean> projtestfuncassertmap=new HashMap<>();
-        Map<String,Boolean>  map = new HashMap<>();
+        Map<String, Boolean> projtestfuncassertmap = new HashMap<>();
+        Map<String, Boolean> map = new HashMap<>();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -994,11 +975,7 @@ public class CommitAnalyzer {
                 if (treeWalk.isSubtree()) {
                     // System.out.println("dir: " + treeWalk.getPathString());
                     treeWalk.enterSubtree();
-                }
-
-
-
-                else if (treeWalk.getPathString().endsWith(".cs")) {
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
 
                     ObjectId objectId = treeWalk.getObjectId(0);
                     ObjectLoader loader = repository.open(objectId);
@@ -1009,7 +986,6 @@ public class CommitAnalyzer {
                     byte[] butestr = loader.getBytes();
                     String str = new String(butestr);
                     File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-
 
 
                     Reader reader;
@@ -1025,15 +1001,13 @@ public class CommitAnalyzer {
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
-                        MysteryGuest se=new MysteryGuest();
+                        MysteryGuest se = new MysteryGuest();
                         map = se.searchForMysteryGuest(curtree);
 //                        System.out.println(map.size());
 //                        System.out.println(map);
                         //Copy to project map
-                        for(String key:map.keySet())
-                        {
-                            if(!projtestfuncassertmap.containsKey(key))
-                            {
+                        for (String key : map.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
                                 projtestfuncassertmap.put(key, map.get(key));
                             }
 
@@ -1044,7 +1018,6 @@ public class CommitAnalyzer {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
 
 
                     f1.delete();
@@ -1062,10 +1035,10 @@ public class CommitAnalyzer {
         return projtestfuncassertmap;
     }
 
-    public Map<String,Double>  getGeneralFixture(String commitid){
+    public Map<String, Double> getGeneralFixture(String commitid) {
         //List<ClassFunction> classfunclist=new ArrayList<>();
-        Map<String,Double> projtestfuncassertmap=new HashMap<>();
-        Map<String,Double> map = new HashMap<>();
+        Map<String, Double> projtestfuncassertmap = new HashMap<>();
+        Map<String, Double> map = new HashMap<>();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -1089,11 +1062,7 @@ public class CommitAnalyzer {
                 if (treeWalk.isSubtree()) {
                     // System.out.println("dir: " + treeWalk.getPathString());
                     treeWalk.enterSubtree();
-                }
-
-
-
-                else if (treeWalk.getPathString().endsWith(".cs")) {
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
 
                     ObjectId objectId = treeWalk.getObjectId(0);
                     ObjectLoader loader = repository.open(objectId);
@@ -1104,7 +1073,6 @@ public class CommitAnalyzer {
                     byte[] butestr = loader.getBytes();
                     String str = new String(butestr);
                     File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-
 
 
                     Reader reader;
@@ -1122,14 +1090,12 @@ public class CommitAnalyzer {
 //                        System.exit(0);
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
-                        GeneralFixture gf=new GeneralFixture();
+                        GeneralFixture gf = new GeneralFixture();
                         map = gf.searchForGeneralFixture(curtree);
 //                        System.out.println(map);
                         //Copy to project map
-                        for(String key:map.keySet())
-                        {
-                            if(!projtestfuncassertmap.containsKey(key))
-                            {
+                        for (String key : map.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
                                 projtestfuncassertmap.put(key, map.get(key));
                             }
 
@@ -1140,7 +1106,6 @@ public class CommitAnalyzer {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
 
 
                     f1.delete();
@@ -1161,11 +1126,11 @@ public class CommitAnalyzer {
     }
 
 
-    public Map<String,Boolean>  getEagerTest(String commitid) {
+    public Map<String, Boolean> getEagerTest(String commitid) {
 
         //List<ClassFunction> classfunclist=new ArrayList<>();
-        Map<String,Boolean> projtestfuncassertmap=new HashMap<>();
-        Map<String,Boolean>  map = new HashMap<>();
+        Map<String, Boolean> projtestfuncassertmap = new HashMap<>();
+        Map<String, Boolean> map = new HashMap<>();
         try {
             ObjectId objectid = repository.resolve(commitid);
             RevCommit commit = rw.parseCommit(objectid);
@@ -1189,11 +1154,7 @@ public class CommitAnalyzer {
                 if (treeWalk.isSubtree()) {
                     // System.out.println("dir: " + treeWalk.getPathString());
                     treeWalk.enterSubtree();
-                }
-
-
-
-                else if (treeWalk.getPathString().endsWith(".cs")) {
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
 
                     ObjectId objectId = treeWalk.getObjectId(0);
                     ObjectLoader loader = repository.open(objectId);
@@ -1204,7 +1165,6 @@ public class CommitAnalyzer {
                     byte[] butestr = loader.getBytes();
                     String str = new String(butestr);
                     File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-
 
 
                     Reader reader;
@@ -1220,15 +1180,13 @@ public class CommitAnalyzer {
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
-                        EagerTest et=new EagerTest();
+                        EagerTest et = new EagerTest();
                         map = et.searchForEagerTest(curtree);
 //                        System.out.println(map.size());
 //                        System.out.println(map);
                         //Copy to project map
-                        for(String key:map.keySet())
-                        {
-                            if(!projtestfuncassertmap.containsKey(key))
-                            {
+                        for (String key : map.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
                                 projtestfuncassertmap.put(key, map.get(key));
                             }
 
@@ -1239,7 +1197,6 @@ public class CommitAnalyzer {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
 
 
                     f1.delete();
@@ -1257,99 +1214,91 @@ public class CommitAnalyzer {
         return projtestfuncassertmap;
     }
 
-	public Map<String,List<AssertCall>> getAssertRoulette(String commitid) {
+    public Map<String, List<AssertCall>> getAssertRoulette(String commitid) {
 
-		//List<ClassFunction> classfunclist=new ArrayList<>();
-		Map<String,List<AssertCall>> projtestfuncassertmap=new HashMap<>();
-		
-		try {
-			ObjectId objectid = repository.resolve(commitid);
-			RevCommit commit = rw.parseCommit(objectid);
+        //List<ClassFunction> classfunclist=new ArrayList<>();
+        Map<String, List<AssertCall>> projtestfuncassertmap = new HashMap<>();
 
-			RevTree tree = commit.getTree();
+        try {
+            ObjectId objectid = repository.resolve(commitid);
+            RevCommit commit = rw.parseCommit(objectid);
 
-			// TreeWalk treeWalk = new TreeWalk(repository);
-			// treeWalk.addTree(tree);
-			// treeWalk.setRecursive(false);
-			// treeWalk.setPostOrderTraversal(false);
+            RevTree tree = commit.getTree();
 
-			TreeWalk treeWalk = new TreeWalk(repository);
-			treeWalk.addTree(commit.getTree());
-			treeWalk.setRecursive(false);
+            // TreeWalk treeWalk = new TreeWalk(repository);
+            // treeWalk.addTree(tree);
+            // treeWalk.setRecursive(false);
+            // treeWalk.setPostOrderTraversal(false);
 
-			// treeWalk.setRecursive(true);
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
 
-			while (treeWalk.next()) {
-				// System.out.println("found:" + treeWalk.getPathString());
+            // treeWalk.setRecursive(true);
+
+            while (treeWalk.next()) {
+                // System.out.println("found:" + treeWalk.getPathString());
 //				System.out.println(treeWalk.getPathString()+"*****");
-				if (treeWalk.isSubtree()) {
-					// System.out.println("dir: " + treeWalk.getPathString());
-					treeWalk.enterSubtree();
-				}
-				
+                if (treeWalk.isSubtree()) {
+                    // System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
+
+                    ObjectId objectId = treeWalk.getObjectId(0);
+                    ObjectLoader loader = repository.open(objectId);
+
+                    // and then one can the loader to read the file
+                    // loader.copyTo(System.out);
+
+                    byte[] butestr = loader.getBytes();
+                    String str = new String(butestr);
+                    File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
 
 
-				else if (treeWalk.getPathString().endsWith(".cs")) {					
-					
-					ObjectId objectId = treeWalk.getObjectId(0);
-					ObjectLoader loader = repository.open(objectId);
-
-					// and then one can the loader to read the file
-					// loader.copyTo(System.out);
-
-					byte[] butestr = loader.getBytes();
-					String str = new String(butestr);
-					File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
-					
-					
-					
-					Reader reader;
-					try {
+                    Reader reader;
+                    try {
 //						System.out.println(treeWalk.getPathString());
-						
+
 //						if(treeWalk.getPathString().contains("Resources.Designer.cs"))
 //						{
 //							System.out.print("debug");
 //						}
-						reader = new FileReader(f1.toString());
-						ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
-
-						
-						//TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
-						//analyzer.getTestFunctionList(curtree);
-						AssertionRoulette ar=new AssertionRoulette();
-						Map<String,List<AssertCall>> testfuncassertmap=ar.searchForAssertionRoulette(curtree);
-						
-						//Copy to project map
-						for(String key:testfuncassertmap.keySet())
-						{
-							if(!projtestfuncassertmap.containsKey(key))
-							{
-								projtestfuncassertmap.put(key, testfuncassertmap.get(key));
-							}
-							
-							
-						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-
-					
-					f1.delete();
+                        reader = new FileReader(f1.toString());
+                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 
-				}
+                        //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
+                        //analyzer.getTestFunctionList(curtree);
+                        AssertionRoulette ar = new AssertionRoulette();
+                        Map<String, List<AssertCall>> testfuncassertmap = ar.searchForAssertionRoulette(curtree);
 
-			}
-			treeWalk.reset();
+                        //Copy to project map
+                        for (String key : testfuncassertmap.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
+                                projtestfuncassertmap.put(key, testfuncassertmap.get(key));
+                            }
 
-		} catch (Exception ex) {
-			System.out.print(ex.getMessage());
-		}
-		
-		return projtestfuncassertmap;
-	}
+
+                        }
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+
+                    f1.delete();
+
+
+                }
+
+            }
+            treeWalk.reset();
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+
+        return projtestfuncassertmap;
+    }
 
 }

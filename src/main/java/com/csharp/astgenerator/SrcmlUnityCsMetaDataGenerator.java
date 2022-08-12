@@ -96,6 +96,57 @@ public class SrcmlUnityCsMetaDataGenerator {
 		return block;
 	}
 
+
+    public static List<ITree> ListbreadthFirstSearchForNode(ITree node, String type, String nodevisitedmeta) {
+
+        // Just so we handle receiving an uninitialized Node, otherwise an
+        // exception will be thrown when we try to add it to queue
+        List<ITree> classnode = new ArrayList<>();
+        if (node == null)
+            return null;
+
+        // Creating the queue, and adding the first node (step 1)
+        LinkedList<ITree> queue = new LinkedList<>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            ITree currentFirst = queue.removeFirst();
+
+            // In some cases we might have added a particular node more than once before
+            // actually visiting that node, so we make sure to check and skip that node if
+            // we have
+            // encountered it before
+
+            if (currentFirst.getType().toString().contains(type)) {
+                classnode.add(currentFirst);
+
+            }
+
+            if (currentFirst.getMetadata(nodevisitedmeta) != null)
+                continue;
+
+            // Mark the node as visited
+            currentFirst.setMetadata(nodevisitedmeta, 1);
+            // System.out.print(currentFirst.name + " ");
+
+            List<ITree> allNeighbors = currentFirst.getChildren();
+
+            // We have to check whether the list of neighbors is null before proceeding,
+            // otherwise
+            // the for-each loop will throw an exception
+            if (allNeighbors == null)
+                continue;
+
+            for (ITree neighbor : allNeighbors) {
+                // We only add unvisited neighbors
+                if (neighbor.getMetadata(nodevisitedmeta) == null) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        return classnode;
+    }
 	public static ITree breadthFirstSearchForNode(ITree node, String type, String nodevisitedmeta) {
 
 		// Just so we handle receiving an uninitialized Node, otherwise an
@@ -118,6 +169,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 
 			if (currentFirst.getType().toString().contains(type)) {
 				classnode = currentFirst;
+
 			}
 
 			if (currentFirst.getMetadata(nodevisitedmeta) != null)
@@ -142,6 +194,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 				}
 			}
 		}
+
 		return classnode;
 	}
 

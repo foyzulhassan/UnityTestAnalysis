@@ -66,6 +66,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\reference_project\TestSmellDetector-2.1\samplefile.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

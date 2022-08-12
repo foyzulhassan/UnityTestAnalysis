@@ -47,7 +47,6 @@ public class ProjectTestAnalyzer {
 
 			try {
 				cmtanalyzer = new CommitAnalyzer("test", projname, proj);
-
 				String commitid = cmtanalyzer.getHeadCommitID();
 				List<ClassFunction> classfunclist = cmtanalyzer.getClassFunctionTypeList(commitid);
 
@@ -62,6 +61,7 @@ public class ProjectTestAnalyzer {
 
 					for (FunctionCall func : funclist) {
 						if (func.isTestFunction()) {
+//                            System.out.println(func.getFuncName());
 							analysisdata.addToTestMethodList(func.getFuncName());
 						} else {
 							analysisdata.addToMethodList(func.getFuncName());

@@ -74,16 +74,22 @@ public class TreeNodeAnalyzer {
         List<ITree> funclist = breadthFirstSearchForNodeList(copynode, "function", "func");
 
         for (ITree func : funclist) {
+            String funcname = SrcmlUnityCsMetaDataGenerator.getFunctionName(func);
+
             List<ITree> attributes = breadthFirstSearchForNodeList(func, "attribute", "an1");
 
             if (attributes != null && attributes.size() > 0) {
                 List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
                 List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
+                List<ITree> mtestanotations = breadthFirstSearchForLabel(attributes.get(0), "MTest", "an4");
                 //System.out.println("test");
 
                 if (unitytestanotations != null && unitytestanotations.size() > 0) {
                     testfunclist.add(func);
                 } else if (testanotations != null && testanotations.size() > 0) {
+                    testfunclist.add(func);
+                }
+                else if (mtestanotations != null && mtestanotations.size() > 0) {
                     testfunclist.add(func);
                 }
             }
