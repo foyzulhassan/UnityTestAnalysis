@@ -56,7 +56,7 @@ public class MainClass {
 
 		System.out.println("Enter your action:");
 
-		System.out.println("0->Download Projects" +
+		System.out.println("1->Download Projects" +
 //                "\n2->Commit Change Analysis"
 //				+ "\n3->Read CSV File and Generate Patch"
 				 "\n11->Generate Test and Functional code Method and Class Count (RQ1)"
@@ -68,6 +68,7 @@ public class MainClass {
 				+ "\n34->Mystery Guest  Analysis(RQ3)"
 				+ "\n35->Sensitive Equality Analysis(RQ3)"
 				+ "\n35->General Fixture Analysis(RQ3)"
+                + "\n37->Magic Number Test Analysis"
 
 
 
@@ -311,6 +312,23 @@ public class MainClass {
 
         }
 
+        else if (inputid == 37) {
+            System.out.println("Magic Number Test Analysis");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeMagicNumberTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("MagicNumberTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
 
 
 	}

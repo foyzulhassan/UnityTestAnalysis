@@ -7,11 +7,30 @@ import java.util.List;
 
 public class AssertCall {
 	private String assertName;	
-	private List<String> paramList;
+	public List<String> paramList;
 	private List<ITree> paramListTrees;
+
+	//public String paramValue;
+
+
+
+
 	private boolean hasMsg;
-	
-	
+
+	private double hasVal;
+
+	public double getHasVal() {
+		return hasVal;
+	}
+
+	public void setHasVal(double hasVal) {
+		this.hasVal = hasVal;
+	}
+
+
+
+
+
 	public AssertCall()
 	{
 		paramList=new ArrayList<>();
@@ -28,7 +47,6 @@ public class AssertCall {
 	public void setAssertName(String assertName) {
 		this.assertName = assertName;
 	}
-
 
 	public List<String> getParamList() {
 		return paramList;

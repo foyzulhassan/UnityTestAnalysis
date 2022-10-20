@@ -352,6 +352,49 @@ public class SmellAnalysisMngr {
         return smellpercentage;
     }
 
+    public List<ProjectSmellEntity> analyzeMagicNumberTest() {
+        String filepath = Config.gitProjList;
+
+        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+        // List<PerfFixData> fixdata = new ArrayList<>();
+        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+
+        int counter = 0;
+        for (String proj : projlist) {
+            String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            TestAnalysisData analysisdata = new TestAnalysisData(projname);
+
+            CommitAnalyzer cmtanalyzer = null;
+            System.out.println(counter + "-->" + projname);
+
+            counter++;
+
+            try {
+                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                String commitid = cmtanalyzer.getHeadCommitID();
+                Map<String,Boolean> testfunccondition = cmtanalyzer.getMagicNumber(commitid);
+                MagicNumberTest magicnumber = new MagicNumberTest();
+                double percentage = magicnumber.getMagicNumberStats(testfunccondition);
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("MagicNumber");
+                projsmell.setProjName(projname);
+                projsmell.setSmellPercentage(percentage);
+                smellpercentage.add(projsmell);
+
+
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return smellpercentage;
+
+    }
+
 
     public static void main(String[] args) {
             String filepath = Config.gitProjList;
