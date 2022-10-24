@@ -352,7 +352,11 @@ public class SmellAnalysisMngr {
         return smellpercentage;
     }
 
+<<<<<<< HEAD
     public List<ProjectSmellEntity> analyzeDefaultTest() {
+=======
+    public List<ProjectSmellEntity> analyzeRedundantPrint() {
+>>>>>>> ff83a074be610d6d4b48d44f9e9b54d397f94b42
         String filepath = Config.gitProjList;
 
         List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
@@ -375,11 +379,19 @@ public class SmellAnalysisMngr {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
+<<<<<<< HEAD
                 Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getDefaultTest(commitid);
                 DefaultTest defaultTest = new DefaultTest();
                 double percentage = defaultTest.getDefaultTestStats(testfuncconditionalTestmap);
 
                 ProjectSmellEntity projsmell = new ProjectSmellEntity("DefaultTest");
+=======
+                Map<String,Boolean> testredundantprintTestmap = cmtanalyzer.getRedundantPrint(commitid);
+                RedundantPrint redundantPrint = new RedundantPrint();
+                double percentage = redundantPrint.getRedundantPrintStats(testredundantprintTestmap);
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("RedundantPrint");
+>>>>>>> ff83a074be610d6d4b48d44f9e9b54d397f94b42
                 projsmell.setProjName(projname);
                 projsmell.setSmellPercentage(percentage);
                 smellpercentage.add(projsmell);
@@ -410,6 +422,7 @@ public class SmellAnalysisMngr {
             List<Map<String, Boolean>> eagerTestSmells= new ArrayList<>();
             List<Map<String, Boolean>> lazyTestSmells= new ArrayList<>();
             List<Map<String, Boolean>> sensitiveEqualitySmells= new ArrayList<>();
+            List< Map<String,Boolean> > redundantPrint= new ArrayList<>();
             List<Map<String, List<AssertCall>>> assertionRouletteSmells= new ArrayList<>();
             List<Map<String, Boolean>> defaultTestSmells= new ArrayList<>();
 
