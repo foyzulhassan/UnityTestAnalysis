@@ -352,7 +352,7 @@ public class SmellAnalysisMngr {
         return smellpercentage;
     }
 
-    public List<ProjectSmellEntity> analyzeRedundantPrint() {
+    public List<ProjectSmellEntity> analyzeDefaultTest() {
         String filepath = Config.gitProjList;
 
         List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
@@ -375,11 +375,11 @@ public class SmellAnalysisMngr {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
-                Map<String,Boolean> testredundantprintTestmap = cmtanalyzer.getRedundantPrint(commitid);
-                RedundantPrint redundantPrint = new RedundantPrint();
-                double percentage = redundantPrint.getRedundantPrintStats(testredundantprintTestmap);
+                Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getDefaultTest(commitid);
+                DefaultTest defaultTest = new DefaultTest();
+                double percentage = defaultTest.getDefaultTestStats(testfuncconditionalTestmap);
 
-                ProjectSmellEntity projsmell = new ProjectSmellEntity("RedundantPrint");
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("DefaultTest");
                 projsmell.setProjName(projname);
                 projsmell.setSmellPercentage(percentage);
                 smellpercentage.add(projsmell);
@@ -410,8 +410,8 @@ public class SmellAnalysisMngr {
             List<Map<String, Boolean>> eagerTestSmells= new ArrayList<>();
             List<Map<String, Boolean>> lazyTestSmells= new ArrayList<>();
             List<Map<String, Boolean>> sensitiveEqualitySmells= new ArrayList<>();
-            List< Map<String,Boolean> > redundantPrint= new ArrayList<>();
             List<Map<String, List<AssertCall>>> assertionRouletteSmells= new ArrayList<>();
+            List<Map<String, Boolean>> defaultTestSmells= new ArrayList<>();
 
             int counter = 0;
             for (String proj : projlist) {
