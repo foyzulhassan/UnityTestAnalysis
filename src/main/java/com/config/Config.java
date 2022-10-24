@@ -9,11 +9,9 @@ public class Config {
 	 public static String
 //	 rootDir="/home/umd-002677/VR_AR_Testing/project_repos/";
 //	 rootDir="/media/umd-002677/HDD/Project sets/VR_AR_Testing/project_repos/";
-<<<<<<< HEAD
+
 	 rootDir="D:\\Research\\Vr-Test\\";
-=======
-     rootDir="D:\\Research\\Vr-Test\\";
->>>>>>> 6e10e5f301a13a55c4bf81cb9320391591d6978a
+
 //	 rootDir="D:\\VR_AR_Testing\\project_repos\\";
 	 //
 	 //text file that contains list of projects to analyze

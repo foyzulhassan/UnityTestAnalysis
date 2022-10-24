@@ -352,15 +352,7 @@ public class SmellAnalysisMngr {
         return smellpercentage;
     }
 
-<<<<<<< HEAD
     public List<ProjectSmellEntity> analyzeMagicNumberTest() {
-=======
-<<<<<<< HEAD
-    public List<ProjectSmellEntity> analyzeDefaultTest() {
-=======
-    public List<ProjectSmellEntity> analyzeRedundantPrint() {
->>>>>>> ff83a074be610d6d4b48d44f9e9b54d397f94b42
->>>>>>> 6e10e5f301a13a55c4bf81cb9320391591d6978a
         String filepath = Config.gitProjList;
 
         List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
@@ -376,37 +368,16 @@ public class SmellAnalysisMngr {
             System.out.println(counter + "-->" + projname);
 
             counter++;
-<<<<<<< HEAD
-=======
-//            if (counter > 5)
-//                return smellpercentage;
->>>>>>> 6e10e5f301a13a55c4bf81cb9320391591d6978a
 
             try {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
-<<<<<<< HEAD
                 Map<String,Boolean> testfunccondition = cmtanalyzer.getMagicNumber(commitid);
                 MagicNumberTest magicnumber = new MagicNumberTest();
                 double percentage = magicnumber.getMagicNumberStats(testfunccondition);
 
                 ProjectSmellEntity projsmell = new ProjectSmellEntity("MagicNumber");
-=======
-<<<<<<< HEAD
-                Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getDefaultTest(commitid);
-                DefaultTest defaultTest = new DefaultTest();
-                double percentage = defaultTest.getDefaultTestStats(testfuncconditionalTestmap);
-
-                ProjectSmellEntity projsmell = new ProjectSmellEntity("DefaultTest");
-=======
-                Map<String,Boolean> testredundantprintTestmap = cmtanalyzer.getRedundantPrint(commitid);
-                RedundantPrint redundantPrint = new RedundantPrint();
-                double percentage = redundantPrint.getRedundantPrintStats(testredundantprintTestmap);
-
-                ProjectSmellEntity projsmell = new ProjectSmellEntity("RedundantPrint");
->>>>>>> ff83a074be610d6d4b48d44f9e9b54d397f94b42
->>>>>>> 6e10e5f301a13a55c4bf81cb9320391591d6978a
                 projsmell.setProjName(projname);
                 projsmell.setSmellPercentage(percentage);
                 smellpercentage.add(projsmell);
@@ -437,9 +408,7 @@ public class SmellAnalysisMngr {
             List<Map<String, Boolean>> eagerTestSmells= new ArrayList<>();
             List<Map<String, Boolean>> lazyTestSmells= new ArrayList<>();
             List<Map<String, Boolean>> sensitiveEqualitySmells= new ArrayList<>();
-            List< Map<String,Boolean> > redundantPrint= new ArrayList<>();
             List<Map<String, List<AssertCall>>> assertionRouletteSmells= new ArrayList<>();
-            List<Map<String, Boolean>> defaultTestSmells= new ArrayList<>();
 
             int counter = 0;
             for (String proj : projlist) {

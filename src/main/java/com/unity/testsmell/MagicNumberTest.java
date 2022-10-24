@@ -178,23 +178,4 @@ public class MagicNumberTest {
         return  (double) magicnumber/total;
     }
 
-
-
-
-    public double getSensitiveEqualityStats(Map<String,Boolean> testfuncconditionalTestmap)
-    {
-
-        int total=testfuncconditionalTestmap.keySet().size();
-        if (total == 0)
-            return -0.001;
-
-        int sensitiveEquality=0;
-
-        for(boolean b:testfuncconditionalTestmap.values()){
-            if(b)
-                sensitiveEquality++;
-        }
-
-        return  (double) sensitiveEquality/total;
-    }
 }
