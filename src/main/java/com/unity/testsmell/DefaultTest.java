@@ -67,16 +67,16 @@ public class DefaultTest {
 
 
 
-    public double getDefaultTestStats(Map<String,Boolean> testfuncconditionalTestmap)
+    public double getDefaultTestStats(Map<String,Boolean> testdefaultTestmap)
     {
 
-        int total=testfuncconditionalTestmap.keySet().size();
+        int total=testdefaultTestmap.keySet().size();
         if (total == 0)
             return -0.001;
 
         int defaultTest=0;
 
-        for(boolean b:testfuncconditionalTestmap.values()){
+        for(boolean b:testdefaultTestmap.values()){
             if(b)
                 defaultTest++;
         }

@@ -375,9 +375,9 @@ public class SmellAnalysisMngr {
                 cmtanalyzer = new CommitAnalyzer("test", projname, proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
-                Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getDefaultTest(commitid);
+                Map<String,Boolean> testdefaultTestmap = cmtanalyzer.getDefaultTest(commitid);
                 DefaultTest defaultTest = new DefaultTest();
-                double percentage = defaultTest.getDefaultTestStats(testfuncconditionalTestmap);
+                double percentage = defaultTest.getDefaultTestStats(testdefaultTestmap);
 
                 ProjectSmellEntity projsmell = new ProjectSmellEntity("DefaultTest");
                 projsmell.setProjName(projname);
