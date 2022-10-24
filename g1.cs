@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -74,4 +75,30 @@ namespace Microsoft.MixedReality.Toolkit.Tests.EditMode.InputSystem
             }
         }
     }
+=======
+﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.Audio;
+using UnityEngine.UI;
+
+namespace VRAVE
+{
+public class SetAudioLevels : MonoBehaviour {
+
+	public AudioMixer mainMixer;					//Used to hold a reference to the AudioMixer mainMixer
+
+
+	//Call this function and pass in the float parameter musicLvl to set the volume of the AudioMixerGroup Music in mainMixer
+	public void SetMusicLevel(float musicLvl)
+	{
+		mainMixer.SetFloat("musicVol", musicLvl);
+	}
+
+	//Call this function and pass in the float parameter sfxLevel to set the volume of the AudioMixerGroup SoundFx in mainMixer
+	public void SetSfxLevel(float sfxLevel)
+	{
+		mainMixer.SetFloat("sfxVol", sfxLevel);
+	}
+}
+>>>>>>> 6e10e5f301a13a55c4bf81cb9320391591d6978a
 }
