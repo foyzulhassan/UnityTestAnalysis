@@ -52,38 +52,38 @@ import edu.util.fileprocess.CSVReaderWriter;
 
 public class MainClass {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		System.out.println("Enter your action:");
+        System.out.println("Enter your action:");
 
-		System.out.println("0->Download Projects" +
+        System.out.println("0->Download Projects" +
 //                "\n2->Commit Change Analysis"
 //				+ "\n3->Read CSV File and Generate Patch"
-				 "\n11->Generate Test and Functional code Method and Class Count (RQ1)"
-                +"\n12->Generate Functional code LOC (RQ1)"
-				+ "\n2->Test Assert Density(RQ2 + LOC(RQ1) analysis)"
-				+ "\n31->Assert Roulette Analysis(RQ3)"
-				+ "\n32->Eager Test Analysis(RQ3)"
-				+ "\n33->Lazy Test Analysis(RQ3)"
-				+ "\n34->Mystery Guest  Analysis(RQ3)"
-				+ "\n35->Sensitive Equality Analysis(RQ3)"
-				+ "\n35->General Fixture Analysis(RQ3)"
-
+                        "\n11->Generate Test and Functional code Method and Class Count (RQ1)"
+                        + "\n12->Generate Functional code LOC (RQ1)"
+                        + "\n2->Test Assert Density(RQ2 + LOC(RQ1) analysis)"
+                        + "\n31->Assert Roulette Analysis(RQ3)"
+                        + "\n32->Eager Test Analysis(RQ3)"
+                        + "\n33->Lazy Test Analysis(RQ3)"
+                        + "\n34->Mystery Guest  Analysis(RQ3)"
+                        + "\n35->Sensitive Equality Analysis(RQ3)"
+                        + "\n35->General Fixture Analysis(RQ3)"
+                        + "\n37->Magic Number Test Analysis"
 
 
         );
 
-		Scanner cin = new Scanner(System.in);
+        Scanner cin = new Scanner(System.in);
 
-		System.out.println("Enter an integer: ");
-		int inputid = cin.nextInt();
+        System.out.println("Enter an integer: ");
+        int inputid = cin.nextInt();
 
-		if (inputid == 1) {
-			ProjectLoader projloader = new ProjectLoader();
-			projloader.LoadDownloadProjects();
-			System.out.println("Download Projects->Completed");
+        if (inputid == 1) {
+            ProjectLoader projloader = new ProjectLoader();
+            projloader.LoadDownloadProjects();
+            System.out.println("Download Projects->Completed");
 
-		}
+        }
 //        else if (inputid == 2) {
 //			CommitAnalysisMngr commitmngr = new CommitAnalysisMngr();
 //			commitmngr.PerformCommitAnalysis();
@@ -97,110 +97,99 @@ public class MainClass {
 //				e.printStackTrace();
 //			}
 //		}
-		else if (inputid == 11) {
+        else if (inputid == 11) {
 
-			System.out.println("\n\n\nGenerate Test and Functional code Method and Class Count (RQ1)\n\n\n");
-			
-			ProjectTestAnalyzer analyzer = new ProjectTestAnalyzer();
-			ProjectTestData projdata = analyzer.PerformClassFunctionType();
-			List<TestData> testdatalist = analyzer.convertToTestData(projdata);
-			List<TestMethodData> testmethoddatalist = analyzer.convertToTestMethodData(projdata);
-			if (testdatalist.size() > 0) {
-				CSVReaderWriter writer = new CSVReaderWriter();
-				ApacheCSVReaderWriter apachecsv=new ApacheCSVReaderWriter();
-				try {
-					apachecsv.WriteTestDataCSVFile(testdatalist, Config.csvFileTestStat);
-					writer.writeBeanToFile(testmethoddatalist, Config.csvFileTestStatDetails);
-				} catch (CsvDataTypeMismatchException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (CsvRequiredFieldEmptyException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+            System.out.println("\n\n\nGenerate Test and Functional code Method and Class Count (RQ1)\n\n\n");
 
-			System.out.print("*********Done************");
+            ProjectTestAnalyzer analyzer = new ProjectTestAnalyzer();
+            ProjectTestData projdata = analyzer.PerformClassFunctionType();
+            List<TestData> testdatalist = analyzer.convertToTestData(projdata);
+            List<TestMethodData> testmethoddatalist = analyzer.convertToTestMethodData(projdata);
+            if (testdatalist.size() > 0) {
+                CSVReaderWriter writer = new CSVReaderWriter();
+                ApacheCSVReaderWriter apachecsv = new ApacheCSVReaderWriter();
+                try {
+                    apachecsv.WriteTestDataCSVFile(testdatalist, Config.csvFileTestStat);
+                    writer.writeBeanToFile(testmethoddatalist, Config.csvFileTestStatDetails);
+                } catch (CsvDataTypeMismatchException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (CsvRequiredFieldEmptyException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.print("*********Done************");
 
 
-		}
-        else if (inputid == 2) {
+        } else if (inputid == 2) {
 
-			System.out.println("Assert Density  + LOC  Analysis(RQ2-b)");
+            System.out.println("Assert Density  + LOC  Analysis(RQ2-b)");
 
-			AssertDensityAnalyzer analyzer = new AssertDensityAnalyzer();
-			ProjectLocAssertCount projdata = analyzer.PerformAssertDensity();
-			
-			List<ProjAssertDensity> projassertdensity=new ArrayList<>();
-			if (projdata!=null) {
-				Map<String,LineCountAssertCount> projectTestData=projdata.getProjectTestData();
-				try {
-					for(String proj:projectTestData.keySet())	
-					{
-						LineCountAssertCount locassertcount=projectTestData.get(proj);
-						ProjAssertDensity projassdensity=new ProjAssertDensity();
-						projassdensity.setProjName(proj);
-						projassdensity.setTestlineCount(locassertcount.getLineCount());
-						if(locassertcount.getLineCount()<=0)
-						{
-							System.out.println(proj+"==>"+locassertcount.getLineCount());
-							projassdensity.setAssertDensity(-0.01);
-						}
-						else
-						{
-							float density=(float)((float)locassertcount.getAssertCount()/(float)locassertcount.getLineCount());
-							projassdensity.setAssertDensity(density);
-							System.out.println(proj+"==>"+density);
-						}
-						
-						projassertdensity.add(projassdensity);
-					}
-					
-					ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
-					writer.WriteAssertDensityCSVFile(projassertdensity, Config.csvFileAssertDensityStat);
-					
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+            AssertDensityAnalyzer analyzer = new AssertDensityAnalyzer();
+            ProjectLocAssertCount projdata = analyzer.PerformAssertDensity();
 
-		}
+            List<ProjAssertDensity> projassertdensity = new ArrayList<>();
+            if (projdata != null) {
+                Map<String, LineCountAssertCount> projectTestData = projdata.getProjectTestData();
+                try {
+                    for (String proj : projectTestData.keySet()) {
+                        LineCountAssertCount locassertcount = projectTestData.get(proj);
+                        ProjAssertDensity projassdensity = new ProjAssertDensity();
+                        projassdensity.setProjName(proj);
+                        projassdensity.setTestlineCount(locassertcount.getLineCount());
+                        if (locassertcount.getLineCount() <= 0) {
+                            System.out.println(proj + "==>" + locassertcount.getLineCount());
+                            projassdensity.setAssertDensity(-0.01);
+                        } else {
+                            float density = (float) ((float) locassertcount.getAssertCount() / (float) locassertcount.getLineCount());
+                            projassdensity.setAssertDensity(density);
+                            System.out.println(proj + "==>" + density);
+                        }
 
-        else if (inputid == 12) {
+                        projassertdensity.add(projassdensity);
+                    }
+
+                    ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+                    writer.WriteAssertDensityCSVFile(projassertdensity, Config.csvFileAssertDensityStat);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+        } else if (inputid == 12) {
 
             System.out.println("Generate Functional code LOC (RQ1)");
 
             FuncCodeLOCAnalyzer analyzer = new FuncCodeLOCAnalyzer();
             ProjectLocAssertCount projdata = analyzer.PerformLOC();
 
-            List<ProjAssertDensity> projassertdensity=new ArrayList<>();
-            if (projdata!=null) {
-                Map<String,LineCountAssertCount> projectTestData=projdata.getProjectTestData();
+            List<ProjAssertDensity> projassertdensity = new ArrayList<>();
+            if (projdata != null) {
+                Map<String, LineCountAssertCount> projectTestData = projdata.getProjectTestData();
                 try {
-                    for(String proj:projectTestData.keySet())
-                    {
+                    for (String proj : projectTestData.keySet()) {
 
-                        LineCountAssertCount locassertcount=projectTestData.get(proj);
+                        LineCountAssertCount locassertcount = projectTestData.get(proj);
 
-                        ProjAssertDensity projassdensity=new ProjAssertDensity();
+                        ProjAssertDensity projassdensity = new ProjAssertDensity();
                         projassdensity.setProjName(proj);
                         projassdensity.setTestlineCount(locassertcount.getLineCount());
 
 
-                        if(locassertcount.getLineCount()<=0)
-                        {
-                            System.out.println(proj+"==>"+locassertcount.getLineCount());
+                        if (locassertcount.getLineCount() <= 0) {
+                            System.out.println(proj + "==>" + locassertcount.getLineCount());
                             projassdensity.setAssertDensity(-0.01);
-                        }
-                        else
-                        {
-                            float density=(float)((float)locassertcount.getAssertCount()/(float)locassertcount.getLineCount());
+                        } else {
+                            float density = (float) ((float) locassertcount.getAssertCount() / (float) locassertcount.getLineCount());
                             projassdensity.setAssertDensity(density);
-                            System.out.println(proj+"==>"+density);
+                            System.out.println(proj + "==>" + density);
                         }
 
                         projassertdensity.add(projassdensity);
@@ -215,26 +204,24 @@ public class MainClass {
                 }
             }
 
-        }
-        else if (inputid == 31) {
-			System.out.println("Assert Roulette Analysis(RQ3)");
-			
-			SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
-			List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeAssertionRoulette();
-			ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
-			try {
-				writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("AssertRoulette"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+        } else if (inputid == 31) {
+            System.out.println("Assert Roulette Analysis(RQ3)");
+
+            SmellAnalysisMngr smellmgr = new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist = smellmgr.analyzeAssertionRoulette();
+            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("AssertRoulette"));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
 
-        }
-        else  if (inputid == 32)  {  //
+        } else if (inputid == 32) {  //
             System.out.println("Eager Test Analysis(RQ3)");
 
-            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
-            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeEagerTest();
+            SmellAnalysisMngr smellmgr = new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist = smellmgr.analyzeEagerTest();
             ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("EagerTest"));
@@ -243,13 +230,11 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
-
-        else  if (inputid == 33)  {  //
+        } else if (inputid == 33) {  //
             System.out.println("Lazy Test Analysis(RQ3)");
 
-            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
-            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeLazyTest();
+            SmellAnalysisMngr smellmgr = new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist = smellmgr.analyzeLazyTest();
             ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("LazyTest"));
@@ -258,13 +243,11 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
-
-        else if (inputid == 34) {
+        } else if (inputid == 34) {
             System.out.println("Mystery Guest Analysis(RQ3)");
 
-            SmellAnalysisMngr smellmgr=new SmellAnalysisMngr();
-            List<ProjectSmellEntity> projsemlllist=smellmgr.analyzeMysteryGuest();
+            SmellAnalysisMngr smellmgr = new SmellAnalysisMngr();
+            List<ProjectSmellEntity> projsemlllist = smellmgr.analyzeMysteryGuest();
             ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("MysteryGuest"));
@@ -273,15 +256,13 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
-
-        else if (inputid == 35) {
+        } else if (inputid == 35) {
             System.out.println("Sensitive Equality Analysis(RQ3)");
 
             SmellAnalysisMngr
-                    smellmgr=new SmellAnalysisMngr();
+                    smellmgr = new SmellAnalysisMngr();
             List<ProjectSmellEntity>
-                    projsemlllist=smellmgr.analyzeSensitiveEquality();
+                    projsemlllist = smellmgr.analyzeSensitiveEquality();
             ApacheCSVReaderWriter
                     writer = new ApacheCSVReaderWriter();
             try {
@@ -291,15 +272,13 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        }
-
-        else if (inputid == 36) {
+        } else if (inputid == 36) {
             System.out.println("General Fixture Analysis(RQ3)");
 
             SmellAnalysisMngr
-                    smellmgr=new SmellAnalysisMngr();
+                    smellmgr = new SmellAnalysisMngr();
             List<ProjectSmellEntity>
-                    projsemlllist=smellmgr.analyzeGeneralFixture();
+                    projsemlllist = smellmgr.analyzeGeneralFixture();
             ApacheCSVReaderWriter
                     writer = new ApacheCSVReaderWriter();
             try {
@@ -309,9 +288,23 @@ public class MainClass {
                 e.printStackTrace();
             }
 
+        } else if (inputid == 37) {
+            System.out.println("Magic Number Test Analysis");
+
+            SmellAnalysisMngr
+                    smellmgr = new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist = smellmgr.analyzeMagicNumberTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("MagicNumberTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
         }
-
-
-
-	}
+    }
 }
