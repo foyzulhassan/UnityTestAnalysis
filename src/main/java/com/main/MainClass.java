@@ -69,6 +69,7 @@ public class MainClass {
                         + "\n35->Sensitive Equality Analysis(RQ3)"
                         + "\n35->General Fixture Analysis(RQ3)"
                         + "\n37->Magic Number Test Analysis"
+                        + "\n38->Default Test Analysis"
 
 
         );
@@ -304,6 +305,23 @@ public class MainClass {
                 e.printStackTrace();
             }
 
+
+        }
+        else if (inputid == 38) {
+            System.out.println("Default Test Analysis");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeDefaultTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("DefaultTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
         }
     }
