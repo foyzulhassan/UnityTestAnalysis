@@ -70,6 +70,7 @@ public class MainClass {
                         + "\n35->General Fixture Analysis(RQ3)"
                         + "\n37->Magic Number Test Analysis"
                         + "\n38->Default Test Analysis"
+                        + "\n39->Redundant Print Analysis"
 
 
         );
@@ -318,6 +319,24 @@ public class MainClass {
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("DefaultTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else if (inputid == 39) {
+            System.out.println("Redundant Print");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeRedundantPrint();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("RedundantPrint"));
             } catch (IOException e) {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
