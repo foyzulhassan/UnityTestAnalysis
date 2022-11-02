@@ -71,6 +71,7 @@ public class MainClass {
                         + "\n37->Magic Number Test Analysis"
                         + "\n38->Default Test Analysis"
                         + "\n39->Redundant Print Analysis"
+                        + "\n40->Constructor initialization"
 
 
         );
@@ -337,6 +338,24 @@ public class MainClass {
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("RedundantPrint"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else if (inputid == 40) {
+            System.out.println("Constructor Initialization");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeConstructorInitialization();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ConstructorInitialization"));
             } catch (IOException e) {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();

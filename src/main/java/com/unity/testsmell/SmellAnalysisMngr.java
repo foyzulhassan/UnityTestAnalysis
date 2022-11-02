@@ -484,6 +484,52 @@ public class SmellAnalysisMngr {
     }
 
 
+    public List<ProjectSmellEntity> analyzeConstructorInitialization() {
+        String filepath = Config.gitProjList;
+
+        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+        // List<PerfFixData> fixdata = new ArrayList<>();
+        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+
+        int counter = 0;
+        for (String proj : projlist) {
+            String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            TestAnalysisData analysisdata = new TestAnalysisData(projname);
+
+            CommitAnalyzer cmtanalyzer = null;
+            System.out.println(counter + "-->" + projname);
+
+            counter++;
+//            if (counter > 5)
+//                return smellpercentage;
+
+            try {
+                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                String commitid = cmtanalyzer.getHeadCommitID();
+                Map<String,Boolean> testconstructorTestmap = cmtanalyzer.getConstructorInitialization(commitid);
+                ConstructorInitialization constructorInitialization = new ConstructorInitialization();
+                double percentage = constructorInitialization.getConstructorInitializationStats(testconstructorTestmap);
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("ConstructorInitialization");
+                projsmell.setProjName(projname);
+                projsmell.setSmellPercentage(percentage);
+                smellpercentage.add(projsmell);
+
+
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return smellpercentage;
+
+    }
+
+
 
 
     public static void main(String[] args) {
@@ -501,6 +547,7 @@ public class SmellAnalysisMngr {
             List<Map<String, List<AssertCall>>> assertionRouletteSmells= new ArrayList<>();
             List<Map<String, Boolean>> defaultTestSmells= new ArrayList<>();
             List< Map<String,Boolean> > redundantPrint= new ArrayList<>();
+            List< Map<String,Boolean> > constructorInitialization= new ArrayList<>();
 
             int counter = 0;
             for (String proj : projlist) {

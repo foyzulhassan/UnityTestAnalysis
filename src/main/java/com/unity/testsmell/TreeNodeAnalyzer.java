@@ -10,11 +10,19 @@ import com.github.gumtreediff.tree.ITree;
 
 public class TreeNodeAnalyzer {
 
-    public static List<ITree> getFunctionList(ITree node) {
+    public static List<ITree> getFunctionList(ITree node) { // It will return all the functions regardless of annotations.
 
         ITree copynode = node.deepCopy();
 
         List<ITree> funclist = breadthFirstSearchForNodeList(copynode, "function", "func");
+        return funclist;
+    }
+
+    public static List<ITree> getConstructorList(ITree node) { // It will return all the functions regardless of annotations.
+
+        ITree copynode = node.deepCopy();
+
+        List<ITree> funclist = breadthFirstSearchForNodeList(copynode, "constructor", "const");
 
         return funclist;
     }
@@ -72,6 +80,7 @@ public class TreeNodeAnalyzer {
         ITree copynode = node.deepCopy();
         List<ITree> testfunclist = new ArrayList<>();
         List<ITree> funclist = breadthFirstSearchForNodeList(copynode, "function", "func");
+       // List<ITree> constructorlist = breadthFirstSearchForNodeList(copynode, "constructor", "func");
 
         for (ITree func : funclist) {
             String funcname = SrcmlUnityCsMetaDataGenerator.getFunctionName(func);
@@ -82,6 +91,7 @@ public class TreeNodeAnalyzer {
                 List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
                 List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
                 List<ITree> mtestanotations = breadthFirstSearchForLabel(attributes.get(0), "MTest", "an4");
+                List<ITree> testFixture = breadthFirstSearchForLabel(attributes.get(0), "Fixture", "an5");
                 //System.out.println("test");
 
                 if (unitytestanotations != null && unitytestanotations.size() > 0) {
@@ -92,7 +102,45 @@ public class TreeNodeAnalyzer {
                 else if (mtestanotations != null && mtestanotations.size() > 0) {
                     testfunclist.add(func);
                 }
+                else if (testFixture != null && testFixture.size() > 0) {
+                    testfunclist.add(func);
+                }
             }
+        }
+
+        return testfunclist;
+    }
+
+    public static List<ITree> getAllFunctionList(ITree node) {
+
+        ITree copynode = node.deepCopy();
+        List<ITree> testfunclist = new ArrayList<>();
+        List<ITree> funclist = breadthFirstSearchForNodeList(copynode, "function", "func");
+
+        for (ITree func : funclist) {
+            String funcname = SrcmlUnityCsMetaDataGenerator.getFunctionName(func);
+
+            List<ITree> attributes = breadthFirstSearchForNodeList(func, "attribute", "an1");
+
+
+            List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
+            List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
+            List<ITree> mtestanotations = breadthFirstSearchForLabel(attributes.get(0), "MTest", "an4");
+            List<ITree> noanotations = breadthFirstSearchForLabel(attributes.get(0), "", "an4");
+                //System.out.println("test");
+
+                if (unitytestanotations != null && unitytestanotations.size() > 0) {
+                    testfunclist.add(func);
+                } else if (testanotations != null && testanotations.size() > 0) {
+                    testfunclist.add(func);
+                }
+                else if (mtestanotations != null && mtestanotations.size() > 0) {
+                    testfunclist.add(func);
+                }
+                 if (noanotations  != null && noanotations.size() > 0) {
+                    testfunclist.add(func);
+                }
+
         }
 
         return testfunclist;
@@ -174,6 +222,8 @@ public class TreeNodeAnalyzer {
 
             }
 
+//            nodelist.add(currentFirst);
+
             if (currentFirst.getMetadata(nodevisitedflag) != null)
                 continue;
 
@@ -246,6 +296,54 @@ public class TreeNodeAnalyzer {
                 if (neighbor.getMetadata(nodevisitedmeta) == null) {
                     queue.add(neighbor);
                 }
+            }
+        }
+        return nodelist;
+    }
+
+    public static List<ITree> breadthFirstSearchForLabelOrNolabel(ITree node, String nodevisitedmeta) {
+
+        // Just so we handle receiving an uninitialized Node, otherwise an
+        // exception will be thrown when we try to add it to queue
+        //ITree classnode = null;
+        List<ITree> nodelist = new ArrayList<>();
+        if (node == null)
+            return null;
+
+        // Creating the queue, and adding the first node (step 1)
+        LinkedList<ITree> queue = new LinkedList<>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            ITree currentFirst = queue.removeFirst();
+
+            // In some cases we might have added a particular node more than once before
+            // actually visiting that node, so we make sure to check and skip that node if
+            // we have
+            // encountered it before
+                nodelist.add(currentFirst);
+
+
+            if (currentFirst.getMetadata(nodevisitedmeta) != null)
+                continue;
+
+            // Mark the node as visited
+            currentFirst.setMetadata(nodevisitedmeta, 1);
+            // System.out.print(currentFirst.name + " ");
+
+            List<ITree> allNeighbors = currentFirst.getChildren();
+
+            // We have to check whether the list of neighbors is null before proceeding,
+            // otherwise
+            // the for-each loop will throw an exception
+            if (allNeighbors == null)
+                continue;
+
+            for (ITree neighbor : allNeighbors) {
+                // We only add unvisited neighbors
+               // if (neighbor.getMetadata(nodevisitedmeta) == null) {
+                    queue.add(neighbor);
+               // }
             }
         }
         return nodelist;
