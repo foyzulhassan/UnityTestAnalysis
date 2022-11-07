@@ -72,6 +72,7 @@ public class MainClass {
                         + "\n38->Default Test Analysis"
                         + "\n39->Redundant Print Analysis"
                         + "\n40->Constructor initialization"
+                        + "\n41->Sleepy Test"
 
 
         );
@@ -356,6 +357,24 @@ public class MainClass {
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ConstructorInitialization"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else if (inputid == 41) {
+            System.out.println("Sleepy Test");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeSleepyTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("SleepyTest"));
             } catch (IOException e) {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
