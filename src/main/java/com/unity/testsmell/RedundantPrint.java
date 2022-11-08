@@ -34,7 +34,7 @@ public class RedundantPrint {
 
         for(ITree testfunc:testfunclist)
         {
-            List<ITree> printlist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "Console");
+            List<ITree> printlist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "console");
             ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
             String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
 

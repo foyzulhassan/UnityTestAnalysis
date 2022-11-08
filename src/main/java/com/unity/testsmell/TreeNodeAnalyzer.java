@@ -18,13 +18,31 @@ public class TreeNodeAnalyzer {
         return funclist;
     }
 
-    public static List<ITree> getConstructorList(ITree node) { // It will return all the functions regardless of annotations.
+    public static List<ITree> getConstructorList(ITree node) {
 
         ITree copynode = node.deepCopy();
 
         List<ITree> funclist = breadthFirstSearchForNodeList(copynode, "constructor", "const");
 
         return funclist;
+    }
+
+    public static List<ITree> getStatementList(ITree node) {
+
+        ITree copynode = node.deepCopy();
+
+        List<ITree> funclist = breadthFirstSearchForNodeList(copynode, "decl_stmt", "stmt");
+
+        return funclist;
+    }
+
+    public static List<ITree> getExprStatementList(ITree node) {
+
+        ITree copynode = node.deepCopy();
+
+        List<ITree> exprlist = breadthFirstSearchForNodeList(copynode, "expr_stmt", "expr");
+
+        return exprlist;
     }
 
     public static List<ITree> getSetupFunctionsList(ITree node) {

@@ -73,6 +73,7 @@ public class MainClass {
                         + "\n39->Redundant Print Analysis"
                         + "\n40->Constructor initialization"
                         + "\n41->Sleepy Test"
+                        + "\n42->Empty Test"
 
 
         );
@@ -375,6 +376,24 @@ public class MainClass {
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("SleepyTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else if (inputid == 42) {
+            System.out.println("Empty Test");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeEmptyTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("EmptyTest"));
             } catch (IOException e) {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
