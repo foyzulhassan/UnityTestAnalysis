@@ -454,6 +454,20 @@ public class SrcmlUnityCsMetaDataGenerator {
 		return classnamenode;
 	}
 
+	public static ITree getIgnoredAnotation(ITree classnode) {
+		ITree classnamenode = null;
+
+		for (ITree node : classnode.getChildren()) {
+			if (node.getLabel().equals("Ignore")) {
+				classnamenode = node;
+				break;
+			}
+
+		}
+		return classnamenode;
+	}
+
+
 	public static List<ITree> breadthFirstSearchForNodeList1(ITree node, String type, String nodevisitedmeta) {
 
 		// Just so we handle receiving an uninitialized Node, otherwise an
