@@ -75,6 +75,7 @@ public class MainClass {
                         + "\n41->Sleepy Test"
                         + "\n42->Empty Test"
                         + "\n43->Ignored Test"
+                        + "\n44->ExceptionCatchingThrowing Test"
 
 
         );
@@ -413,6 +414,24 @@ public class MainClass {
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("IgnoredTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else if (inputid == 44) {
+            System.out.println("ExceptionCatchingThrowing Test");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeExceptionCatchingThrowingTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ExceptionThrowingTest"));
             } catch (IOException e) {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();

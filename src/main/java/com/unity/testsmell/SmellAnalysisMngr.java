@@ -664,6 +664,51 @@ public class SmellAnalysisMngr {
 
     }
 
+    public List<ProjectSmellEntity> analyzeExceptionCatchingThrowingTest() {
+        String filepath = Config.gitProjList;
+
+        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+        // List<PerfFixData> fixdata = new ArrayList<>();
+        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+
+        int counter = 0;
+        for (String proj : projlist) {
+            String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            TestAnalysisData analysisdata = new TestAnalysisData(projname);
+
+            CommitAnalyzer cmtanalyzer = null;
+            System.out.println(counter + "-->" + projname);
+
+            counter++;
+//            if (counter > 5)
+//                return smellpercentage;
+
+            try {
+                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                String commitid = cmtanalyzer.getHeadCommitID();
+                Map<String,Boolean> testexceptionTestmap = cmtanalyzer.getExceptionTest(commitid);
+                ExceptionCatchingThrowing exceptionCatchingThrowing = new ExceptionCatchingThrowing();
+                double percentage = exceptionCatchingThrowing .getExceptionTestStats(testexceptionTestmap );
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("ExceptionThrowingTest");
+                projsmell.setProjName(projname);
+                projsmell.setSmellPercentage(percentage);
+                smellpercentage.add(projsmell);
+
+
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return smellpercentage;
+
+    }
+
 
 
 
