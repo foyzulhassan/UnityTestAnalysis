@@ -76,6 +76,7 @@ public class MainClass {
                         + "\n42->Empty Test"
                         + "\n43->Ignored Test"
                         + "\n44->ExceptionCatchingThrowing Test"
+                        + "\n45->Unknown Test"
 
 
         );
@@ -432,6 +433,24 @@ public class MainClass {
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("ExceptionThrowingTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else if (inputid == 45) {
+            System.out.println("Unknown Test");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeUnknownTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("UnknownTest"));
             } catch (IOException e) {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
