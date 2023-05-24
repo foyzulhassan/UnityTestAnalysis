@@ -33,9 +33,12 @@ import com.jcabi.github.Github;
 import com.jcabi.github.RtGithub;
 import com.jcabi.http.response.JsonResponse;
 import com.gitoperations.CloneRemoteRepository;
+import com.opencsv.CSVWriter;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,9 +64,14 @@ public final class Main {
     	List<JsonObject> totalitems=new ArrayList<JsonObject>();
     	
         final Github github = new RtGithub("nafeesiqbal346@gmail.com","Nafees001..@");
-        final int numberofpage=1;
+		int numberofpage=10; // if int doesn't work then change it to final int and vice-versa.
         final String baselocalpath="D:\\Researh_Works\\data\\";
         CloneRemoteRepository gitremoterepo=new CloneRemoteRepository();
+		File file = new File("D:\\Output.csv");
+		FileWriter outputfile = new FileWriter(file);
+		CSVWriter writer = new CSVWriter(outputfile);
+		String[] header = { "CLoneUrl", "Repo", "Topic" };
+		writer.writeNext(header);
         
         for(int i=1;i<=numberofpage;i++)
         {
@@ -74,7 +82,7 @@ public final class Main {
         	searchQuery.put("sort","stars");
         	searchQuery.put("order","desc");
         	//It can show maximum 100 objects per page. So value is set to 100
-        	searchQuery.put("per_page", "10");    
+        	searchQuery.put("per_page", "100");
         	searchQuery.put("page", Integer.toString(i));  
               
         	final JsonResponse resp = github.entry()
@@ -119,17 +127,28 @@ public final class Main {
         	 String reponame= obj.getString("name");   
         	 JsonArray topic=obj.getJsonArray("topics");
         	 String array=topic.toString();
+
         	 
-        	 if(!array.contains("interview"))
+        	 if(!array.contains("interview") || !array.contains("class") || !array.contains("assignment"))
         	 {
         		 System.out.println(cloneurl);    
         		 System.out.println(reponame); 
-        		 System.out.println(topic); 
+        		 System.out.println(topic);
+				 //CSVWriter writer = new CSVWriter(new FileWriter("D:\\Output.csv"));
+
+
+				 String[] data = {cloneurl,reponame, array};
+				 writer.writeNext(data);
+				 writer.flush();
+
+
+
         	 }
         	 
         	// String localpath=baselocalpath+reponame;
         	 
         	//gitremoterepo.DownloadRemoteRepository(localpath, cloneurl);
+
         }  
        
       

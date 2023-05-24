@@ -71,7 +71,7 @@ public class MagicNumberTest {
                 //double v = Double.parseDouble(num.toTreeString());
                 //System.out.println(v);
                 // double d = Double.parseDouble(assertCall.getParamList().);
-                if (assertCall.getParamList() != null) {
+                if (assertCall.getParamList().size() > 0) {
                     for (int i = 0; i < assertCall.getParamList().size(); i++) {
                         // System.out.println(assertCall.getParamList().get(0));
                         //String str = assertCall.getParamList().get(i);
@@ -106,11 +106,8 @@ public class MagicNumberTest {
                                             // System.out.println("Couldn't Parse");
                                         }
                                     }
-                                    break;
                                 }
-                                break;
                             }
-                            break;
                         }
 
                         //             assertCall.getParamListTrees().forEach(t ->{
@@ -149,6 +146,7 @@ public class MagicNumberTest {
 //                        if ( d>= 0.0){
 //                            isfound =true;
 //                        }
+                        break;
                     }
                 }
             }
