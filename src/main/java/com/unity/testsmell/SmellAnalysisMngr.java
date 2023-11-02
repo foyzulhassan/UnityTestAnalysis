@@ -802,6 +802,92 @@ public class SmellAnalysisMngr {
 
     }
 
+    public List<ProjectSmellEntity> analyzeRedundantAssertTest() {
+        String filepath = Config.gitProjList;
+
+        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+        // List<PerfFixData> fixdata = new ArrayList<>();
+        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+
+        int counter = 0;
+        for (String proj : projlist) {
+            String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            TestAnalysisData analysisdata = new TestAnalysisData(projname);
+
+            CommitAnalyzer cmtanalyzer = null;
+            System.out.println(counter + "-->" + projname);
+
+            counter++;
+
+            try {
+                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                String commitid = cmtanalyzer.getHeadCommitID();
+                Map<String,Boolean> testredundantassert = cmtanalyzer.getRedundantAssert(commitid);
+                RedundantAssertion redundantassertion = new RedundantAssertion();
+                double percentage = redundantassertion.getRedundantAssertionStats(testredundantassert);
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("RedundantAssertion");
+                projsmell.setProjName(projname);
+                projsmell.setSmellPercentage(percentage);
+                smellpercentage.add(projsmell);
+
+
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return smellpercentage;
+
+    }
+
+    public List<ProjectSmellEntity> analyzeDuplicateAssertTest() {
+        String filepath = Config.gitProjList;
+
+        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+        // List<PerfFixData> fixdata = new ArrayList<>();
+        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+
+        int counter = 0;
+        for (String proj : projlist) {
+            String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            TestAnalysisData analysisdata = new TestAnalysisData(projname);
+
+            CommitAnalyzer cmtanalyzer = null;
+            System.out.println(counter + "-->" + projname);
+            ;
+            counter++;
+
+
+            try {
+                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                String commitid = cmtanalyzer.getHeadCommitID();
+                Map<String,Boolean> testduplicateassert = cmtanalyzer.getDuplicateAssert(commitid);
+                DuplicateAssert duplicateassert = new DuplicateAssert();
+                double percentage = duplicateassert.getDuplicateAssertTestStats(testduplicateassert);
+
+                ProjectSmellEntity projsmell = new ProjectSmellEntity("DuplicateAssert");
+                projsmell.setProjName(projname);
+                projsmell.setSmellPercentage(percentage);
+
+                smellpercentage.add(projsmell);
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return smellpercentage;
+
+    }
+
 
 
 

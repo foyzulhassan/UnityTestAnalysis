@@ -13,10 +13,13 @@ import com.csharp.changesize.ChangeSizeAnalyzer;
 import com.csharp.diff.CSharpDiffGenMngr;
 import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.tree.ITree;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import java.io.FileWriter;
+import org.apache.commons.csv.CSVFormat;
 import com.unity.callgraph.CallGraphBasedDistinctFuncAnalyzer;
 import com.unity.callgraph.CallGraphBasedFuncAnalyzer;
 import com.unity.callgraph.CallGraphBasedFuncFixCommit;
@@ -55,6 +58,7 @@ public class MainClass {
 //				+ "\n3->Read CSV File and Generate Patch"
                         "\n11->Generate Test and Functional code Method and Class Count (RQ1)"
                         + "\n12->Generate Functional code LOC (RQ1)"
+                        + "\n3->Generate Random Test"
                         + "\n2->Test Assert Density(RQ2 + LOC(RQ1) analysis)"
                         + "\n31->Assert Roulette Analysis(RQ3)"
                         + "\n32->Eager Test Analysis(RQ3)"
@@ -71,6 +75,7 @@ public class MainClass {
                         + "\n43->Ignored Test"
                         + "\n44->ExceptionCatchingThrowing Test"
                         + "\n45->Unknown Test"
+                        + "\n46->Redundant Assert Test"
 
 
         );
@@ -128,7 +133,64 @@ public class MainClass {
             System.out.print("*********Done************");
 
 
-        } else if (inputid == 2) {
+        }
+        else if(inputid ==3) {
+            System.out.println("\n\n\nGenerate Random Test Methods\n\n\n");
+            File file = new File("D:\\Output_Test_File.csv");
+            FileWriter outputfile = new FileWriter(file);
+            CSVWriter writer = new CSVWriter(outputfile);
+            String[] header = {"Project_Name", "Test_Method"};
+            writer.writeNext(header);
+            int rows = 370, columns = 2, counter = 0;
+
+            CSVReader reader = null;
+            reader = new CSVReader(new FileReader("D:\\Research\\Vr-Test\\Book1.csv"));
+            String[] line;
+
+            List<String[]> list_test = new ArrayList<>();
+
+            while ((line = reader.readNext()) != null) {
+                System.out.println(line[0] + line[1]);
+                String proj = line[1].toString();
+                String test_name = line[2].toString();
+                String[] data = {proj, test_name};
+
+                list_test.add(data);
+
+//                writer.writeNext(data);
+
+//                counter++;
+            }
+
+
+            for (int i = 0; i < 370; i++){
+                Random random = new Random();
+                int idx = random.nextInt(list_test.size() - 0);
+
+                String[] data = list_test.get(idx);
+                writer.writeNext(data);
+                writer.flush();
+
+
+            }
+
+
+//                while(counter<370){
+//                            random.nextInt() > 2{
+//                        }
+//                        r.forEach(x ->  writer.writeNext(x));
+//
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+
+        }
+
+
+
+
+
+        else if (inputid == 2) {
 
             System.out.println("Assert Density  + LOC  Analysis(RQ2-b)");
 
@@ -334,7 +396,8 @@ public class MainClass {
                 e.printStackTrace();
             }
 
-        } else if (inputid == 37) {
+        }
+        else if (inputid == 37) {
             System.out.println("Magic Number Test Analysis");
 
             SmellAnalysisMngr
@@ -489,6 +552,43 @@ public class MainClass {
                     writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("UnknownTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        else if (inputid == 46) {
+            System.out.println("Redundant Assert");
+
+            SmellAnalysisMngr
+                    smellmgr = new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist = smellmgr.analyzeRedundantAssertTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("RedundantAssertionTest"));
+            } catch (IOException e) {
+//                 TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
+        }
+
+        else if (inputid == 47) {
+            System.out.println("DuplicateAssert Test");
+
+            SmellAnalysisMngr
+                    smellmgr=new SmellAnalysisMngr();
+            List<ProjectSmellEntity>
+                    projsemlllist=smellmgr.analyzeDuplicateAssertTest();
+            ApacheCSVReaderWriter
+                    writer = new ApacheCSVReaderWriter();
+            try {
+                writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("DuplicateAssertTest"));
             } catch (IOException e) {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
