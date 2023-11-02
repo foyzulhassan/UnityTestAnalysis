@@ -1,6 +1,7 @@
 package com.unity.testsmell;
 
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -56,6 +57,53 @@ public class SmellAnalysisMngr {
 		return smellpercentage;
 
 	}
+
+//    public List<ProjectSmellEntity> analyzeAssertionRoulette() {
+//        String filepath = Config.gitProjList;
+//
+//        List<String> projlist = TextFileReaderWriter.GetFileContentByLine(filepath);
+//        List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
+//
+//        int counter = 0;
+//
+//        // Open the PrintWriter outside the loop
+//        try (PrintWriter writer = new PrintWriter("AssertRoulette.csv", "UTF-8")) {
+//
+//            for (String proj : projlist) {
+//                String projname = ProjectPropertyAnalyzer.getProjName(proj);
+//                TestAnalysisData analysisdata = new TestAnalysisData(projname);
+//                CommitAnalyzer cmtanalyzer = null;
+//
+//                System.out.println(counter + "-->" + projname);
+//                counter++;
+//
+//                try {
+//                    cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+//
+//                    String commitid = cmtanalyzer.getHeadCommitID();
+//                    Map<String, List<AssertCall>> projtestfuncassertmap = cmtanalyzer.getAssertRoulette(commitid);
+//                    AssertionRoulette assertroulette = new AssertionRoulette();
+//
+//                    // Pass writer to the getAssertRoulteStats method
+//                    double percentage = assertroulette.getAssertRoulteStats(projtestfuncassertmap, writer, projname);
+//
+//                    ProjectSmellEntity projsmell = new ProjectSmellEntity("AssertionRoulette");
+//                    projsmell.setProjName(projname);
+//                    projsmell.setSmellPercentage(percentage);
+//
+//                    smellpercentage.add(projsmell);
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return smellpercentage;
+//    }
+
 
     public List<ProjectSmellEntity> analyzeSensitiveEquality() {
         String filepath = Config.gitProjList;

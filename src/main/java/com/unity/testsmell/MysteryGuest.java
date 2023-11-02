@@ -5,6 +5,7 @@ import com.config.Config;
 import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.github.gumtreediff.tree.ITree;
 
+import java.io.PrintWriter;
 import java.util.*;
 
 public class MysteryGuest {
@@ -305,5 +306,6 @@ public class MysteryGuest {
         }
 
         return (double) mysteryGuest / total;
+
     }
 }

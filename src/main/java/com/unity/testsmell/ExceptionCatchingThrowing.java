@@ -80,6 +80,7 @@ public class ExceptionCatchingThrowing {
                 exception++;
         }
 
-        return  (double) exception/total;
+       return  (double) exception/total;
+
     }
 }

@@ -6,6 +6,8 @@ import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.github.gumtreediff.tree.ITree;
 import com.unity.testanalyzer.LineCountAssertCount;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -673,15 +675,15 @@ public class AssertionRoulette {
 		double percentage=0.0;
 		int total=0;
 		int roulecount=0;
-		
+
 		for(String key:testfuncassertmap.keySet())
 		{
 			List<AssertCall> assertcall=testfuncassertmap.get(key);
-			
+
 			if(assertcall!=null && assertcall.size()>1)
 			{
 				int index=1;
-				
+
 				while(index<assertcall.size())
 				{
 					if(assertcall.get(index).isHasMsg()==false)
@@ -691,12 +693,13 @@ public class AssertionRoulette {
 					}
 					index++;
 				}
-				
+
 			}
 		}
-		
+
+
 		total=testfuncassertmap.keySet().size();
-		
+
 		if(total<=0)
 		{
 			return -0.001;
@@ -705,7 +708,8 @@ public class AssertionRoulette {
 		{
 			percentage= (((double)roulecount/(double)total)*100.00);
 		}
-		
+
 		return percentage;
-	}	
+	}
+
 }

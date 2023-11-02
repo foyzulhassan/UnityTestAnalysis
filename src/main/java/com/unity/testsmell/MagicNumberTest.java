@@ -5,6 +5,7 @@ import com.config.Config;
 import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.github.gumtreediff.tree.ITree;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,11 +107,11 @@ public class MagicNumberTest {
                                             // System.out.println("Couldn't Parse");
                                         }
                                     }
-                                    break;
+                                   // break;
                                 }
-                                break;
+                               // break;
                             }
-                            break;
+                            //break;
                         }
 
                         //             assertCall.getParamListTrees().forEach(t ->{
@@ -149,6 +150,7 @@ public class MagicNumberTest {
 //                        if ( d>= 0.0){
 //                            isfound =true;
 //                        }
+                        break;
                     }
                 }
             }
@@ -176,6 +178,7 @@ public class MagicNumberTest {
         }
 
         return  (double) magicnumber/total;
+
     }
 
 }

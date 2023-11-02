@@ -1,15 +1,7 @@
 package com.main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 import com.build.statement.StatementPatchXmlReader;
 import com.build.statement.StatementSimilarityMngr;
@@ -21,6 +13,8 @@ import com.csharp.changesize.ChangeSizeAnalyzer;
 import com.csharp.diff.CSharpDiffGenMngr;
 import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.tree.ITree;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.unity.callgraph.CallGraphBasedDistinctFuncAnalyzer;
@@ -52,7 +46,7 @@ import edu.util.fileprocess.CSVReaderWriter;
 
 public class MainClass {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         System.out.println("Enter your action:");
 
@@ -171,7 +165,51 @@ public class MainClass {
                 }
             }
 
-        } else if (inputid == 12) {
+        } else if(inputid ==3) {
+            System.out.println("\n\n\nGenerate Random Test Methods\n\n\n");
+            File file = new File("AssertRouletteSample.csv");
+            FileWriter outputfile = new FileWriter(file);
+            CSVWriter writer = new CSVWriter(outputfile);
+            String[] header = {"Project_Name", "Test_Method"};
+            writer.writeNext(header);
+            int rows = 200, columns = 2, counter = 0;
+
+            CSVReader reader = null;
+            reader = new CSVReader(new FileReader("/media/backup/AssertRoullet/AssertRoulette.csv"));
+            String[] line;
+
+            List<String[]> list_test = new ArrayList<>();
+
+            while ((line = reader.readNext()) != null) {
+                System.out.println(line[0] + line[1]);
+                String proj = line[0].toString();
+                String test_name = line[1].toString();
+                String[] data = {proj, test_name};
+
+                list_test.add(data);
+
+//                writer.writeNext(data);
+
+//                counter++;
+            }
+
+
+            for (int i = 0; i < 200; i++){
+                Random random = new Random();
+                int idx = random.nextInt(list_test.size() - 0);
+
+                String[] data = list_test.get(idx);
+                writer.writeNext(data);
+                writer.flush();
+
+
+            }
+
+
+        }
+
+
+        else if (inputid == 12) {
 
             System.out.println("Generate Functional code LOC (RQ1)");
 

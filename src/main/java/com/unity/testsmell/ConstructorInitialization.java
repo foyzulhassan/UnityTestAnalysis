@@ -130,8 +130,8 @@ public class ConstructorInitialization {
             if(b)
                 constructorInitialization++;
         }
-        //System.out.println(x);
 
-        return  (double) constructorInitialization/total;
+       return  (double) constructorInitialization/total;
+
     }
 }

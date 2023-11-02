@@ -4,9 +4,7 @@
       <root url="file://$PROJECT_DIR$/libs" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.ideaLibSources/commons-lang3-3.1-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
     <jarDirectory url="file://$PROJECT_DIR$/libs" recursive="false" />
   </library>
 </component>

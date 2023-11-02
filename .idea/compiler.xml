@@ -6,12 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="unitytestAnalyzer" />
         <module name="TestSmellDetector" />
+        <module name="unityperfanalyzer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="TestSmellDetector" target="1.8" />
       <module name="unitytestAnalyzer" target="11" />
     </bytecodeTargetLevel>
   </component>

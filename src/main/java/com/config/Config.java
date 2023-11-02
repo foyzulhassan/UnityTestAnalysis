@@ -8,11 +8,11 @@ public class Config {
 	// public static String rootDir="/media/AutoBuilder/UnityPerformance/";
 	 public static String
 
-			//rootDir="/home/umd-002676/Desktop/Vr-Test/";
-			rootDir="D:\\Research\\Vr-Test\\";
+			rootDir="/media/backup/Vr-Test/";
+			//rootDir="D:\\Research\\Vr-Test\\";
 	 //
 	 //text file that contains list of projects to analyze
-	 public static String gitProjList=rootDir+"Project_Source.txt";
+	 public static String gitProjList=rootDir+"All_DataSet.txt";
 	 //reporDir used for storing Unity Projects
 	 public static String repoDir = rootDir+"GitRepo/";
 	
