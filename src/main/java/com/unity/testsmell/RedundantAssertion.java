@@ -33,7 +33,6 @@ public class RedundantAssertion {
 
         String lowerclassname = classname.getLabel();
 
-
         for(ITree testfunc:testfunclist)
         {
             List<ITree> redundantlist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "assert");
@@ -43,23 +42,16 @@ public class RedundantAssertion {
 
             if(redundantlist!=null && redundantlist.size()>0)
             {
-
                 redundantassertion = IsRedundantAssertionFound(redundantlist);
-
             }
-
             //sensitiveEquality.put(classtestfunc,toStringFound);
             redundantAssertion.put(classtestfunc, redundantassertion);
 
             redundantassertion = false;
 
-
-
         }
 
-
         return redundantAssertion;
-
 
     }
 

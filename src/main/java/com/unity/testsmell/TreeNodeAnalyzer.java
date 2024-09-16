@@ -163,7 +163,6 @@ public class TreeNodeAnalyzer {
 
     public static AssertCall getAssertCall(ITree assertnode) {
         AssertCall assertcall = null;
-
         ITree parent = assertnode;
         ITree callnode = null;
         boolean found = false;
@@ -310,7 +309,6 @@ public class TreeNodeAnalyzer {
         return nodelist;
     }
 
-
     private static List<ITree> breadthFirstSearchForTypeLabel(ITree node, String type, String label, String nodevisitedmeta) {
 
         // Just so we handle receiving an uninitialized Node, otherwise an
@@ -338,7 +336,6 @@ public class TreeNodeAnalyzer {
 
             if (currentFirst.getLabel().toLowerCase().equals(label) && currentFirst.getType().toString().toLowerCase().equals(type)) {
                 nodelist.add(currentFirst);
-
                 //classnode = currentFirst;
             }
 

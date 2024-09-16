@@ -11,7 +11,7 @@ import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.csharp.astgenerator.SrcmlUnityCsTreeGenerator;
 import com.csharp.changesize.ChangeSizeAnalyzer;
 import com.csharp.diff.CSharpDiffGenMngr;
-import com.github.gumtreediff.actions.EditScript;
+//mport com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.tree.ITree;
 
 import com.opencsv.CSVReader;
@@ -19,6 +19,8 @@ import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.FileWriter;
+
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.csv.CSVFormat;
 import com.unity.callgraph.CallGraphBasedDistinctFuncAnalyzer;
 import com.unity.callgraph.CallGraphBasedFuncAnalyzer;
@@ -47,9 +49,12 @@ import com.unity.testsmell.TreeNodeAnalyzer;
 import edu.util.fileprocess.ApacheCSVReaderWriter;
 import edu.util.fileprocess.CSVReaderWriter;
 
+import static com.config.Config.rootDir;
+import static com.unity.testsmell.SmellAnalysisMngr.*;
+
 public class MainClass {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, CsvValidationException {
 
         System.out.println("Enter your action:");
 
@@ -65,7 +70,7 @@ public class MainClass {
                         + "\n33->Lazy Test Analysis(RQ3)"
                         + "\n34->Mystery Guest  Analysis(RQ3)"
                         + "\n35->Sensitive Equality Analysis(RQ3)"
-                        + "\n35->General Fixture Analysis(RQ3)"
+                        + "\n36->General Fixture Analysis(RQ3)"
                         + "\n37->Magic Number Test Analysis"
                         + "\n38->Default Test Analysis"
                         + "\n39->Redundant Print Analysis"
@@ -76,6 +81,9 @@ public class MainClass {
                         + "\n44->ExceptionCatchingThrowing Test"
                         + "\n45->Unknown Test"
                         + "\n46->Redundant Assert Test"
+                        + "\n47->DuplicateAssert Test"
+                        + "\n48-> No smell test cases"
+                        + "\n49-> Random selection of test cases from a file"
 
 
         );
@@ -136,7 +144,7 @@ public class MainClass {
         }
         else if(inputid ==3) {
             System.out.println("\n\n\nGenerate Random Test Methods\n\n\n");
-            File file = new File("D:\\Output_Test_File.csv");
+            File file = new File("/Users/farazgurramkonda/IdeaProjects/UnityTestAnalysis/Project_Repo/GitRepo/Output_Test_File.csv");
             FileWriter outputfile = new FileWriter(file);
             CSVWriter writer = new CSVWriter(outputfile);
             String[] header = {"Project_Name", "Test_Method"};
@@ -144,7 +152,7 @@ public class MainClass {
             int rows = 370, columns = 2, counter = 0;
 
             CSVReader reader = null;
-            reader = new CSVReader(new FileReader("D:\\Research\\Vr-Test\\Book1.csv"));
+            reader = new CSVReader(new FileReader("/Users/farazgurramkonda/IdeaProjects/UnityTestAnalysis/Project_Repo/Book1.csv"));
             String[] line;
 
             List<String[]> list_test = new ArrayList<>();
@@ -593,6 +601,49 @@ public class MainClass {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
+        }
+
+        else if(inputid == 48) {
+            System.out.println("No smell Test");
+            SmellAnalysisMngr smellmgr = new SmellAnalysisMngr();
+
+            // Collect all test cases along with project name
+            List<ProjectSmellEntity> projTestCaseList = smellmgr.analyzeAllTestCases();
+
+            // Use ApacheCSVReaderWriter to write the test cases to a CSV file
+            ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
+            try {
+                // Write each project with its test cases to the CSV
+                writer.WriteSmellStatCSVFile(projTestCaseList, Config.getSmellStatFile("AllTestCases"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(inputid==49){
+            System.out.println("Random selection of test cases from a file");
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("selected file for sampling and please use .csv extension:");
+            String inputFilePath = scanner.nextLine();
+
+            System.out.println("selected file for output sampling and please use .csv extension:");
+            String outputFilePath = scanner.nextLine();
+
+            // Step 1: Read the CSV file
+            List<String[]> csvData = readCSV(rootDir + inputFilePath);
+
+            // Step 2: Get the number of rows to select from the user
+            System.out.print("Enter the number of rows to select randomly: ");
+            int numRows = scanner.nextInt();
+
+            // Step 3: Randomly select the rows
+            List<String[]> selectedRows = getRandomRows(csvData, numRows);
+
+            // Step 4: Write the selected rows to a new CSV file
+            writeCSV(rootDir+outputFilePath, selectedRows);
+
+            scanner.close();
 
         }
     }

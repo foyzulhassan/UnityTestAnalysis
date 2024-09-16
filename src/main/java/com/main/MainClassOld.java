@@ -19,7 +19,7 @@ import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.csharp.astgenerator.SrcmlUnityCsTreeGenerator;
 import com.csharp.changesize.ChangeSizeAnalyzer;
 import com.csharp.diff.CSharpDiffGenMngr;
-import com.github.gumtreediff.actions.EditScript;
+//import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.tree.ITree;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
@@ -223,7 +223,7 @@ public class MainClassOld {
 			Reader reader;
 			try {
 				reader = new FileReader(f1.toString());
-				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 				
 				//TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
 				//analyzer.getTestFunctionList(curtree);

@@ -23,7 +23,7 @@ public class AssertionRoulette {
 	}
 	
 	
-	public Map<String,List<AssertCall>> searchForAssertionRoulette(ITree root)
+	public Map<String,List<AssertCall>>  searchForAssertionRoulette(ITree root)
 	{
 				
 		List<ITree> testfunclist=TreeNodeAnalyzer.getTestFunctionList(root);

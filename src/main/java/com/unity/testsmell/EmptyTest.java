@@ -32,7 +32,6 @@ public class EmptyTest {
 
         String lowerclassname = classname.getLabel();
 
-
         for(ITree testfunc:testfunclist)
         {
            // List<ITree> sleepylist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "thread");

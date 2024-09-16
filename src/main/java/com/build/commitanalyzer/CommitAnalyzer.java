@@ -1,80 +1,50 @@
 package com.build.commitanalyzer;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 //import org.apache.commons.compress.utils.IOUtils;
-import com.github.gumtreediff.tree.TreeContext;
 import com.unity.testanalysis.FunctionalCodeLOCExtractor;
 import com.unity.testsmell.*;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
-import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
-import org.eclipse.jgit.util.io.DisabledOutputStream;
 
 import com.build.analyzer.entity.CommitChange;
 import com.config.Config;
-import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.csharp.astgenerator.SrcmlUnityCsTreeGenerator;
 import com.csharp.diff.CSharpDiffGenerator;
 import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.EditScriptGenerator;
-import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
 
 //import edu.utsa.data.DataResultsHolder;
 //import edu.utsa.data.DataStatsHolder;
 //import edu.utsa.main.MainClass;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.gen.srcml.SrcmlCsTreeGenerator;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.Matchers;
-import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import com.github.gumtreediff.tree.ITree;
 import com.unity.callgraph.ClassFunction;
 import com.unity.entity.PerfFixData;
 import com.unity.testanalysis.ClassFunctionTypeAnalyzer;
 import com.unity.testanalyzer.LineCountAssertCount;
-
-import org.apache.commons.io.IOUtils;
 
 /**
  * @author Foyzul Hassan
@@ -243,7 +213,6 @@ public class CommitAnalyzer {
                     fixdata.setSrcFileChangeCount(0);
                     perffixdata.add(fixdata);
                 }
-
             }
             // System.out.println("Had " + count + " commits");
             // System.out.println(this.project);
@@ -734,7 +703,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -821,7 +790,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -909,7 +878,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -997,7 +966,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1084,7 +1053,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 //                        TreeContext tx = new SrcmlUnityCsTreeGenerator().generate(reader);
 //                        System.out.println(tx.toString());
 //                        System.exit(0);
@@ -1176,7 +1145,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1351,7 +1320,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1438,7 +1407,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1527,7 +1496,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1615,7 +1584,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1703,7 +1672,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1791,7 +1760,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1879,7 +1848,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -1967,7 +1936,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -2055,7 +2024,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -2143,7 +2112,7 @@ public class CommitAnalyzer {
 //							System.out.print("debug");
 //						}
                         reader = new FileReader(f1.toString());
-                        ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
@@ -2270,6 +2239,143 @@ public class CommitAnalyzer {
     }
 
 
+    public Map<String, Boolean> getAllTestCases(String commitid) {
+
+        Map<String, Boolean> projtestfuncassertmap = new HashMap<>();
+        Map<String, Boolean> mp = new HashMap<>();
+        try {
+            ObjectId objectid = repository.resolve(commitid);
+            RevCommit commit = rw.parseCommit(objectid);
+
+            RevTree tree = commit.getTree();
+
+            // TreeWalk treeWalk = new TreeWalk(repository);
+            // treeWalk.addTree(tree);
+            // treeWalk.setRecursive(false);
+            // treeWalk.setPostOrderTraversal(false);
+
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
+//        Map<String, String> projTestFuncMap = new HashMap<>();
+//
+//        try {
+//            ObjectId objectId = repository.resolve(commitid);
+//            RevCommit commit = rw.parseCommit(objectId);
+//            RevTree tree = commit.getTree();
+//
+//            TreeWalk treeWalk = new TreeWalk(repository);
+//            treeWalk.addTree(commit.getTree());
+//            treeWalk.setRecursive(false);
+//
+//            while (treeWalk.next()) {
+//                if (treeWalk.isSubtree()) {
+//                    treeWalk.enterSubtree();
+//                } else if (treeWalk.getPathString().endsWith(".cs")) {
+//                    ObjectId fileObjectId = treeWalk.getObjectId(0);
+//                    ObjectLoader loader = repository.open(fileObjectId);
+//
+//                    // Extract file name from the path string
+//                    String fileName = treeWalk.getPathString().substring(treeWalk.getPathString().lastIndexOf("/") + 1);
+//
+//                    byte[] fileContent = loader.getBytes();
+//                    String fileContentString = new String(fileContent);
+//
+//                    File tempFile = commitAnalyzingUtils.writeContentInFile("temp.cs", fileContentString);
+//                    Reader reader = new FileReader(tempFile);
+//
+//                    try {
+//                        ITree rootTree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+//
+//                        // Extract test cases with file and function name
+//                        TestCaseExtractor testCaseExtractor = new TestCaseExtractor();
+//                        Map<String, String> testFuncMap = testCaseExtractor.extractTestCasesWithFileName(rootTree, fileName);
+//
+//                        // Merge test cases into the project map
+//                        projTestFuncMap.putAll(testFuncMap);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    } finally {
+//                        tempFile.delete();
+//                        reader.close();
+//                    }
+//                }
+//            }
+//
+//            treeWalk.reset();
+//        } catch (Exception ex) {
+//            System.out.print(ex.getMessage());
+//        }
+//
+//        return projTestFuncMap;
+//    }
+
+            while (treeWalk.next()) {
+                // System.out.println("found:" + treeWalk.getPathString());
+//				System.out.println(treeWalk.getPathString()+"*****");
+                if (treeWalk.isSubtree()) {
+                    // System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                } else if (treeWalk.getPathString().endsWith(".cs")) {
+
+                    ObjectId objectId = treeWalk.getObjectId(0);
+                    ObjectLoader loader = repository.open(objectId);
+
+                    // and then one can the loader to read the file
+                    // loader.copyTo(System.out);
+
+                    byte[] butestr = loader.getBytes();
+                    String str = new String(butestr);
+                    File f1 = commitAnalyzingUtils.writeContentInFile("g1.cs", str);
+
+
+                    Reader reader;
+                    try {
+//						System.out.println(treeWalk.getPathString());
+
+//						if(treeWalk.getPathString().contains("Resources.Designer.cs"))
+//						{
+//							System.out.print("debug");
+//						}
+                        reader = new FileReader(f1.toString());
+                        ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+
+                        //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
+                        //analyzer.getTestFunctionList(curtree);
+                        TestCaseExtractor testCaseExtractor = new TestCaseExtractor();
+                        mp = testCaseExtractor.searchFornosmells(curtree);
+//                        System.out.println(map.size());
+//                        System.out.println(map);
+                        //Copy to project map
+                        for (String key : mp.keySet()) {
+                            if (!projtestfuncassertmap.containsKey(key)) {
+                                projtestfuncassertmap.put(key, mp.get(key));
+                            }
+
+
+                        }
+
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+
+                    f1.delete();
+
+
+                }
+
+            }
+            treeWalk.reset();
+
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+//        System.out.println(projtestfuncassertmap);
+        return projtestfuncassertmap;
+    }
 
 }
 

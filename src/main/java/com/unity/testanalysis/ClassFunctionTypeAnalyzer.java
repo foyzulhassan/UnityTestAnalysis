@@ -26,7 +26,7 @@ public class ClassFunctionTypeAnalyzer {
 
 				clsfunc = new ClassFunction();
 				Reader reader = new FileReader(cursrc.toString());
-				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 				List<ITree> classnodes = SrcmlUnityCsMetaDataGenerator.ListbreadthFirstSearchForNode(curtree, "class", "c1");
 
@@ -119,7 +119,7 @@ public class ClassFunctionTypeAnalyzer {
 			try {
 				
 				Reader reader = new FileReader(cursrc.toString());
-				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 				ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(curtree, "class", "c1");
 

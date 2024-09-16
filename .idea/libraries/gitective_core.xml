@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="gitective.core" type="repository">
+    <properties maven-id="org.gitective:gitective-core:0.9.1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/gitective-core-0.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jsch-0.1.44-1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

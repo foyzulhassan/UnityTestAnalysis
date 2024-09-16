@@ -32,7 +32,7 @@ public class CSharpTreeVisitor {
 	        Deque<Pair<ITree, Iterator<ITree>>> stack = new ArrayDeque<>();
 	        stack.push(new Pair<>(root, root.getChildren().iterator()));
 	        //visitor.startTree(root);
-	        typeList.add(root.getType().name);
+	        typeList.add(String.valueOf(root.getType()));
 	        labelList.add(root.getLabel());
 	        while (!stack.isEmpty()) {
 	            Pair<ITree, Iterator<ITree>> it = stack.peek();
@@ -44,7 +44,7 @@ public class CSharpTreeVisitor {
 	                ITree child = it.second.next();
 	                stack.push(new Pair<>(child, child.getChildren().iterator()));
 	               // visitor.startTree(child);
-	    	        typeList.add(child.getType().name);
+	    	        typeList.add(String.valueOf(child.getType()));
 	    	        labelList.add(child.getLabel());
 	            }
 	        }

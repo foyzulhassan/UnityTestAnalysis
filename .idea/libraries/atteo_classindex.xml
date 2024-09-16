@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="atteo.classindex" type="repository">
+    <properties maven-id="org.atteo.classindex:classindex:3.4" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/classindex-3.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

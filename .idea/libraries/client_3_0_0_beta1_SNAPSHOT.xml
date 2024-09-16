@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="client-3.0.0-beta1-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/client-3.0.0-beta1-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

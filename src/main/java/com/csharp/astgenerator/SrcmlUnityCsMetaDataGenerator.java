@@ -16,7 +16,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 		ITree node = currentnode.getParent();
 
 		while (node != null) {
-			if (node.getType().toString() == "function") {
+			if (String.valueOf(node.getType()) == "function") {
 				block = node;
 				break;
 			}
@@ -31,13 +31,11 @@ public class SrcmlUnityCsMetaDataGenerator {
         List<ITree> classProps = new ArrayList<>();
         ITree tempnode=node.deepCopy();
         tempnode.getChildren().forEach( ch->{
-            if(ch.getType().toString().equals("block")){
+            if(String.valueOf(ch.getType()).equals("block")){
                 ch.getChildren().forEach( gch -> {
-
-                        if( gch.getType().toString().toLowerCase().equals("decl_stmt")){
+                        if( String.valueOf(gch.getType()).toLowerCase().equals("decl_stmt")){
                             classProps.add(gch);
                         }
-
                 });
             }
         });
@@ -46,14 +44,12 @@ public class SrcmlUnityCsMetaDataGenerator {
 
 	public static String getFunctionName(ITree node) {
 		String label = "";
-
 		for (ITree child : node.getChildren()) {
-			if (child.getType().toString() == "name") {
+			if (String.valueOf(child.getType()) == "name") {
 				label = child.getLabel();
 				break;
 			}
 		}
-
 		return label;
 	}
 
@@ -65,7 +61,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 		ITree param = null;
 
 		for (ITree child : children) {
-			if (child.getType().name == "parameter_list") {
+			if (String.valueOf(child.getType()) == "parameter_list") {
 				param = child;
 				break;
 			}
@@ -85,7 +81,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 		ITree node = currentnode;
 
 		while (node != null) {
-			if (node.getType().toString().contains("stmt")) {
+			if (String.valueOf(node.getType()).contains("stmt")) {
 				block = node;
 				break;
 			}
@@ -117,7 +113,7 @@ public class SrcmlUnityCsMetaDataGenerator {
             // we have
             // encountered it before
 
-            if (currentFirst.getType().toString().contains(type)) {
+            if (String.valueOf(currentFirst.getType()).contains(type)) {
                 classnode.add(currentFirst);
 
             }
@@ -167,7 +163,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 			// we have
 			// encountered it before
 
-			if (currentFirst.getType().toString().contains(type)) {
+			if (String.valueOf(currentFirst.getType()).contains(type)) {
 				classnode = currentFirst;
 
 			}
@@ -225,7 +221,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 //					System.out.println(currentFirst.getPos());
 //				}
 
-				if (!currentFirst.getType().toString().equals("comment")) {
+				if (!String.valueOf(currentFirst.getType()).equals("comment")) {
 
 					if (currentFirst.getMetadata("lineno") != null) {
 
@@ -237,7 +233,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 					}
 				}
 
-				if (currentFirst.getType().toString().equals("call")) {
+				if (String.valueOf(currentFirst.getType()).equals("call")) {
 					if (currentFirst.getChildren().size() > 0) {
 						ITree firstchild = currentFirst.getChild(0);
 						String methodname = firstchild.getLabel();
@@ -246,7 +242,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 						}
 					}
 
-				} else if (currentFirst.getType().toString().equals("name")) {
+				} else if (String.valueOf(currentFirst.getType()).equals("name")) {
 
 					String methodname = currentFirst.getLabel();
 					// ITree parent=currentFirst.getParent();
@@ -308,7 +304,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 			// we have
 			// encountered it before
 
-			if (currentFirst.getType().toString().contains(type)) {
+			if (String.valueOf(currentFirst.getType()).contains(type)) {
 				currentFirst.setMetadata("JUNIT", false);
 				List<ITree> attributes = breadthFirstSearchForNodeList1(currentFirst, "attribute", "an1");
 
@@ -371,7 +367,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 			// we have
 			// encountered it before
 
-			if (currentFirst.getType().toString().contains(type)) {
+			if (String.valueOf(currentFirst.getType()).contains(type)) {
 				currentFirst.setMetadata("UNITYTEST", false);
 				List<ITree> attributes = breadthFirstSearchForNodeList1(currentFirst, "attribute", "an1");
 
@@ -419,7 +415,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 		ITree classnamenode = null;
 
 		for (ITree node : classnode.getChildren()) {
-			if (node.getType().toString().contains("name")) {
+			if (String.valueOf(node.getType()).contains("name")) {
 				classnamenode = node;
 				break;
 			}
@@ -432,7 +428,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 		ITree funcnamenode = null;
 
 		for (ITree node : parentnode.getChildren()) {
-			if (node.getType().toString().contains("name")) {
+			if (String.valueOf(node.getType()).contains("name")) {
 				funcnamenode = node;
 				break;
 			}
@@ -489,7 +485,7 @@ public class SrcmlUnityCsMetaDataGenerator {
 			// we have
 			// encountered it before
 
-			if (currentFirst.getType().toString().contains(type)) {
+			if (String.valueOf(currentFirst.getType()).contains(type)) {
 				nodelist.add(currentFirst);
 
 				// classnode = currentFirst;

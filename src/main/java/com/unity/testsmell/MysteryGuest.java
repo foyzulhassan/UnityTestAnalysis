@@ -63,7 +63,6 @@ public class MysteryGuest {
         List<ITree> testfunclist = TreeNodeAnalyzer.getTestFunctionList(root);
         Map<String, Boolean> mysteryGuest = new HashMap<>();
         ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
-
         if (classnode == null)
             return mysteryGuest;
 

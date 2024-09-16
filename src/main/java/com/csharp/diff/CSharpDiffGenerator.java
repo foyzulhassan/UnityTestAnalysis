@@ -26,6 +26,7 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.matchers.heuristic.gt.CompleteBottomUpMatcher;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.unity.callgraph.ClassFunction;
 import com.unity.callgraph.FunctionCall;
 
@@ -38,10 +39,10 @@ public class CSharpDiffGenerator {
 			try {
 
 				Reader reader = new FileReader(cursrc.toString());
-				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 				reader = new FileReader(prevsrc.toString());
-				ITree prevtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree prevtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 				// System.out.println(curtree.toTreeString());
 				// System.out.println("\n\n\n\\n\n*************************\n\n\n\n");
@@ -57,13 +58,13 @@ public class CSharpDiffGenerator {
 
 				//Matcher m = new CompleteBottomUpMatcher();
 				Matcher m = Matchers.getInstance().getMatcher();
-				MappingStore mappings = m.match(prevtree, curtree);
+				MappingStore mappings = m.match((Tree) prevtree, (Tree) curtree);
 
 				EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator();
 				actions = editScriptGenerator.computeActions(mappings);
 
 				for (Action a : actions) {
-					ITree node = a.getNode();
+					ITree node = (ITree) a.getNode();
 					ITree function = SrcmlUnityCsMetaDataGenerator.getBlock(node);
 					if (function != null) {
 						String funcname = SrcmlUnityCsMetaDataGenerator.getFunctionName(function);
@@ -108,10 +109,10 @@ public class CSharpDiffGenerator {
 			try {
 
 				Reader reader = new FileReader(cursrc.toString());
-				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 				reader = new FileReader(prevsrc.toString());
-				ITree prevtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree prevtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 				// System.out.println(curtree.toTreeString());
 				// System.out.println("\n\n\n\\n\n*************************\n\n\n\n");
@@ -127,13 +128,13 @@ public class CSharpDiffGenerator {
 
 				Matcher m = new CompleteBottomUpMatcher();
 				// Matcher m = Matchers.getInstance().getMatcher();
-				MappingStore mappings = m.match(prevtree, curtree);
+				MappingStore mappings = m.match((Tree) prevtree, (Tree) curtree);
 
 				EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator();
 				actions = editScriptGenerator.computeActions(mappings);
 
 				for (Action a : actions) {
-					ITree node = a.getNode();
+					ITree node = (ITree) a.getNode();
 					ITree function = SrcmlUnityCsMetaDataGenerator.getBlock(node);
 					if (function != null) {
 						String funcname = SrcmlUnityCsMetaDataGenerator.getFunctionName(function);
@@ -176,7 +177,7 @@ public class CSharpDiffGenerator {
 
 		for (EditScript actions : actionlist) {
 			for (Action a : actions) {
-				ITree node = a.getNode();
+				ITree node = (ITree) a.getNode();
 				CSharpChange change = new CSharpChange();
 
 				if (a instanceof Delete) {
@@ -190,7 +191,7 @@ public class CSharpDiffGenerator {
 
 				} else if (a instanceof TreeDelete) {
 					CSharpTreeVisitor treevisitor = new CSharpTreeVisitor();
-					treevisitor.visitTree(a.getNode());
+					treevisitor.visitTree((ITree) a.getNode());
 					List<String> label = treevisitor.getLabelList();
 					List<String> type = treevisitor.getTypeList();
 					String strlabel = listToString(label, " ");
@@ -215,7 +216,7 @@ public class CSharpDiffGenerator {
 
 				} else if (a instanceof TreeInsert) {
 					CSharpTreeVisitor treevisitor = new CSharpTreeVisitor();
-					treevisitor.visitTree(a.getNode());
+					treevisitor.visitTree((ITree) a.getNode());
 					List<String> label = treevisitor.getLabelList();
 					List<String> type = treevisitor.getTypeList();
 					String strlabel = listToString(label, " ");
@@ -275,7 +276,7 @@ public class CSharpDiffGenerator {
 
 				clsfunc = new ClassFunction();
 				Reader reader = new FileReader(cursrc.toString());
-				ITree curtree = new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
+				ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
 
 				ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(curtree, "class", "c1");
 

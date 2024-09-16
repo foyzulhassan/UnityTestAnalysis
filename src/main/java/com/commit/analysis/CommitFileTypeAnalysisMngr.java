@@ -12,7 +12,7 @@ import com.config.Config;
 import com.csharp.changesize.ChangeSize;
 import com.csharp.diff.CSharpDiffGenerator;
 import com.csharp.patch.xml.PatchXMLGenerator;
-import com.github.gumtreediff.actions.EditScript;
+//import com.github.gumtreediff.actions.EditScript;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.unity.entity.PerfFixData;

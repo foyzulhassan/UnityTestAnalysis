@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Project_Repo/GitRepo/A11YTK@A11YTK" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Project_Repo/GitRepo/ExtendRealityLtd@Zinnia.Unity" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Project_Repo/GitRepo/framefield@vr-annotate" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Project_Repo/GitRepo/gpvigano@VRTK-GearVR-Test" vcs="Git" />
   </component>
 </project>

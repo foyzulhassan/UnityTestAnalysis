@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="eclipse.jgit" type="repository">
+    <properties maven-id="org.eclipse.jgit:org.eclipse.jgit:5.11.0.202103091610-r" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.jgit-5.11.0.202103091610-r.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JavaEWAH-1.1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.30.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -348,31 +348,23 @@ private int conditionCount, ifCount, switchCount, forCount, foreachCount, whileC
 						assertcount++;
 					}
 				}
-
 			}
 			else if(currentFirst.getType().toString().equals("name"))
 			{
-
 					String methodname=currentFirst.getLabel();
 					//ITree parent=currentFirst.getParent();
-
 					if(methodname.toLowerCase().contains("assert"))
 					{
 						assertcount++;
 					}
-
-
 			}
-
 			if (currentFirst.getMetadata(nodevisitedmeta) != null)
 				continue;
-
 			// Mark the node as visited
 			currentFirst.setMetadata(nodevisitedmeta, 1);
 			// System.out.print(currentFirst.name + " ");
 
 			List<ITree> allNeighbors = currentFirst.getChildren();
-
 			// We have to check whether the list of neighbors is null before proceeding,
 			// otherwise
 			// the for-each loop will throw an exception
