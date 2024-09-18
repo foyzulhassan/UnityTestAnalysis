@@ -47,13 +47,14 @@ public class CallGraphBasedDistinctFuncAnalyzer {
 		for (PerfFixData fix : fixlist) {
 			PatchXMLReader xmlreader = new PatchXMLReader();
 			List<String> funclist = xmlreader.getPatchClassFuncList(fix.getId());
-			String projname = fix.getProjName();
-
+			String projname_and_owner = fix.getProjName();
+			String owner = projname_and_owner.split("@")[0];
+			String projname = projname_and_owner.split("@")[1];
 			System.out.println(fix.getId());
 
 			CommitAnalyzer cmtanalyzer = null;
 			try {
-				cmtanalyzer = new CommitAnalyzer("test", projname);
+				cmtanalyzer = new CommitAnalyzer(owner, projname);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

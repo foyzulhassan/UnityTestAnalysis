@@ -110,7 +110,7 @@ public class CommitAnalyzer {
         this.projectOwner = projectOwner;
         this.project = project;
 
-        directoryPath = Config.repoDir + project + "/.git";
+        directoryPath = Config.repoDir +projectOwner+"/"+ project + "/.git";
 
         commitAnalyzingUtils = new CommitAnalyzingUtils();
         statsHolder = new DataStatsHolder();
@@ -128,7 +128,7 @@ public class CommitAnalyzer {
         this.projectOwner = projectOwner;
         this.project = project;
 
-        directoryPath = Config.repoDir + project + "/.git";
+        directoryPath =  Config.repoDir +projectOwner+"/"+ project + "/.git";
 
         commitAnalyzingUtils = new CommitAnalyzingUtils();
         statsHolder = new DataStatsHolder();
@@ -459,8 +459,9 @@ public class CommitAnalyzer {
     }
 
     public String getHeadCommitID() {
+        System.out.println("Assert Roulette headCheckCount ==> " + repository.getAllRefs().size());
         Ref head = repository.getAllRefs().get("HEAD");
-
+        System.out.println("Assert Roulette headCheck ==> " + head);
         return head.getObjectId().getName();
     }
 

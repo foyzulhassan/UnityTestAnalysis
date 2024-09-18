@@ -26,12 +26,13 @@ public class CSharpDiffGenMngr {
 	public void generateCSharpDiff(List<PerfFixData> fixlist) {
 
 		for (PerfFixData fix : fixlist) {
-			String projname = fix.getProjName();
-
+			String projname_and_owner = fix.getProjName();
+			String owner = projname_and_owner.split("@")[0];
+			String projname = projname_and_owner.split("@")[1];
 			CommitAnalyzer cmtanalyzer = null;
 
 			try {
-				cmtanalyzer = new CommitAnalyzer("test", projname);
+				cmtanalyzer = new CommitAnalyzer(owner, projname);
 				List<EditScript> actionlist = cmtanalyzer.extractCSharpFileChange(fix.getFixCommitID());
 				CSharpDiffGenerator diffgen = new CSharpDiffGenerator();
 

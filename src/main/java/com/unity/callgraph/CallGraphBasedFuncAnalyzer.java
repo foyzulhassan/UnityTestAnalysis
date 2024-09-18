@@ -49,13 +49,16 @@ public class CallGraphBasedFuncAnalyzer {
 		for (PerfFixData fix : fixlist) {
 			PatchXMLReader xmlreader = new PatchXMLReader();
 			List<String> funclist = xmlreader.getPatchFuncList(fix.getId());
-			String projname = fix.getProjName();
+
 
 			System.out.println(fix.getId());
 			
 			CommitAnalyzer cmtanalyzer = null;
+			String projname_and_owner = fix.getProjName();
+			String owner = projname_and_owner.split("@")[0];
+			String projname = projname_and_owner.split("@")[1];
 			try {
-				cmtanalyzer = new CommitAnalyzer("test", projname);
+				cmtanalyzer = new CommitAnalyzer(owner, projname);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

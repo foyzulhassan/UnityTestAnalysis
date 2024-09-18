@@ -2,19 +2,20 @@
   <library name="github.gumtreediff.gen.antlr3.r" type="repository">
     <properties maven-id="com.github.gumtreediff:gen.antlr3-r:3.0.0" />
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/gen.antlr3-r-3.0.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/antlr-3.5.2.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/antlr-runtime-3.5.2.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/ST4-4.0.8.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/classindex-3.10.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/simmetrics-core-3.2.3.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/guava-18.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/commons-codec-1.10.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/fastutil-8.3.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/gson-2.8.2.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/jgrapht-core-1.5.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/jheaps-0.13.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/gen.antlr3-3.0.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/gumtreediff/gen.antlr3-r/3.0.0/gen.antlr3-r-3.0.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/antlr/antlr/3.5.2/antlr-3.5.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/antlr/ST4/4.0.8/ST4-4.0.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/atteo/classindex/classindex/3.10/classindex-3.10.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/gumtreediff/core/3.0.0/core-3.0.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mpkorstanje/simmetrics-core/3.2.3/simmetrics-core-3.2.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/18.0/guava-18.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.10/commons-codec-1.10.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/it/unimi/dsi/fastutil/8.3.1/fastutil-8.3.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.2/gson-2.8.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/1.5.1/jgrapht-core-1.5.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jheaps/jheaps/0.13/jheaps-0.13.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/gumtreediff/gen.antlr3/3.0.0/gen.antlr3-3.0.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

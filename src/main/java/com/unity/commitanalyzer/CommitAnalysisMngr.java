@@ -32,7 +32,6 @@ public class CommitAnalysisMngr {
 		for(String proj:projlist)
 		{
 			String projname=ProjectPropertyAnalyzer.getProjName(proj);
-			
 			CommitAnalyzer cmtanalyzer = null;
 
 			try {

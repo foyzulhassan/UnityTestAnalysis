@@ -6,9 +6,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.io.IOUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,19 +33,23 @@ public class SmellAnalysisMngr {
 		List<ProjectSmellEntity> smellpercentage = new ArrayList<>();
         List<String[]> csvData = new ArrayList<>();
 
+        //System.out.println("Assert Roulette ProjectList ==> " + projlist.size()); 312
+
 		int counter = 0;
 		for (String proj : projlist) {
 			String projname = ProjectPropertyAnalyzer.getProjName(proj);
+            //System.out.println("Assert Roulette ProjectName ==> " + projname); Done
 			TestAnalysisData analysisdata = new TestAnalysisData(projname);
 
 			CommitAnalyzer cmtanalyzer = null;
-			System.out.println(counter + "-->" + projname);
+			System.out.println("ProjectName==>" + counter + "-->" + projname);
 
 			counter++;
 
 
 			try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String, List<AssertCall>> projtestfuncassertmap = cmtanalyzer.getAssertRoulette(commitid);
@@ -62,7 +63,7 @@ public class SmellAnalysisMngr {
                 projsmell.setProjName(projname);
                 projsmell.setSmellPercentage(percentage);
 
-
+                System.out.println("Assert Roulette ProjectSmellName ==> " + projsmell);
                 smellpercentage.add(projsmell);
 
                 for (String key : allKeys) {
@@ -75,16 +76,24 @@ public class SmellAnalysisMngr {
 
             } catch (Exception e) {
 				// TODO Auto-generated catch block
+                System.out.println("Assert Roulette Exception ==> " + e.getMessage());
 				e.printStackTrace();
 			}
             String csvFilePath = rootDir+"Assertion_Roulette_Smells.csv";
             createFileIfNotExists(csvFilePath);
+            System.out.println("CsvPath====>>>" + csvFilePath);
             appendDataToCSV(csvData, csvFilePath);
 		}
 
 		return smellpercentage;
 
 	}
+
+    public static Map<String,String> getProjectStructureName(String projname){
+        String owner = projname.split("@")[0];
+        projname = projname.split("@")[1];
+        return Map.of(owner, projname);
+    }
 
     private void createFileIfNotExists(String filePath) {
         File file = new File(filePath);
@@ -140,7 +149,8 @@ public class SmellAnalysisMngr {
 //                counter++;
 //
 //                try {
-//                    cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+//                    Map <String,String> ownerProject = getProjectStructureName(projname);
+//                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 //
 //                    String commitid = cmtanalyzer.getHeadCommitID();
 //                    Map<String, List<AssertCall>> projtestfuncassertmap = cmtanalyzer.getAssertRoulette(commitid);
@@ -188,7 +198,9 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getSensitiveEquality(commitid);
@@ -246,7 +258,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getLazyTest(commitid);
@@ -302,7 +315,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getEagerTest(commitid);
@@ -360,7 +374,8 @@ public class SmellAnalysisMngr {
 //            if (counter > 55)
 //                return smellpercentage;
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testfuncconditionalTestmap = cmtanalyzer.getMysteryGuest(commitid);
@@ -418,7 +433,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String, Map<String, Integer>> testfuncconditionalTestmap = cmtanalyzer.getConditionalTest(commitid);
@@ -492,7 +508,8 @@ public class SmellAnalysisMngr {
 //                continue;
 //            }
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String, Double> testgeneralfixtureTestmap = cmtanalyzer.getGeneralFixture(commitid);
@@ -556,7 +573,8 @@ public class SmellAnalysisMngr {
             counter++;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testfunccondition = cmtanalyzer.getMagicNumber(commitid);
@@ -614,7 +632,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testdefaultTestmap = cmtanalyzer.getDefaultTest(commitid);
@@ -673,7 +692,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testredundantprintTestmap = cmtanalyzer.getRedundantPrint(commitid);
@@ -733,7 +753,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testconstructorTestmap = cmtanalyzer.getConstructorInitialization(commitid);
@@ -790,7 +811,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testsleepyTestmap = cmtanalyzer.getSleepyTest(commitid);
@@ -845,7 +867,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testemptyTestmap = cmtanalyzer.getEmptyTest(commitid);
@@ -903,7 +926,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testignoredTestmap = cmtanalyzer.getIgnoredTest(commitid);
@@ -961,7 +985,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testexceptionTestmap = cmtanalyzer.getExceptionTest(commitid);
@@ -1017,7 +1042,8 @@ public class SmellAnalysisMngr {
 //                return smellpercentage;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testunknownTestmap = cmtanalyzer.getUnknownTest(commitid);
@@ -1073,7 +1099,8 @@ public class SmellAnalysisMngr {
             counter++;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testredundantassert = cmtanalyzer.getRedundantAssert(commitid);
@@ -1129,7 +1156,8 @@ public class SmellAnalysisMngr {
 
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 String commitid = cmtanalyzer.getHeadCommitID();
                 Map<String,Boolean> testduplicateassert = cmtanalyzer.getDuplicateAssert(commitid);
@@ -1203,7 +1231,8 @@ public class SmellAnalysisMngr {
             counter++;
 
             try {
-                cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                 // Get the commit ID for the project
                 String commitid = cmtanalyzer.getHeadCommitID();
@@ -1396,7 +1425,8 @@ public class SmellAnalysisMngr {
 //                    continue;
 //                }
                 try {
-                    cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+                    Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
                     String commitid = cmtanalyzer.getHeadCommitID();
                     Map<String, Double> tempMap = cmtanalyzer.getGeneralFixture(commitid);

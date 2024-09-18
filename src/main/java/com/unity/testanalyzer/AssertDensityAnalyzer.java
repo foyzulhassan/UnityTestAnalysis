@@ -22,6 +22,8 @@ import com.utility.ProjectPropertyAnalyzer;
 import edu.util.fileprocess.CSVReaderWriter;
 import edu.util.fileprocess.TextFileReaderWriter;
 
+import static com.unity.testsmell.SmellAnalysisMngr.getProjectStructureName;
+
 public class AssertDensityAnalyzer {
 
 	public AssertDensityAnalyzer() {
@@ -46,7 +48,8 @@ public class AssertDensityAnalyzer {
 			
 
 			try {
-				cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+				Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
 				String commitid = cmtanalyzer.getHeadCommitID();
 				LineCountAssertCount lineassertcount = cmtanalyzer.getTestLocAndAssertCount(commitid);

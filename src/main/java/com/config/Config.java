@@ -6,22 +6,22 @@ import java.io.IOException;
 
 public class Config {
 	// public static String rootDir="/media/AutoBuilder/UnityPerformance/";
-	 public static String
+	public static String
 
-			rootDir="/media/backup/Vr-Test/";
-			//rootDir="D:\\Research\\Vr-Test\\";
-	 //
-	 //text file that contains list of projects to analyze
-	 public static String gitProjList=rootDir+"All_DataSet.txt";
-	 //reporDir used for storing Unity Projects
-	 public static String repoDir = rootDir+"GitRepo/";
-	
-	 public static String csvFile=rootDir+"perf_commit_data_Updated.csv";
-	 public static String patchDir=rootDir+"PatchDir/";
+			rootDir="/home/umd-user/Documents/UnityTestAnalysis/Project_Repo/";
+	//rootDir="D:\\Research\\Vr-Test\\";
+	//
+	//text file that contains list of projects to analyze
+	public static String gitProjList=rootDir+"Project_Source.txt";
+	//reporDir used for storing Unity Projects
+	public static String repoDir = rootDir+"GitRepo/";
+
+	public static String csvFile=rootDir+"perf_commit_data_Updated.csv";
+	public static String patchDir=rootDir+"PatchDir/";
 
 	public static String[] perfCommitToken = { "performance", "speed up", "accelerate", "fast", "slow", "latenc",
 			"contention", "optimiz", "efficient" };
-	
+
 	public static String csvFileTestStat=rootDir+"unity_test_stat.csv";
 	public static String csvFileTestStatDetails=rootDir+"unity_test_stat_details.csv";
 	public static String csvFileAssertDensityStat=rootDir+"unity_assert_density_stat.csv";
@@ -40,7 +40,7 @@ public class Config {
 	public static int commitid = 1;
 	public static int stmtUniqueId = 1;
 	public static String separatorStr="<>";
-	
+
 	public static String getSmellStatFile(String smellname)
 	{
 		return csvFileSmellStat+smellname+".csv";

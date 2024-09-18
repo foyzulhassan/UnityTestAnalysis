@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.unity.testsmell.SmellAnalysisMngr.getProjectStructureName;
+
 public class FuncCodeLOCAnalyzer {
 
 	public FuncCodeLOCAnalyzer() {
@@ -40,7 +42,8 @@ public class FuncCodeLOCAnalyzer {
 
 
 			try {
-				cmtanalyzer = new CommitAnalyzer("test", projname, proj);
+				Map <String,String> ownerProject = getProjectStructureName(projname);
+                cmtanalyzer = new CommitAnalyzer(ownerProject.keySet().iterator().next(), ownerProject.values().iterator().next(), proj);
 
 				String commitid = cmtanalyzer.getHeadCommitID();
 				LineCountAssertCount lineassertcount = cmtanalyzer.getFuncCodeLOC(commitid);

@@ -325,6 +325,7 @@ public class MainClass {
 
             SmellAnalysisMngr smellmgr = new SmellAnalysisMngr();
             List<ProjectSmellEntity> projsemlllist = smellmgr.analyzeAssertionRoulette();
+            System.out.println("Assert Roulette ListSize ==> " + projsemlllist.size());
             ApacheCSVReaderWriter writer = new ApacheCSVReaderWriter();
             try {
                 writer.WriteSmellStatCSVFile(projsemlllist, Config.getSmellStatFile("AssertRoulette"));

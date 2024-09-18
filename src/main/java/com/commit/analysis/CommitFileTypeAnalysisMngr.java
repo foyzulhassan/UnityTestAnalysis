@@ -37,12 +37,13 @@ public class CommitFileTypeAnalysisMngr {
 		}
 
 		for (PerfFixData fix : cmtlist) {
-			String projname = fix.getProjName();
-
+			String projname_and_owner = fix.getProjName();
+			String owner = projname_and_owner.split("@")[0];
+			String projname = projname_and_owner.split("@")[1];
 			CommitAnalyzer cmtanalyzer = null;
 
 			try {
-				cmtanalyzer = new CommitAnalyzer("test", projname);
+				cmtanalyzer = new CommitAnalyzer(owner, projname);
 				PerfFixData fixwithchange=cmtanalyzer.extractFileChangeData(fix.getFixCommitID(),fix);
 				cmtlistwithchange.add(fixwithchange);		
 
