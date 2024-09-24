@@ -106,6 +106,7 @@ https://github.com/gpsnmeajp/EasyVirtualMotionCaptureForUnity.git
 https://github.com/gpvigano/VRTK-GearVR-Test.git
 https://github.com/HalcyonGrid/halcyon.git
 https://github.com/halsafar/BeatSaberSongBrowser.git
+https://github.com/holojam/HolojamSDK-Unity.git
 https://github.com/hotbreakb/Capstone_Design.git
 https://github.com/HousekeepersStudio/OpendagVR2.git
 https://github.com/hrntsm/STEVIA-Stb2U.git
@@ -184,7 +185,7 @@ https://github.com/nadir500/USN-VR-Unilateral-spatial-neglect-virtual-reality.gi
 https://github.com/naqtn/ProgrammingInVRChat.git
 https://github.com/NathanJVella/VR-Space-Game.git
 https://github.com/neos-modding-group/NeosModLoader.git
-
+https://github.com/NgoJunHaoJason/CZ4001.git
 https://github.com/nicoco007/DynamicOpenVR.git
 https://github.com/nightingaleproject/vrdr-dotnet.git
 https://github.com/nikhilnxvverma1/vr-photo-album.git
@@ -243,6 +244,7 @@ https://github.com/sh-akira/VirtualMotionCapture.git
 https://github.com/ShanguUncle/UnityChatSDK.git
 https://github.com/SkinnyDevi/MU-VR-Experience.git
 https://github.com/SMBenedict173/General-Anesthesia-Simulator.git
+https://github.com/SpaceVR-O1/Human.git
 https://github.com/spandananitdgp/Egyptian-Mummification-VR-Experience.git
 https://github.com/stefaanvermassen/virtual-museum-app.git
 https://github.com/takafumihoriuchi/SmartCodesignVR.git

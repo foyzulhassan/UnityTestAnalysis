@@ -1,1 +1,6 @@
 /target/
+/Project_Repo
+/reference_project
+/lib
+/libs
+/*.csv

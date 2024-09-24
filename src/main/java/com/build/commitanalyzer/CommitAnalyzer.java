@@ -461,7 +461,7 @@ public class CommitAnalyzer {
     public String getHeadCommitID() {
         System.out.println("Assert Roulette headCheckCount ==> " + repository.getAllRefs().size());
         Ref head = repository.getAllRefs().get("HEAD");
-        System.out.println("Assert Roulette headCheck ==> " + head);
+        System.out.println("Assert Roulette headCheck ==> " + head + "ObjectID => " + head.getObjectId() + "Name => " + head.getObjectId().getName()  );
         return head.getObjectId().getName();
     }
 
