@@ -51,6 +51,7 @@ import edu.util.fileprocess.CSVReaderWriter;
 
 import static com.config.Config.rootDir;
 import static com.unity.testsmell.SmellAnalysisMngr.*;
+import static java.lang.System.exit;
 
 public class MainClass {
 
@@ -97,7 +98,7 @@ public class MainClass {
             ProjectLoader projloader = new ProjectLoader();
             projloader.LoadDownloadProjects();
             System.out.println("Download Projects->Completed");
-
+            exit(0);
         }
 //        else if (inputid == 2) {
 //			CommitAnalysisMngr commitmngr = new CommitAnalysisMngr();

@@ -38,6 +38,7 @@ private boolean toStringFound = false;
 			ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
 //			List<AssertCall> assercalllist=new ArrayList<>();
 			String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+			toStringFound = false;
 
 			if(if_stmt_list!=null && if_stmt_list.size()>0)
 			{
@@ -46,16 +47,8 @@ private boolean toStringFound = false;
 
             sensitiveEquality.put(classtestfunc,toStringFound);
 
-            toStringFound = false;
-
-
-
 		}
-
-
         return sensitiveEquality;
-
-
 	}
 
 

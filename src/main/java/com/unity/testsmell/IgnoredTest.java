@@ -18,49 +18,60 @@ public class IgnoredTest {
 
     }
 
-    public Map<String,Boolean> searchForIgnoredTest(ITree root)
-    {
-        List<ITree> testfunclist=TreeNodeAnalyzer.getTestFunctionList(root);
-        Map<String,Boolean> ignoredTest=new HashMap<>();
+    public Map<String,Boolean> searchForIgnoredTest(ITree root) {
+        List<ITree> testfunclist = TreeNodeAnalyzer.getTestFunctionList(root);
+        Map<String, Boolean> ignoredTest = new HashMap<>();
         ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
 
-        if(classnode==null)
+        if (classnode == null)
             return ignoredTest;
 
         ITree classname = SrcmlUnityCsMetaDataGenerator.getClassName(classnode);
 
         String lowerclassname = classname.getLabel();
+        //String classtestfunc = lowerclassname + Config.separatorStr + classname.getLabel();
+       // System.out.println("classtestfunc"+classtestfunc);
 
 
-        for(ITree testfunc:testfunclist)
-        {
+        for (ITree testfunc : testfunclist) {
+            // Search for the 'Thread' class
+            List<ITree> Ignorelist = TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "Ignore");
+            boolean IgnoreFound = false;
             ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
-            String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
-            List<ITree> ignorelist = TreeNodeAnalyzer.getIgnoredFunctionList(testfunc);
+            String classtestfunc = lowerclassname + Config.separatorStr + funcnamenode.getLabel();
 
-            for(ITree ignorefunc : ignorelist) {
-                if(ignorefunc.getLabel().equals("Ignore"))
-                {
-                    ignoreFound = true;
-                }
+            if (Ignorelist != null && Ignorelist.size() > 0) {
+                IgnoreFound = true;
             }
 
-            ignoredTest.put(classtestfunc,ignoreFound);
 
-            ignoreFound = false;
+//        for(ITree testfunc:testfunclist)
+//        {
+//            ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+//            String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
+//            List<ITree> ignorelist = TreeNodeAnalyzer.getIgnoredFunctionList(testfunc);
 
-
-
-
+//            for(ITree ignorefunc : ignorelist) {
+//                if(ignorefunc.getLabel().equals("Ignore"))
+//                {
+//                    ignoreFound = true;
+//                }
+//            }
+//
+//            ignoredTest.put(classtestfunc,ignoreFound);
+//
+//            ignoreFound = false;
+//
+//
+//
+//
+//
+//        }
+            ignoredTest.put(classtestfunc, IgnoreFound);
 
         }
-
-
         return ignoredTest;
-
-
     }
-
 
 
 

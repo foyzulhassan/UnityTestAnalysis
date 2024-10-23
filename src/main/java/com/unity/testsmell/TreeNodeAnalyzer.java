@@ -166,10 +166,8 @@ public class TreeNodeAnalyzer {
         ITree parent = assertnode;
         ITree callnode = null;
         boolean found = false;
-        /*Get the Called node of Assert Statement*/
         while (parent != null) {
             if (parent.getType().toString().toLowerCase().equals("call")) {
-                //found the called node. so break
                 found = true;
                 break;
             }
@@ -195,7 +193,6 @@ public class TreeNodeAnalyzer {
             for (ITree node : paramlist) {
                 assertcall.addParam(node.getType().toString());
                 assertcall.addParamTree(node.deepCopy());
-
             }
         }
 
@@ -309,6 +306,64 @@ public class TreeNodeAnalyzer {
         return nodelist;
     }
 
+//    private static List<ITree> breadthFirstSearchForTypeLabel(ITree node, String type, String label, String nodevisitedmeta) {
+//        // Just so we handle receiving an uninitialized Node, otherwise an
+//        // exception will be thrown when we try to add it to queue
+//        //ITree classnode = null;
+//        List<ITree> nodelist = new ArrayList<>();
+//        if (node == null)
+//            return null;
+//
+//        // Creating the queue, and adding the first node (step 1)
+//        LinkedList<ITree> queue = new LinkedList<>();
+//        queue.add(node);
+//
+//        while (!queue.isEmpty()) {
+//            ITree currentFirst = queue.removeFirst();
+//
+//            // In some cases we might have added a particular node more than once before
+//            // actually visiting that node, so we make sure to check and skip that node if
+//            // we have
+//            // encountered it before
+//            System.out.println("Visiting node:");
+//            System.out.println("Label: " + currentFirst.getLabel());
+//            System.out.println("Type: " + currentFirst.getType().toString());
+//
+//            if (currentFirst.getType().toString().toLowerCase().equals("switch")) {
+//                System.out.println(currentFirst.getLabel().toLowerCase());
+//            }
+//
+//            if (currentFirst.getLabel().toLowerCase().equals(label) && currentFirst.getType().toString().toLowerCase().equals(type)) {
+//                System.out.println("Matchfound:"+ currentFirst.getLabel());
+//                nodelist.add(currentFirst);
+//                //classnode = currentFirst;
+//            }
+//
+//            if (currentFirst.getMetadata(nodevisitedmeta) != null)
+//                continue;
+//
+//            // Mark the node as visited
+//            currentFirst.setMetadata(nodevisitedmeta, 1);
+//            // System.out.print(currentFirst.name + " ");
+//
+//            List<ITree> allNeighbors = currentFirst.getChildren();
+//
+//            // We have to check whether the list of neighbors is null before proceeding,
+//            // otherwise
+//            // the for-each loop will throw an exception
+//            if (allNeighbors == null)
+//                continue;
+//
+//            for (ITree neighbor : allNeighbors) {
+//                // We only add unvisited neighbors
+//                if (neighbor.getMetadata(nodevisitedmeta) == null) {
+//                    queue.add(neighbor);
+//                }
+//            }
+//        }
+//        return nodelist;
+//    }
+
     private static List<ITree> breadthFirstSearchForTypeLabel(ITree node, String type, String label, String nodevisitedmeta) {
 
         // Just so we handle receiving an uninitialized Node, otherwise an
@@ -329,14 +384,20 @@ public class TreeNodeAnalyzer {
             // actually visiting that node, so we make sure to check and skip that node if
             // we have
             // encountered it before
+//            System.out.println("Visiting node:");
+//            System.out.println("Label: " + currentFirst.getLabel());
+//            System.out.println("Type: " + currentFirst.getType().toString());
+
+//           System.out.println("CurrentFirstGetTpeNodeeee ===> "+ currentFirst.getType().toString());
 
             if (currentFirst.getType().toString().toLowerCase().equals("switch")) {
                 System.out.println(currentFirst.getLabel().toLowerCase());
             }
 
-            if (currentFirst.getLabel().toLowerCase().equals(label) && currentFirst.getType().toString().toLowerCase().equals(type)) {
+            if (currentFirst.getLabel().toLowerCase().equals(label.toLowerCase()) && currentFirst.getType().toString().toLowerCase().equals(type.toLowerCase())) {
                 nodelist.add(currentFirst);
                 //classnode = currentFirst;
+//            }
             }
 
             if (currentFirst.getMetadata(nodevisitedmeta) != null)
@@ -362,6 +423,26 @@ public class TreeNodeAnalyzer {
             }
         }
         return nodelist;
+    }
+
+
+
+    public static void printTree(ITree node, String indent) {
+        if (node == null) {
+            return;
+        }
+
+        System.out.println(indent + "├── Label: " + node.getLabel());
+        System.out.println(indent + "│   └── Type: " + node.getType().toString());
+
+        List<ITree> children = node.getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            if (i == children.size() - 1) {
+                printTree(children.get(i), indent + "    ");
+            } else {
+                printTree(children.get(i), indent + "│   ");
+            }
+        }
     }
 
 

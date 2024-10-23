@@ -128,7 +128,7 @@ public class CommitAnalyzer {
         this.projectOwner = projectOwner;
         this.project = project;
 
-        directoryPath =  Config.repoDir +projectOwner+"/"+ project + "/.git";
+        directoryPath =  Config.repoDir +projectOwner+"@"+ project + "/.git";
 
         commitAnalyzingUtils = new CommitAnalyzingUtils();
         statsHolder = new DataStatsHolder();
@@ -459,9 +459,9 @@ public class CommitAnalyzer {
     }
 
     public String getHeadCommitID() {
-        System.out.println("Assert Roulette headCheckCount ==> " + repository.getAllRefs().size());
+        System.out.println("headCheckCount ==> " + repository.getAllRefs().size());
         Ref head = repository.getAllRefs().get("HEAD");
-        System.out.println("Assert Roulette headCheck ==> " + head + "ObjectID => " + head.getObjectId() + "Name => " + head.getObjectId().getName()  );
+        System.out.println("headCheck ==> " + head + "ObjectID => " + head.getObjectId() + "Name => " + head.getObjectId().getName()  );
         return head.getObjectId().getName();
     }
 
@@ -1674,7 +1674,6 @@ public class CommitAnalyzer {
 //						}
                         reader = new FileReader(f1.toString());
                         ITree curtree = (ITree) new SrcmlUnityCsTreeGenerator().generate(reader).getRoot();
-
                         //TreeNodeAnalyzer analyzer=new TreeNodeAnalyzer();
                         //analyzer.getTestFunctionList(curtree);
                         SleepyTest st = new SleepyTest ();
