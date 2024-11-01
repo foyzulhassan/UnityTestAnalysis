@@ -105,23 +105,27 @@ public class TreeNodeAnalyzer {
 
             List<ITree> attributes = breadthFirstSearchForNodeList(func, "attribute", "an1");
 
-            if (attributes != null && attributes.size() > 0) {
+            if (attributes != null && !attributes.isEmpty()) {
                 List<ITree> unitytestanotations = breadthFirstSearchForLabel(attributes.get(0), "UnityTest", "an2");
                 List<ITree> testanotations = breadthFirstSearchForLabel(attributes.get(0), "Test", "an3");
                 List<ITree> mtestanotations = breadthFirstSearchForLabel(attributes.get(0), "MTest", "an4");
                 List<ITree> testFixture = breadthFirstSearchForLabel(attributes.get(0), "Fixture", "an5");
+                List<ITree> testMethod = breadthFirstSearchForLabel(attributes.get(0),"TestMethod","ans6");
                 //System.out.println("test");
 
-                if (unitytestanotations != null && unitytestanotations.size() > 0) {
+                if (unitytestanotations != null && !unitytestanotations.isEmpty()) {
                     testfunclist.add(func);
-                } else if (testanotations != null && testanotations.size() > 0) {
-                    testfunclist.add(func);
-                }
-                else if (mtestanotations != null && mtestanotations.size() > 0) {
+                } else if (testanotations != null && !testanotations.isEmpty()) {
                     testfunclist.add(func);
                 }
-                else if (testFixture != null && testFixture.size() > 0) {
+                else if (mtestanotations != null && !mtestanotations.isEmpty()) {
                     testfunclist.add(func);
+                }
+                else if (testFixture != null && !testFixture.isEmpty()) {
+                    testfunclist.add(func);
+                }
+                else if (testMethod != null && !testMethod.isEmpty()){
+                    testMethod.add(func);
                 }
             }
         }
