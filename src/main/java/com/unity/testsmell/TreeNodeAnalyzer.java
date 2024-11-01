@@ -125,7 +125,7 @@ public class TreeNodeAnalyzer {
                     testfunclist.add(func);
                 }
                 else if (testMethod != null && !testMethod.isEmpty()){
-                    testMethod.add(func);
+                    testfunclist.add(func);
                 }
             }
         }
