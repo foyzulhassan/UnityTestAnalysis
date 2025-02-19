@@ -284,7 +284,7 @@ public class MysteryGuest {
                 }
             }
         } else {
-            System.out.println("Unsupported node type");
+            //System.out.println("Unsupported node type");
             return "";
         }
         return "";

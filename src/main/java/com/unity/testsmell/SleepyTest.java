@@ -59,7 +59,7 @@ public class SleepyTest {
 //    }
 
     public Map<String, Boolean> searchForSleepyTest(ITree root) {
-        System.out.println("root: " + root.toString());
+        //System.out.println("root: " + root.toString());
         List<ITree> testfunclist = TreeNodeAnalyzer.getTestFunctionList(root);
         Map<String, Boolean> sleepyAndAfterTest = new HashMap<>();
         ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
@@ -72,7 +72,7 @@ public class SleepyTest {
         for (ITree testfunc : testfunclist) {
             // Search for the 'Thread' class
             List<ITree> threadlist = TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "Thread");
-            System.out.println("thread list"+threadlist);
+            //System.out.println("thread list"+threadlist);
             // Search for the 'After' method
             List<ITree> afterList = TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "After");
 
@@ -83,7 +83,7 @@ public class SleepyTest {
 
             ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
             String classtestfunc = lowerclassname + Config.separatorStr + funcnamenode.getLabel();
-            System.out.println("classtestfunc"+classtestfunc);
+           // System.out.println("classtestfunc"+classtestfunc);
 
             boolean sleepFound = false;
             boolean afterSecondsFound = false;
@@ -146,16 +146,16 @@ public class SleepyTest {
 
         // Traverse through the nodes where 'After' is found
         for (ITree afterNode : foundList) {
-            System.out.println("getting parents:"+ afterNode.getParents().get(0));
+            //System.out.println("getting parents:"+ afterNode.getParents().get(0));
             ITree x = afterNode.getParents().get(0);
             ITree y = afterNode.getParents().get(1);
-            System.out.println("getting parents y:"+ afterNode.getParents().get(2));
-            System.out.println("getting children:"+ x.getChildren());
-            System.out.println("getting children:"+ y.getChildren());
+            //System.out.println("getting parents y:"+ afterNode.getParents().get(2));
+            //System.out.println("getting children:"+ x.getChildren());
+            //System.out.println("getting children:"+ y.getChildren());
             List<ITree> siblings = x.getChildren();
             List<ITree> sib = y.getChildren();
             for (int i = 0; i < siblings.size()-1; i++) {
-                System.out.println("getting sibs:"+ siblings.get(i));
+                //System.out.println("getting sibs:"+ siblings.get(i));
                 if (siblings.get(i).equals(afterNode)) {
                     List<ITree> children = y.getChildren();
                     for (int j = 0; j < children.size(); j++){

@@ -21,7 +21,10 @@ public class RedundantAssertion {
 
     public Map<String,Boolean> searchForRedundantAssertion(ITree root)
     {
+        //System.out.println("root"+root);
         List<ITree> testfunclist=TreeNodeAnalyzer.getTestFunctionList(root);
+        //System.out.println("tesstfunclist"+testfunclist);
+        Map<ITree, String> helperfunclist = TreeNodeAnalyzer.getTestFunctionListnull(root);
         Map<String,List<AssertCall>> testfuncassertmap=new HashMap<>();
         Map<String,Boolean> redundantAssertion=new HashMap<>();
         ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
@@ -44,6 +47,19 @@ public class RedundantAssertion {
             {
                 redundantassertion = IsRedundantAssertionFound(redundantlist);
             }
+//            else{
+//                for (Map.Entry<ITree, String> helperEntry : helperfunclist.entrySet()) {
+//                    ITree helperFunc = helperEntry.getKey();
+//                    String helperFuncName = helperEntry.getValue();
+//                    System.out.println("Helper Function Name: " + helperFuncName); // Debugging
+//
+//                    List<ITree> unknownsublist = TreeNodeAnalyzer.getSearchTypeLabel(helperFunc, "name", "assert");
+//                    if(unknownsublist!=null && unknownsublist.size()>0)
+//                    {
+//                        redundantassertion = IsRedundantAssertionFound(redundantlist);
+//                    }
+//                }
+//            }
             //sensitiveEquality.put(classtestfunc,toStringFound);
             redundantAssertion.put(classtestfunc, redundantassertion);
 

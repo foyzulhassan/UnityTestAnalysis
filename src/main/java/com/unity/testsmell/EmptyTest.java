@@ -36,8 +36,13 @@ public class EmptyTest {
         {
            // List<ITree> sleepylist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "thread");
             ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
+            //System.out.println("function name"+funcnamenode);
             List<ITree> funccontent = TreeNodeAnalyzer.getStatementList(testfunc);
+            List<ITree> returnlsist = TreeNodeAnalyzer.getReturnList(testfunc);
+            //System.out.println("returnlsist"+ returnlsist);
+            //System.out.println("list of getstatements: "+ funccontent);
             List<ITree> funcexprcontent = TreeNodeAnalyzer.getExprStatementList(testfunc);
+            //System.out.println("list of funcexprcontent: "+ funcexprcontent);
             String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
 
 
@@ -46,26 +51,16 @@ public class EmptyTest {
 //            {
 //                sleepFound = SleepFound(sleepylist);
 //            }
-            if(funccontent.isEmpty() && funcexprcontent.isEmpty())
+            if(funccontent.isEmpty() && funcexprcontent.isEmpty() && returnlsist.isEmpty())
             {
-
                 empty = true;
             }
-
+            else{
+                empty =false;
+            }
             emptyTest.put(classtestfunc,empty);
-
-            empty =false;
-
-
-
-
-
         }
-
-
         return emptyTest;
-
-
     }
 
 //    private boolean SleepFound(List<ITree>foundList) {

@@ -581,7 +581,112 @@
 //        System.out.println("Lazy Test Percentage: " + lazyPercentage + "%");
 //    }
 //}
-
+//
+//package com.unity.testsmell;
+//import com.config.Config;
+//import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
+//import com.github.gumtreediff.tree.ITree;
+//
+//import java.util.*;
+//
+//public class LazyTest {
+//    private static final List<String> ASSERT_CALLS = Arrays.asList(
+//            "Assert", "That", "AreEqual", "AreNotEqual", "IsTrue", "IsFalse", "IsNull", "IsNotNull", "IsNotEmpty"
+//    );
+//
+//    private static final List<String> EXCLUDED_CALLS = Arrays.asList(
+//            "SetUp", "TearDown", "DummyObject", "GetVelocity", "GameObject", "AddComponent"
+//    );
+//
+//    // Main method to detect lazy tests
+//    public Map<String, Boolean> searchForLazyTest(ITree root) {
+//        List<ITree> testFuncList = TreeNodeAnalyzer.getTestFunctionList(root);
+//        Map<String, Boolean> lazyTests = new HashMap<>();
+//        ITree classNode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
+//
+//        if (classNode == null) return lazyTests;
+//
+//        String className = SrcmlUnityCsMetaDataGenerator.getClassName(classNode).getLabel();
+//
+//        for (ITree testFunc : testFuncList) {
+//            String testFuncName = SrcmlUnityCsMetaDataGenerator.getFuncName(testFunc).getLabel();
+//            List<ITree> callsList = TreeNodeAnalyzer.getSearchTypeLabel(testFunc, "call", "");
+//            List<ITree> mockObjectList = TreeNodeAnalyzer.getSearchTypeLabel(testFunc, "mock", "");
+//
+//            boolean hasAssertions = checkAssertions(callsList);
+//            boolean usesMockObjects = !mockObjectList.isEmpty();
+//            boolean hasMeaningfulCalls = checkMeaningfulProductionCalls(callsList);
+//
+//            String classTestFunc = className + Config.separatorStr + testFuncName;
+//
+//            // Lazy test detection logic
+//            boolean isLazy = !hasAssertions && !usesMockObjects && !hasMeaningfulCalls;
+//
+//            lazyTests.put(classTestFunc, isLazy);
+//
+//            // Debugging output
+//            System.out.println("Test: " + classTestFunc);
+//            System.out.println(" - Lazy: " + isLazy);
+//            System.out.println(" - Has Assertions: " + hasAssertions);
+//            System.out.println(" - Uses Mock Objects: " + usesMockObjects);
+//            System.out.println(" - Has Meaningful Calls: " + hasMeaningfulCalls);
+//        }
+//
+//        return lazyTests;
+//    }
+//
+//    // Check if assertions are present
+//    private boolean checkAssertions(List<ITree> callsList) {
+//        for (ITree call : callsList) {
+//            ITree funcNameNode = SrcmlUnityCsMetaDataGenerator.getFuncName(call);
+//            if (funcNameNode != null) {
+//                String callName = funcNameNode.getLabel();
+//                System.out.println("Checking assertion call: " + callName); // Debugging
+//                for (String assertCall : ASSERT_CALLS) {
+//                    if (callName.contains(assertCall)) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+//    }
+//
+//    // Check if there are meaningful production calls
+//    private boolean checkMeaningfulProductionCalls(List<ITree> callsList) {
+//        for (ITree call : callsList) {
+//            ITree funcNameNode = SrcmlUnityCsMetaDataGenerator.getFuncName(call);
+//            if (funcNameNode != null) {
+//                String callName = funcNameNode.getLabel();
+//                // Debugging: Print the call name being analyzed
+//                System.out.println("Checking production call: " + callName);
+//
+//                // Skip calls that are utilities or test setup
+//                if (!EXCLUDED_CALLS.contains(callName) && !callName.isEmpty()) {
+//                    return true; // Found a meaningful production call
+//                }
+//            }
+//        }
+//        return false; // No meaningful calls found
+//    }
+//
+//    // Get lazy test statistics
+//    public double getLazyTestStats(Map<String, Boolean> testFuncLazyMap) {
+//        int totalTests = testFuncLazyMap.size();
+//        if (totalTests == 0) return -1;
+//
+//        long lazyTestCount = testFuncLazyMap.values().stream().filter(Boolean::booleanValue).count();
+//        return (double) lazyTestCount / totalTests;
+//    }
+//
+//    // Log lazy test statistics
+//    public void logLazyTestStats(Map<String, Boolean> testFuncLazyMap) {
+//        double lazyPercentage = getLazyTestStats(testFuncLazyMap) * 100;
+//        System.out.println("Total Tests: " + testFuncLazyMap.size());
+//        System.out.println("Lazy Tests: " + testFuncLazyMap.values().stream().filter(Boolean::booleanValue).count());
+//        System.out.println("Lazy Test Percentage: " + lazyPercentage + "%");
+//    }
+//}
 package com.unity.testsmell;
 
 import com.config.Config;
@@ -590,51 +695,224 @@ import com.github.gumtreediff.tree.ITree;
 
 import java.util.*;
 
-public class LazyTestRefined {
+public class LazyTest {
 
-    // Main method to detect lazy tests
-    public Map<String, Boolean> detectLazyTests(ITree root) {
-        List<ITree> testFunctions = TreeNodeAnalyzer.getTestFunctionList(root);
+    /**
+     * Main method to detect lazy tests in C# code.
+     * Lazy tests occur when multiple test methods invoke the same method of the production object.
+     *
+     * @param root            The root of the AST.
+     * @param productCallData The production calls data.
+     * @return A map of test function names to whether they are lazy.
+     */
+    public Map<String, Boolean> searchForLazyTest(ITree root, Map<String, List<String>> productCallData) {
         Map<String, Boolean> lazyTests = new HashMap<>();
+        Map<String, List<String>> normalizedProductCalls = normalizeProductCallData(productCallData);
 
-        for (ITree testFunc : testFunctions) {
+        // Debug: Print normalized production calls
+        //System.out.println("Normalized Production Calls: " + normalizedProductCalls);
+
+        List<ITree> testFuncList = TreeNodeAnalyzer.getTestFunctionList(root);
+        Map<String, Set<String>> testFunctionToProductionCalls = new HashMap<>();
+        Map<String, Set<String>> productionMethodToTestFunctions = new HashMap<>();
+
+        ITree classNode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
+
+        if (classNode == null) return lazyTests;
+
+        ITree classNameNode = SrcmlUnityCsMetaDataGenerator.getClassName(classNode);
+        String className = classNameNode.getLabel();
+
+        for (ITree testFunc : testFuncList) {
             String testFuncName = SrcmlUnityCsMetaDataGenerator.getFuncName(testFunc).getLabel();
 
-            // Check for key characteristics of a lazy test
-            boolean hasAssertions = !TreeNodeAnalyzer.getSearchTypeLabel(testFunc, "assert", "").isEmpty();
-            boolean usesMocks = !TreeNodeAnalyzer.getSearchTypeLabel(testFunc, "mock", "").isEmpty();
-            boolean usesSharedFunctions = !TreeNodeAnalyzer.getSearchTypeLabel(testFunc, "call", "").isEmpty();
+            if (testFuncName == null || testFuncName.isEmpty()) {
+                //System.out.println("Skipping unnamed test function.");
+                continue;
+            }
 
-            // Lazy if no assertions, no mocks, and only shared function calls
-            boolean isLazy = !hasAssertions && !usesMocks && usesSharedFunctions;
+            List<ITree> callsList = TreeNodeAnalyzer.getSearchTypeLabel(testFunc, "call", "");
+           // System.out.println("callsList: " + callsList);
+            if (callsList == null || callsList.isEmpty()) {
+                //System.out.println("No calls found for test function: " + testFuncName);
+                continue;
+            }
 
-            lazyTests.put(testFuncName, isLazy);
+            Set<String> invokedProductionMethods = new HashSet<>();
 
-            // Debugging information
-            System.out.println("Test Function: " + testFuncName);
-            System.out.println(" - Has Assertions: " + hasAssertions);
-            System.out.println(" - Uses Mocks: " + usesMocks);
-            System.out.println(" - Uses Shared Functions: " + usesSharedFunctions);
-            System.out.println(" - Lazy Test: " + isLazy);
+            for (ITree call : callsList) {
+                //Log raw node details
+                //System.out.println("Raw call node: " + call.toString());
+                //System.out.println("Subtree for call node:\n" + call.toTreeString());
+                for (ITree child : call.getChildren()) {
+                    //System.out.println("Child node: " + child.toString() + ", Label: " + child.getLabel() + ", Type: " + child.getType());
+                }
+
+                // Check for excluded production objects
+                if (isExcludedProductionObject(call)) {
+                    //System.out.println("Excluded call: " + extractObjectNameFromCall(call));
+                    continue;
+                }
+
+                // Extract function name
+                ITree funcNameNode = SrcmlUnityCsMetaDataGenerator.getFuncName(call);
+                String callName = null;
+
+                if (funcNameNode != null && funcNameNode.getLabel() != null && !funcNameNode.getLabel().isEmpty()) {
+                    callName = funcNameNode.getLabel();
+                    //System.out.println("Extracted call name: " + callName);
+                } else {
+                    //System.out.println("Function name node is null or has an empty label for call: " + call.toString());
+                    callName = extractFallbackFunctionName(call);
+                    //System.out.println("Fallback extracted call name: " + callName);
+                }
+
+                if (callName != null) {
+                     // Match with normalized production calls
+                    String matchedMethod = fuzzyMatchCallName(callName, normalizedProductCalls);
+                    if (matchedMethod != null) {
+                        //System.out.println("Matched production method: " + matchedMethod);
+                        invokedProductionMethods.add(matchedMethod);
+
+                        // Track which test functions call this production method
+                        productionMethodToTestFunctions
+                                .computeIfAbsent(matchedMethod, k -> new HashSet<>())
+                                .add(testFuncName);
+                    } else {
+                        //System.out.println("No match found for call name: " + callName);
+                    }
+                }
+            }
+
+            testFunctionToProductionCalls.put(testFuncName, invokedProductionMethods);
+
+            // Debug: Log invoked production methods for the test function
+            //System.out.println("Test function: " + testFuncName + ", Invoked production methods: " + invokedProductionMethods);
+        }
+
+        // Analyze lazy test determination
+        for (Map.Entry<String, Set<String>> entry : testFunctionToProductionCalls.entrySet()) {
+            String testFuncName = entry.getKey();
+            Set<String> productionMethods = entry.getValue();
+
+            // A test is considered lazy if it invokes a production method that is called by other test functions
+            boolean isLazy = productionMethods.stream()
+                    .anyMatch(method -> productionMethodToTestFunctions.getOrDefault(method, Collections.emptySet()).size() > 1);
+
+            // Debug: Log the lazy test determination
+            //System.out.println("Test function: " + testFuncName + ", Is Lazy: " + isLazy);
+
+            lazyTests.put(className + Config.separatorStr + testFuncName, isLazy);
         }
 
         return lazyTests;
     }
 
-    // Get lazy test statistics
-    public double calculateLazyTestPercentage(Map<String, Boolean> testResults) {
-        if (testResults.isEmpty()) return 0.0;
-
-        long lazyTestCount = testResults.values().stream().filter(Boolean::booleanValue).count();
-        return (double) lazyTestCount / testResults.size() * 100;
+    private Map<String, List<String>> normalizeProductCallData(Map<String, List<String>> productCalls) {
+        Map<String, List<String>> normalizedProductCalls = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : productCalls.entrySet()) {
+            String normalizedKey = normalizeCallName(entry.getKey());
+            List<String> normalizedValues = new ArrayList<>();
+            for (String value : entry.getValue()) {
+                normalizedValues.add(normalizeCallName(value));
+            }
+            normalizedProductCalls.put(normalizedKey, normalizedValues);
+        }
+        return normalizedProductCalls;
     }
 
-    // Log lazy test results
-    public void logLazyTestResults(Map<String, Boolean> testResults) {
-        double lazyTestPercentage = calculateLazyTestPercentage(testResults);
+    private String normalizeCallName(String callName) {
+        return callName.trim().toLowerCase();
+    }
 
-        System.out.println("Total Tests: " + testResults.size());
-        System.out.println("Lazy Tests: " + testResults.values().stream().filter(Boolean::booleanValue).count());
-        System.out.println("Lazy Test Percentage: " + lazyTestPercentage + "%");
+    private String fuzzyMatchCallName(String callName, Map<String, List<String>> normalizedProductCalls) {
+        String normalizedCallName = normalizeCallName(callName);
+        //System.out.println("Normalized call name: " + normalizedCallName);
+
+        // Split the call name into potential class and method names
+        String[] parts = normalizedCallName.split("\\.");
+        if (parts.length == 2) {
+            String className = parts[0];  // Top-level class or object name
+            String methodName = parts[1]; // Method being called
+
+            //System.out.println("Checking for class: " + className + ", method: " + methodName);
+
+            // Check if the class exists in normalized product calls
+            if (normalizedProductCalls.containsKey(className)) {
+                List<String> methods = normalizedProductCalls.get(className);
+
+                // Match the method name
+                if (methods.contains(methodName)) {
+                    return className + "<>" + methodName;
+                } else {
+                    //System.out.println("No match for method: " + methodName + " in class: " + className);
+                }
+            } else {
+                //System.out.println("Class not found in production calls: " + className);
+            }
+        } else {
+           // System.out.println("Invalid call name format: " + normalizedCallName);
+        }
+
+        return null;
+    }
+
+    private boolean isExcludedProductionObject(ITree call) {
+        String objectName = extractObjectNameFromCall(call);
+        if (objectName == null || objectName.isEmpty()) {
+            return false;
+        }
+
+        // Exclude mocks and Unity objects
+        return objectName.toLowerCase().contains("mock") || objectName.contains("Unity");
+    }
+
+    private String extractObjectNameFromCall(ITree call) {
+        for (ITree child : call.getChildren()) {
+            if ("name".equalsIgnoreCase(String.valueOf(child.getType()))) {
+                return child.getLabel();
+            }
+
+            String extractedName = extractObjectNameFromCall(child);
+            if (extractedName != null) {
+                return extractedName;
+            }
+        }
+        return null;
+    }
+
+    private String extractFallbackFunctionName(ITree call) {
+        StringBuilder functionNameBuilder = new StringBuilder();
+
+        for (ITree child : call.getChildren()) {
+            if ("name".equalsIgnoreCase(String.valueOf(child.getType()))) {
+                // Check if the name node has a non-empty label
+                if (child.getLabel() != null && !child.getLabel().isEmpty()) {
+                    functionNameBuilder.append(child.getLabel());
+                } else {
+                    // Recursively extract names from child nodes
+                    String extractedName = extractFallbackFunctionName(child);
+                    if (extractedName != null) {
+                        functionNameBuilder.append(extractedName);
+                    }
+                }
+            } else if ("operator".equalsIgnoreCase(String.valueOf(child.getType()))) {
+                // Add operator (e.g., ".") to the function name
+                functionNameBuilder.append(child.getLabel());
+            }
+        }
+
+        return functionNameBuilder.length() > 0 ? functionNameBuilder.toString() : null;
+    }
+
+    public double getLazyTestStats(Map<String, Boolean> testFuncLazyMap) {
+        if (testFuncLazyMap == null || testFuncLazyMap.isEmpty()) {
+            return -1; // Return -1 if no tests are present.
+        }
+
+        long totalTests = testFuncLazyMap.size();
+        long lazyTestCount = testFuncLazyMap.values().stream().filter(Boolean::booleanValue).count();
+
+        return ((double) lazyTestCount / totalTests) * 100;
     }
 }

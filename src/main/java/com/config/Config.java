@@ -7,8 +7,7 @@ import java.io.IOException;
 public class Config {
 	// public static String rootDir="/media/AutoBuilder/UnityPerformance/";
 	public static String
-
-			rootDir="/home/umd-user/Documents/UnityTestAnalysis/Project_Repo/";
+			rootDir="/media/umd-user/b07094e6-167c-4bb3-993e-58328ec3000f/Test-SMELL-PROJECT/UnityTestAnalysis/Project_Repo/";
 	//rootDir="D:\\Research\\Vr-Test\\";
 	//
 	//text file that contains list of projects to analyze

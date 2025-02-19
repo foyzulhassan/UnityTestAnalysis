@@ -59,7 +59,7 @@ public class MainClass {
 
         System.out.println("Enter your action:");
 
-        System.out.println("0->Download Projects" +
+        System.out.println("1->Download Projects" +
 //                "\n2->Commit Change Analysis"
 //				+ "\n3->Read CSV File and Generate Patch"
                         "\n11->Generate Test and Functional code Method and Class Count (RQ1)"
@@ -167,7 +167,7 @@ public class MainClass {
                 list_test.add(data);
 
 //                writer.writeNext(data);
-
+//
 //                counter++;
             }
 
@@ -194,10 +194,6 @@ public class MainClass {
 //            }
 
         }
-
-
-
-
 
         else if (inputid == 2) {
 
@@ -517,7 +513,6 @@ public class MainClass {
 
         else if (inputid == 43) {
             System.out.println("Ignored Test");
-
             SmellAnalysisMngr
                     smellmgr=new SmellAnalysisMngr();
             List<ProjectSmellEntity>
@@ -566,7 +561,6 @@ public class MainClass {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
         }
 
         else if (inputid == 46) {
@@ -584,7 +578,6 @@ public class MainClass {
 //                 TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
 
         }
 
@@ -644,6 +637,7 @@ public class MainClass {
 
             // Step 4: Write the selected rows to a new CSV file
             writeCSV(rootDir+outputFilePath, selectedRows);
+            System.out.println("Random selection file has been written to this location: "+rootDir+outputFilePath);
 
             scanner.close();
 

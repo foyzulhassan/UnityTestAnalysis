@@ -5,13 +5,12 @@ import com.config.Config;
 import com.csharp.astgenerator.SrcmlUnityCsMetaDataGenerator;
 import com.github.gumtreediff.tree.ITree;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IgnoredTest {
 
     private boolean ignoreFound = false;
+    boolean IgnoreFound_ = false;
 
     public void getSmell(ITree root)
     {
@@ -34,14 +33,39 @@ public class IgnoredTest {
 
 
         for (ITree testfunc : testfunclist) {
+
             // Search for the 'Thread' class
-            List<ITree> Ignorelist = TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "Ignore");
-            boolean IgnoreFound = false;
             ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
             String classtestfunc = lowerclassname + Config.separatorStr + funcnamenode.getLabel();
+            List<ITree> Ignorelist = TreeNodeAnalyzer.getIgnoredFunctionList(testfunc);
+            //System.out.println("ignorelist:"+Ignorelist);
+            List<ITree> functionCalls = TreeNodeAnalyzer.getSearchTypeLabel2(testfunc, "call", "");
+            if(!functionCalls.isEmpty()){
+                for(ITree callnodes: functionCalls) {
+                    if (!callnodes.getChildren().isEmpty()) {
+                        ITree callnodename = callnodes.getChildren().get(0);
+                        //System.out.println("callnamenode: "+callnodename);
+                        String matcher = String.valueOf(callnodename.getType());
+                        if (Objects.equals(matcher, "name")) {
+                            //System.out.println("entered here");
+                            String ignore_present = callnodename.getLabel().toLowerCase();
+                            //System.out.println("ignorefound:"+ignore_present);
+                            //String ignore = "ignore".toLowerCase();
+                            if(ignore_present.equals("ignore")){
+                                IgnoreFound_ = true;
+                            }
+                            //System.out.println("ignorefound: "+IgnoreFound_);
+                        }
+                    }
+                }
+            }
+            //System.out.println("ignore list:"+ Ignorelist);
 
-            if (Ignorelist != null && Ignorelist.size() > 0) {
-                IgnoreFound = true;
+            if (Ignorelist != null && Ignorelist.size() > 0 || IgnoreFound_) {
+                ignoreFound = true;
+            }
+            else{
+                ignoreFound = false;
             }
 
 
@@ -67,8 +91,8 @@ public class IgnoredTest {
 //
 //
 //        }
-            ignoredTest.put(classtestfunc, IgnoreFound);
-
+            ignoredTest.put(classtestfunc, ignoreFound);
+            IgnoreFound_ = false;
         }
         return ignoredTest;
     }

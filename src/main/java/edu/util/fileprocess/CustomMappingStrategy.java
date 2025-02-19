@@ -1,5 +1,6 @@
 package edu.util.fileprocess;
 
+import com.opencsv.exceptions.CsvBeanIntrospectionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -8,6 +9,7 @@ import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
+import java.beans.IntrospectionException;
 import java.util.Map;
 
 class CustomMappingStrategy<T> extends ColumnPositionMappingStrategy<T> {
@@ -22,7 +24,7 @@ super.setColumnMapping(new String[FieldUtils.getAllFields(bean.getClass()).lengt
 
         String[] header = new String[numColumns + 1];
 
-        BeanField<T,Integer> beanField;
+        BeanField<T, Integer> beanField;
         for (int i = 0; i <= numColumns; i++) {
             beanField = findField(i);
             String columnHeaderName = extractHeaderName(beanField);
@@ -44,9 +46,9 @@ super.setColumnMapping(new String[FieldUtils.getAllFields(bean.getClass()).lengt
         return bindByNameAnnotation.column();
     }
 
-    private int findMaxFieldIndex() {
+    public int findMaxFieldIndex() {
         int maxIndex = -1;
-        Map<Integer, BeanField<T, Integer>> fieldMap = (Map<Integer, BeanField<T, Integer>>) getFieldMap();
+        Map<Integer, BeanField<T,Integer>>fieldMap = (Map<Integer, BeanField<T,Integer>>) getFieldMap();
         for (int i = 0; i < fieldMap.size(); i++) {
             BeanField<T, Integer> beanField = fieldMap.get(i);
             if (beanField != null && beanField.getField() != null) {
@@ -55,5 +57,6 @@ super.setColumnMapping(new String[FieldUtils.getAllFields(bean.getClass()).lengt
         }
         return maxIndex;
     }
+
 
 }

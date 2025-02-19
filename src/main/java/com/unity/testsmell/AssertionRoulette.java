@@ -8,11 +8,7 @@ import com.unity.testanalyzer.LineCountAssertCount;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AssertionRoulette {
 	
@@ -27,6 +23,7 @@ public class AssertionRoulette {
 	{
 				
 		List<ITree> testfunclist=TreeNodeAnalyzer.getTestFunctionList(root);
+		Map<ITree, String> helperfunclist = TreeNodeAnalyzer.getTestFunctionListnull(root);
 		Map<String,List<AssertCall>> testfuncassertmap=new HashMap<>();
 		ITree classnode = SrcmlUnityCsMetaDataGenerator.breadthFirstSearchForNode(root, "class", "c1");
 		if(classnode==null)
@@ -38,34 +35,94 @@ public class AssertionRoulette {
 		for(ITree testfunc:testfunclist)
 		{
 			List<ITree> assertlist=TreeNodeAnalyzer.getSearchTypeLabel(testfunc, "name", "assert");
+			//System.out.println("enter here.."+assertlist);
 			ITree funcnamenode = SrcmlUnityCsMetaDataGenerator.getFuncName(testfunc);
 			List<AssertCall> assercalllist=new ArrayList<>();
 			String classtestfunc=lowerclassname+Config.separatorStr+funcnamenode.getLabel();
 			if(assertlist!=null && assertlist.size()>0)
 			{
+				//System.out.println("enter here.."+assertlist);
 				for(ITree assertitem:assertlist)
 				{					
 					AssertCall assertcall=TreeNodeAnalyzer.getAssertCall(assertitem);
-					boolean ismsged=IsMsgedAssert(assertcall);
-					if(ismsged)
-					{
-						assertcall.setHasMsg(true);
+					if(assertcall!=null){
+						boolean ismsged=IsMsgedAssert(assertcall);
+						if(ismsged)
+						{
+							assertcall.setHasMsg(true);
+						}
+						assercalllist.add(assertcall);
 					}
-					assercalllist.add(assertcall);
 					//System.out.println("test");
 				}
-			}		
+			}
+			if(assertlist.isEmpty()) {
+				//System.out.println("enter here.."+assertlist);
+				Map<ITree, String> helperfunclist_1 = TreeNodeAnalyzer.getTestFunctionListnull(testfunc);
+				// Debug: Print all "call" nodes in the test function
+				List<ITree> functionCalls = TreeNodeAnalyzer.getSearchTypeLabel2(testfunc, "call", "");
+//				for (ITree x : functionCalls) {
+//					System.out.println("res:" + x.getChildren().get(0).getType());
+//				}
+
+				// Check if there are any function calls
+				if (!functionCalls.isEmpty()) {
+					// Get the last function call
+					ITree lastFunctionCall = functionCalls.get(functionCalls.size() - 1);
+					//System.out.println("Last function call: " + lastFunctionCall.getChildren());
+
+					// Retrieve the name of the last function call
+					if (lastFunctionCall.getChildren().size() > 1) {
+						ITree functionNameNode = lastFunctionCall.getChildren().get(0);
+						String matcher = String.valueOf(functionNameNode.getType());
+						if (Objects.equals(matcher, "name")) {
+							//System.out.println("entered here");
+							String functionName = functionNameNode.getLabel();
+							//System.out.println("Function name: " + functionName);
+
+							// Check if the function name exists in the helper function list
+							boolean functionExistsInHelperList = helperfunclist.containsValue(functionName);
+							if (functionExistsInHelperList) {
+								//System.out.println("Function '" + functionName + "' exists in the helper function list.");
+
+								// Find the corresponding helper function node
+								ITree helperFunc = null;
+								for (Map.Entry<ITree, String> helperEntry : helperfunclist.entrySet()) {
+									if (helperEntry.getValue().equals(functionName)) {
+										helperFunc = helperEntry.getKey();
+										break;
+									}
+								}
+
+								if (helperFunc != null) {
+									// Extract assertion calls within the helper function
+									List<ITree> unknownsublist = TreeNodeAnalyzer.getSearchTypeLabel(helperFunc, "name", "assert");
+									//System.out.println("list:"+unknownsublist);
+									for (ITree assertitem : unknownsublist) {
+										AssertCall assertcall = TreeNodeAnalyzer.getAssertCall(assertitem);
+										boolean ismsged = IsMsgedAssert(assertcall);
+										if (ismsged) {
+											assertcall.setHasMsg(true);
+										}
+										assercalllist.add(assertcall);
+										//System.out.println("test");
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
 			testfuncassertmap.put(classtestfunc, assercalllist);
+			//System.out.println("testfunction:"+assercalllist);
 		}
-		
 		return testfuncassertmap;
 	}
 	
 	private boolean IsMsgedAssert(AssertCall assertcall)
 	{
-		
 		boolean ismsged=false;
-		
 		if(IsNUnitSingleParamAssert(assertcall.getAssertName()))
 		{
 			if(assertcall.getParamList().size()>1)
@@ -87,7 +144,6 @@ public class AssertionRoulette {
 				ismsged=true;
 			}
 		}
-		
 		return ismsged;
 	}
 	

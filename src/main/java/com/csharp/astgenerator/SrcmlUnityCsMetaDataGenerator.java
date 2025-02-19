@@ -568,4 +568,27 @@ public class SrcmlUnityCsMetaDataGenerator {
 		return nodelist;
 	}
 
+	public static ITree getEnclosingClassNode(ITree node) {
+		while (node != null) {
+			if ("class".equals(node.getType())) {
+				return node;
+			}
+			node = node.getParent();
+		}
+		return null;
+	}
+
+	public static String getVariableName(ITree initNode) {
+		// Iterate through the children of the given node to locate the variable name
+		for (ITree child : initNode.getChildren()) {
+			if ("name".equals(child.getType().toString())) { // Replace "name" with the exact type label used in your AST
+				return child.getLabel(); // Return the label as the variable name
+			}
+		}
+		// Return null if no variable name is found
+		return null;
+	}
+
+
+
 }
