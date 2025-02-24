@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="github.gumtreediff.gen.antlr3.r" type="repository">
+  <library name="com.github.gumteediff:gen.antlr3-r:3.0.0" type="repository">
     <properties maven-id="com.github.gumtreediff:gen.antlr3-r:3.0.0" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/github/gumtreediff/gen.antlr3-r/3.0.0/gen.antlr3-r-3.0.0.jar!/" />

@@ -9,7 +9,7 @@ import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
-import java.beans.IntrospectionException;
+//import java.beans.IntrospectionException;
 import java.util.Map;
 
 class CustomMappingStrategy<T> extends ColumnPositionMappingStrategy<T> {
